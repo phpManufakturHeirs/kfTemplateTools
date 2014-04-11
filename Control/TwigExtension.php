@@ -45,22 +45,28 @@ class TwigExtension extends Twig_Extension
     public function getGlobals()
     {
         return array(
-            'ACTIVE_TEMPLATE_PATH' => ACTIVE_TEMPLATE_PATH,
-            'ACTIVE_TEMPLATE_URL' => ACTIVE_TEMPLATE_URL,
-
+            'CMS_ADDONS_PATH' => CMS_ADDONS_PATH,
             'CMS_ADDONS_URL' => CMS_ADDONS_URL,
-            'CMS_LANGUAGE' => CMS_LANGUAGE,
+            'CMS_LOCALE' => CMS_LOCALE,
             'CMS_ADMIN_PATH' => CMS_ADMIN_PATH,
             'CMS_ADMIN_URL' => CMS_ADMIN_URL,
             'CMS_ADDONS_PATH' => CMS_ADDONS_PATH,
+            'CMS_LOGIN_ENABLED' => CMS_LOGIN_ENABLED,
+            'CMS_LOGIN_FORGOTTEN_URL' => CMS_LOGIN_FORGOTTEN_URL,
+            'CMS_LOGIN_REDIRECT_URL' => CMS_LOGIN_REDIRECT_URL,
+            'CMS_LOGIN_SIGNUP_ENABLED' => CMS_LOGIN_SIGNUP_ENABLED,
+            'CMS_LOGIN_SIGNUP_URL' => CMS_LOGIN_SIGNUP_URL,
+            'CMS_LOGIN_URL' => CMS_LOGIN_URL,
+            'CMS_LOGOUT_URL' => CMS_LOGOUT_URL,
             'CMS_MEDIA_PATH' => CMS_MEDIA_PATH,
             'CMS_MEDIA_URL' => CMS_MEDIA_URL,
             'CMS_PATH' => CMS_PATH,
             'CMS_TABLE_PREFIX' => CMS_TABLE_PREFIX,
-            'CMS_TEMPLATE_PATH' => CMS_TEMPLATE_PATH,
-            'CMS_TEMPLATE_URL' => CMS_TEMPLATE_URL,
+            'CMS_TEMPLATES_PATH' => CMS_TEMPLATES_PATH,
+            'CMS_TEMPLATES_URL' => CMS_TEMPLATES_URL,
             'CMS_TYPE' => CMS_TYPE,
             'CMS_URL' => CMS_URL,
+            'CMS_USER_ACCOUNT_URL' => CMS_USER_ACCOUNT_URL,
             'CMS_USER_DISPLAYNAME' => CMS_USER_DISPLAYNAME,
             'CMS_USER_EMAIL' => CMS_USER_EMAIL,
             'CMS_USER_ID' => CMS_USER_ID,
@@ -71,11 +77,13 @@ class TwigExtension extends Twig_Extension
             'EXTENSION_PATH' => EXTENSION_PATH,
             'EXTENSION_URL' => EXTENSION_URL,
 
-            'FRAMEWORK_PATH' => FRAMEWORK_PATH,
-            'FRAMEWORK_URL' => FRAMEWORK_URL,
+            'FRAMEWORK_CACHE' => FRAMEWORK_CACHE,
+            'FRAMEWORK_DEBUG' => FRAMEWORK_DEBUG,
             'FRAMEWORK_MEDIA_PATH' => FRAMEWORK_MEDIA_PATH,
             'FRAMEWORK_MEDIA_URL' => FRAMEWORK_MEDIA_URL,
+            'FRAMEWORK_PATH' => FRAMEWORK_PATH,
             'FRAMEWORK_TABLE_PREFIX' => FRAMEWORK_TABLE_PREFIX,
+            'FRAMEWORK_URL' => FRAMEWORK_URL,
 
             'HELPER_PATH' => HELPER_PATH,
             'HELPER_URL' => HELPER_URL,
@@ -83,11 +91,49 @@ class TwigExtension extends Twig_Extension
             'LIBRARY_PATH' => LIBRARY_PATH,
             'LIBRARY_URL' => LIBRARY_URL,
 
+            'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
+            'MANUFAKTUR_URL' => MANUFAKTUR_URL,
+
             'PAGE_DESCRIPTION' => PAGE_DESCRIPTION,
+            'PAGE_FOOTER' => PAGE_FOOTER,
+            'PAGE_HEADER' => PAGE_HEADER,
             'PAGE_ID' => PAGE_ID,
             'PAGE_KEYWORDS' => PAGE_KEYWORDS,
+            'PAGE_MODIFIED_BY' => PAGE_MODIFIED_BY,
+            'PAGE_MODIFIED_WHEN' => PAGE_MODIFIED_WHEN,
             'PAGE_TITLE' => PAGE_TITLE,
             'PAGE_URL' => PAGE_URL,
+            'PAGE_VISIBILITY' => PAGE_VISIBILITY,
+
+            'SM2_ALL' => SM2_ALL,
+            'SM2_ALLINFO' => SM2_ALLINFO,
+            'SM2_ALLMENU' => SM2_ALLMENU,
+            'SM2_BUFFER' => SM2_BUFFER,
+            'SM2_COND_TERM' => SM2_COND_TERM,
+            'SM2_CONDITIONAL' => SM2_CONDITIONAL,
+            'SM2_CRUMB' => SM2_CRUMB,
+            'SM2_CURR' => SM2_CURR,
+            'SM2_CURRTREE' => SM2_CURRTREE,
+            'SM2_ESCAPE' => SM2_ESCAPE,
+            'SM2_MAX' => SM2_MAX,
+            'SM2_NO_TITLE' => SM2_NO_TITLE,
+            'SM2_NOCACHE' => SM2_NOCACHE,
+            'SM2_NOESCAPE' => SM2_NOESCAPE,
+            'SM2_NUMCLASS' => SM2_NUMCLASS,
+            'SM2_PRETTY' => SM2_PRETTY,
+            'SM2_ROOT' => SM2_ROOT,
+            'SM2_SHOWHIDDEN' => SM2_SHOWHIDDEN,
+            'SM2_SIBLING' => SM2_SIBLING,
+            'SM2_START' => SM2_START,
+            'SM2_TRIM' => SM2_TRIM,
+            'SM2_XHTML_STRICT' => SM2_XHTML_STRICT,
+
+            'TEMPLATE_DESCRIPTION' => TEMPLATE_DESCRIPTION,
+            'TEMPLATE_DIRECTORY' => TEMPLATE_DIRECTORY,
+            'TEMPLATE_NAME' => TEMPLATE_NAME,
+            'TEMPLATE_PATH' => TEMPLATE_PATH,
+            'TEMPLATE_URL' => TEMPLATE_URL,
+            'TEMPLATE_VERSION' => TEMPLATE_VERSION,
 
             'THIRDPARTY_PATH' => THIRDPARTY_PATH,
             'THIRDPARTY_URL' => THIRDPARTY_URL,
@@ -103,7 +149,7 @@ class TwigExtension extends Twig_Extension
     {
         return array(
             'ellipsis' => new \Twig_Filter_Method($this, 'filterEllipsis'),
-            'markdown' => new \Twig_Filter_Method($this, 'filterMarkdown')
+            'markdown' => new \Twig_Filter_Method($this, 'filterMarkdown'),
         );
     }
 
@@ -116,6 +162,13 @@ class TwigExtension extends Twig_Extension
         return array(
             'image' => new \Twig_Function_Method($this, 'functionImage'),
             'markdown' => new \Twig_Function_Method($this, 'functionMarkdown'),
+            'page_content' => new \Twig_Function_Method($this, 'functionPageContent'),
+            'show_menu2' => new \Twig_Function_Method($this, 'functionShowMenu2'),
+            'droplet' => new \Twig_Function_Method($this, 'functionDroplet'),
+            'kitcommand' => new \Twig_Function_Method($this, 'functionKitCommand'),
+            'register_frontend_modfiles' => new \Twig_Function_Method($this, 'functionRegisterFrontendModfiles'),
+            'register_frontend_modfiles_body' => new \Twig_Function_Method($this, 'functionRegisterFrontendModfilesBody'),
+
         );
     }
 
@@ -234,4 +287,93 @@ class TwigExtension extends Twig_Extension
         return $this->app['markdown']->html($text, $extra, false);
     }
 
+    /**
+     * Return the page content for the given block
+     *
+     * @param number $block
+     */
+    public function functionPageContent($block=1)
+    {
+        return $this->app['cms']->page_content($block);
+    }
+
+    /**
+     * Mapping the show_menu2()
+     *
+     * @param number $aMenu
+     * @param string $aStart
+     * @param unknown $aMaxLevel
+     * @param string $aOptions
+     * @param string $aItemOpen
+     * @param string $aItemClose
+     * @param string $aMenuOpen
+     * @param string $aMenuClose
+     * @param string $aTopItemOpen
+     * @param string $aTopMenuOpen
+     * @return Ambigous <boolean, string, unknown>
+     */
+    public function functionShowMenu2(
+        $aMenu          = 0,
+        $aStart         = SM2_ROOT,
+        $aMaxLevel      = -1999, // SM2_CURR+1
+        $aOptions       = SM2_TRIM,
+        $aItemOpen      = false,
+        $aItemClose     = false,
+        $aMenuOpen      = false,
+        $aMenuClose     = false,
+        $aTopItemOpen   = false,
+        $aTopMenuOpen   = false)
+    {
+        return $this->app['cms']->show_menu2($aMenu,$aStart,$aMaxLevel,$aOptions,$aItemOpen,
+            $aItemClose,$aMenuOpen,$aMenuClose,$aTopItemOpen,$aTopMenuOpen, false);
+    }
+
+    /**
+     * Execute a Droplet
+     *
+     * @param string $droplet
+     * @param array $parameter
+     * @return string
+     */
+    public function functionDroplet($droplet, $parameter=array())
+    {
+        return $this->app['droplet']->execute($droplet, $parameter, false);
+    }
+
+    /**
+     * Execute the given kitCommand
+     *
+     * @param string $command
+     * @param parameter $parameter
+     * @return string
+     */
+    public function functionKitCommand($command, $parameter=array())
+    {
+        return $this->app['kitcommand']->execute($command, $parameter, false);
+    }
+
+    /**
+     * Function to add optional module Javascript or CSS stylesheets into the
+     * <head> section of the frontend
+     *
+     * @param string $file_type
+     * @return string
+     */
+    public function functionRegisterFrontendModfiles($file_type='css')
+    {
+        return $this->app['cms']->register_frontend_modfiles($file_type, false);
+    }
+
+    /**
+     * Function to add optional module Javascript into the <body> section
+     * of the frontend
+     *
+     * @param string $file_type
+     * @param boolean $prompt
+     * @return string
+     */
+    public function functionRegisterFrontendModfilesBody($file_type='css')
+    {
+        return $this->app['cms']->register_frontend_modfiles_body($file_type, false);
+    }
 }

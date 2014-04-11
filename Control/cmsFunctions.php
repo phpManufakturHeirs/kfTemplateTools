@@ -20,6 +20,11 @@ class cmsFunctions
     protected $app = null;
     protected $PageData = null;
 
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     */
     public function __construct(Application $app)
     {
         $this->app = $app;
@@ -28,6 +33,8 @@ class cmsFunctions
 
     /**
      * Return the page description for the actual PAGE_ID
+     *
+     * @return string
      */
     public function page_description()
     {
@@ -39,6 +46,7 @@ class cmsFunctions
      *
      * @param string $spacer
      * @param string $template
+     * @return string
      */
     public function page_title($spacer=' - ', $template='[PAGE_TITLE]')
     {
@@ -47,6 +55,8 @@ class cmsFunctions
 
     /**
      * Return the page keywords for the actual PAGE_ID
+     *
+     * @return string
      */
     public function page_keywords()
     {
@@ -57,6 +67,7 @@ class cmsFunctions
      * Return the page content by the given block for the actual PAGE_ID
      *
      * @param number $block
+     * @return string
      */
     public function page_content($block=1)
     {
@@ -76,6 +87,7 @@ class cmsFunctions
      * @param string $aMenuClose
      * @param string $aTopItemOpen
      * @param string $aTopMenuOpen
+     * @param boolean $prompt
      * @return Ambigous <boolean, string, unknown>
      */
     public function show_menu2(
@@ -88,10 +100,20 @@ class cmsFunctions
         $aMenuOpen      = false,
         $aMenuClose     = false,
         $aTopItemOpen   = false,
-        $aTopMenuOpen   = false)
+        $aTopMenuOpen   = false,
+        $prompt         = true
+        )
     {
-        return \show_menu2($aMenu,$aStart,$aMaxLevel,$aOptions,$aItemOpen,
-            $aItemClose,$aMenuOpen,$aMenuClose,$aTopItemOpen,$aTopMenuOpen);
+        if ($prompt) {
+            \show_menu2($aMenu,$aStart,$aMaxLevel,$aOptions,$aItemOpen,
+                $aItemClose,$aMenuOpen,$aMenuClose,$aTopItemOpen,$aTopMenuOpen);
+        }
+        else {
+            ob_start();
+            \show_menu2($aMenu,$aStart,$aMaxLevel,$aOptions,$aItemOpen,
+                $aItemClose,$aMenuOpen,$aMenuClose,$aTopItemOpen,$aTopMenuOpen);
+            return ob_get_clean();
+        }
     }
 
     /**
@@ -108,4 +130,87 @@ class cmsFunctions
         return $this->PageData->getURL($page_id, $arguments);
     }
 
+    /**
+     * Return the page footer from the CMS options.
+     * You can use the placeholders [YEAR] and [PROCESS_TIME]
+     *
+     * @param string $date_format for the [YEAR] placeholder
+     * @return string formatted
+     */
+    public function page_footer($date_format='Y', $prompt=true)
+    {
+        if ($prompt) {
+            \page_footer($date_format);
+        }
+        else {
+            ob_start();
+            \page_footer($date_format);
+            return ob_get_clean();
+        }
+    }
+
+    /**
+     * Return the page header from the CMS options.
+     *
+     * @param string $date_format (not supported)
+     */
+    public function page_header($prompt=true)
+    {
+        if ($prompt) {
+            \page_header();
+        }
+        else {
+            ob_start();
+            \page_header();
+            return ob_get_clean();
+        }
+    }
+
+    /**
+     * Function to add optional module Javascript or CSS stylesheets into the
+     * <head> section of the frontend
+     *
+     * @param string $file_type
+     * @param boolean $prompt
+     * @return string
+     */
+    public function register_frontend_modfiles($file_type='css', $prompt=true)
+    {
+        if (!function_exists('register_frontend_modfiles')) {
+            // i.e. BlackCat does not support this function!
+            return '';
+        }
+        if ($prompt) {
+            \register_frontend_modfiles($file_type);
+        }
+        else {
+            ob_start();
+            \register_frontend_modfiles($file_type);
+            return ob_get_clean();
+        }
+    }
+
+    /**
+     * Function to add optional module Javascript into the <body> section
+     * of the frontend
+     *
+     * @param string $file_type
+     * @param boolean $prompt
+     * @return string
+     */
+    public function register_frontend_modfiles_body($file_type='js', $prompt=true)
+    {
+        if (!function_exists('register_frontend_modfiles_body')) {
+            // i.e. BlackCat does not support this function!
+            return '';
+        }
+        if ($prompt) {
+            \register_frontend_modfiles_body($file_type);
+        }
+        else {
+            ob_start();
+            \register_frontend_modfiles_body($file_type);
+            return ob_get_clean();
+        }
+    }
 }

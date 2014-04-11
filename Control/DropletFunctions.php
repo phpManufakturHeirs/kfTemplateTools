@@ -41,7 +41,7 @@ class DropletFunctions
     {
         extract($parameter, EXTR_SKIP );
         if (false === ($result = eval($code))) {
-            return $this->app['translator']->trans('A error occured while executing the Droplet, please check the code.');
+            return $this->app['translator']->trans('A error occured while executing the Droplet, please check the PHP code.');
         }
         return $result;
     }
@@ -52,7 +52,7 @@ class DropletFunctions
      * @param string $droplet
      * @param array $parameter
      * @param boolean $prompt
-     * @return unknown
+     * @return string
      */
     public function execute($droplet, $parameter=array(), $prompt=true)
     {

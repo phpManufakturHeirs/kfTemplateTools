@@ -12,18 +12,29 @@
 namespace phpManufaktur\TemplateTools\Control;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class kitCommandFunctions
 {
     protected $app = null;
 
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     */
     public function __construct(Application $app)
     {
         $this->app = $app;
     }
 
+    /**
+     * Execute the given kitCommand
+     *
+     * @param string $command
+     * @param parameter $parameter
+     * @param string $prompt
+     * @return mixed
+     */
     public function execute($command, $parameter=array(), $prompt=true)
     {
         $params = array(
@@ -32,9 +43,9 @@ class kitCommandFunctions
                 'page_id' => PAGE_ID,
                 'page_url' => PAGE_URL,
                 'user' => array(
-                    'id' => -1,
-                    'name' => '',
-                    'email' => ''
+                    'id' => CMS_USER_ID,
+                    'name' => CMS_USER_USERNAME,
+                    'email' => CMS_USER_EMAIL
                 ),
             ),
             'GET' => array(),
@@ -60,25 +71,12 @@ class kitCommandFunctions
         if (false === ($response = curl_exec($ch))) {
             trigger_error(curl_error($ch), E_USER_ERROR);
         }
-        $result = curl_exec($ch);
         curl_close($ch);
         if ($prompt) {
-            echo $result;
+            echo $response;
         }
         else {
-            return $result;
+            return $response;
         }
-        /*
-        // process each kitCommand
-        $subRequest = Request::create(FRAMEWORK_URL.'/command/'.strtolower($command), 'POST', $params);
-        $Response = $this->app->handle($subRequest, HttpKernelInterface::MASTER_REQUEST, false);
-        $result = $Response->getContent();
-        if ($prompt) {
-            echo $result;
-        }
-        else {
-            return $result;
-        }
-        */
     }
 }

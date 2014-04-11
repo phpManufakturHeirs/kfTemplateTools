@@ -15,5 +15,38 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
-    'Sample' => 'Beispiel',
+    'A error occured while executing the Droplet, please check the PHP code.'
+        => 'Bei der Ausführung des Droplet trat ein Fehler auf, bitte prüfen Sie den PHP Code.',
+    'Authenticated'
+        => 'Angemeldet',
+
+    'Enter password'
+        => 'Passwort',
+    'Enter username'
+        => 'Benutzername',
+
+    'Forgot your password?'
+        => 'Haben Sie Ihr Passwort vergessen?',
+
+    'I want to signup!'
+        => 'Ich möchte mich registrieren',
+
+    'Login'
+        => 'Anmelden',
+    'Logout'
+        => 'Abmelden',
+
+    'Password'
+        => 'Passwort',
+
+    'The Droplet %droplet% does not exists!'
+        => 'Das Droplet <i>%droplet%</i> existiert nicht!',
+
+    'User account'
+        => 'Benutzerkonto',
+    'Username'
+        => 'Benutzername',
+
+    'Welcome back, %name%'
+        => 'Herzlich willkommen, %name%!',
 );

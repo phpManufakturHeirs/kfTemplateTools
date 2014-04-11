@@ -51,16 +51,27 @@ if (!defined('CMS_PATH')) define('CMS_PATH', $tools['utils']->sanitizePath(WB_PA
 if (!defined('CMS_URL')) define('CMS_URL', WB_URL);
 if (!defined('CMS_MEDIA_PATH')) define('CMS_MEDIA_PATH', CMS_PATH.MEDIA_DIRECTORY);
 if (!defined('CMS_MEDIA_URL')) define('CMS_MEDIA_URL', CMS_URL.MEDIA_DIRECTORY);
-if (!defined('CMS_LANGUAGE')) define('CMS_LANGUAGE', strtolower(LANGUAGE));
-if (!defined('CMS_TEMPLATE_PATH')) define('CMS_TEMPLATE_PATH', CMS_PATH.'/templates');
-if (!defined('CMS_TEMPLATE_URL')) define('CMS_TEMPLATE_URL', CMS_URL.'/templates');
+if (!defined('CMS_LOCALE')) define('CMS_LOCALE', strtolower(LANGUAGE));
+if (!defined('CMS_TEMPLATES_PATH')) define('CMS_TEMPLATES_PATH', CMS_PATH.'/templates');
+if (!defined('CMS_TEMPLATES_URL')) define('CMS_TEMPLATES_URL', CMS_URL.'/templates');
 if (!defined('CMS_ADDONS_PATH')) define('CMS_ADDONS_PATH', CMS_PATH.'/modules');
 if (!defined('CMS_ADDONS_URL')) define('CMS_ADDONS_URL', CMS_URL.'/modules');
 if (!defined('CMS_USER_ID')) define('CMS_USER_ID', isset($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : -1);
 if (!defined('CMS_USER_USERNAME')) define('CMS_USER_USERNAME', isset($_SESSION['USERNAME']) ? $_SESSION['USERNAME'] : 'anonymous');
-if (!defined('CMS_USER_DISPLAYNAME')) define('CMS_USER_DISPLAYNAME', isset($_SESSION['DISPLAYNAME']) ? $_SESSION['DISPLAYNAME'] : 'anonymous');
+if (!defined('CMS_USER_DISPLAYNAME')) define('CMS_USER_DISPLAYNAME', isset($_SESSION['DISPLAY_NAME']) ? $_SESSION['DISPLAY_NAME'] : 'anonymous');
 if (!defined('CMS_USER_EMAIL')) define('CMS_USER_EMAIL', isset($_SESSION['EMAIL']) ? $_SESSION['EMAIL'] : '');
 if (!defined('CMS_USER_IS_AUTHENTICATED')) define('CMS_USER_IS_AUTHENTICATED', ((CMS_USER_ID > 0) && (CMS_USER_EMAIL != '')));
+if (!defined('CMS_USER_ACCOUNT_URL')) define('CMS_USER_ACCOUNT_URL', PREFERENCES_URL);
+if (!defined('CMS_LOGIN_ENABLED')) define('CMS_LOGIN_ENABLED', FRONTEND_LOGIN);
+if (!defined('CMS_LOGIN_URL')) define('CMS_LOGIN_URL', LOGIN_URL);
+if (!defined('CMS_LOGIN_FORGOTTEN_URL')) define('CMS_LOGIN_FORGOTTEN_URL', FORGOT_URL);
+// get the redirect URL for the login
+$redirect_url = ((isset($_SESSION['HTTP_REFERER']) && $_SESSION['HTTP_REFERER'] != '') ? $_SESSION['HTTP_REFERER'] : CMS_URL);
+$redirect_url = (isset($_REQUEST['redirect']) && !empty($_REQUEST['redirect'])) ? $_REQUEST['redirect'] : $redirect_url;
+if (!defined('CMS_LOGIN_REDIRECT_URL')) define('CMS_LOGIN_REDIRECT_URL', $redirect_url);
+if (!defined('CMS_LOGIN_SIGNUP_ENABLED')) define('CMS_LOGIN_SIGNUP_ENABLED', FRONTEND_SIGNUP);
+if (!defined('CMS_LOGIN_SIGNUP_URL')) define('CMS_LOGIN_SIGNUP_URL', SIGNUP_URL);
+if (!defined('CMS_LOGOUT_URL')) define('CMS_LOGOUT_URL', LOGOUT_URL);
 
 // check for the framework configuration file
 $framework_config = $tools['utils']->readConfiguration(realpath(BOOTSTRAP_PATH . '/config/framework.json'));
@@ -89,9 +100,6 @@ if (!defined('EXTENSION_URL')) define('EXTENSION_URL', MANUFAKTUR_URL.'/Library/
 
 if (!defined('HELPER_PATH')) define('HELPER_PATH', MANUFAKTUR_PATH.'/Library/Helper');
 if (!defined('HELPER_URL')) define('HELPER_URL', MANUFAKTUR_URL.'/Library/Helper');
-
-if (!defined('ACTIVE_TEMPLATE_PATH')) define('ACTIVE_TEMPLATE_PATH', CMS_PATH.substr(TEMPLATE_DIR, strlen(CMS_URL)));
-if (!defined('ACTIVE_TEMPLATE_URL')) define('ACTIVE_TEMPLATE_URL', TEMPLATE_DIR);
 
 // get the filesystem into the application
 $tools['filesystem'] = function() {
@@ -143,11 +151,45 @@ $tools->register(new Silex\Provider\DoctrineServiceProvider(), array(
     )
 ));
 
-
 if (!defined('PAGE_URL')) define('PAGE_URL', $tools['cms']->page_url(PAGE_ID));
 if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $tools['cms']->page_title());
 if (!defined('PAGE_DESCRIPTION')) define('PAGE_DESCRIPTION', $tools['cms']->page_description());
 if (!defined('PAGE_KEYWORDS')) define('PAGE_KEYWORDS', $tools['cms']->page_keywords());
+if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
+if (!defined('PAGE_HEADER')) define('PAGE_HEADER', $tools['cms']->page_header(false));
+if (!defined('PAGE_FOOTER')) define('PAGE_FOOTER', $tools['cms']->page_footer('Y', false));
+
+try {
+    // get PAGE_MODIFIED_WHEN and PAGE_MODIFIED_BY
+    $SQL = "SELECT `modified_when`, `display_name` FROM `".CMS_TABLE_PREFIX."pages`, `".CMS_TABLE_PREFIX."users` ".
+        "WHERE `user_id`=`modified_by` AND `page_id`=".PAGE_ID;
+    $result = $tools['db']->fetchAssoc($SQL);
+    if (!isset($result['modified_when'])) {
+        throw new \Exception("Can't read the page information for ID ".PAGE_ID." from the database!");
+    }
+    if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s', $result['modified_when']));
+    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $result['display_name']);
+} catch (\Doctrine\DBAL\DBALException $e) {
+    throw new \Exception($e);
+}
+
+if (!defined('TEMPLATE_PATH')) define('TEMPLATE_PATH', CMS_PATH.substr(TEMPLATE_DIR, strlen(CMS_URL)));
+if (!defined('TEMPLATE_URL')) define('TEMPLATE_URL', TEMPLATE_DIR);
+if (!defined('TEMPLATE_DIRECTORY')) define('TEMPLATE_DIRECTORY', substr(TEMPLATE_DIR, strlen(CMS_TEMPLATES_URL)+1));
+
+try {
+    // get extended template information
+    $SQL = "SELECT `name`, `description`, `version` FROM `".CMS_TABLE_PREFIX."addons` WHERE `type`='template' AND `directory`='".TEMPLATE_DIRECTORY."'";
+    $result = $tools['db']->fetchAssoc($SQL);
+    if (!isset($result['name'])) {
+        throw new \Exception("Can't read the template information for ".TEMPLATE_DIRECTORY." from the database!");
+    }
+    if (!defined('TEMPLATE_NAME')) define('TEMPLATE_NAME', $result['name']);
+    if (!defined('TEMPLATE_DESCRIPTION')) define('TEMPLATE_DESCRIPTION', $result['description']);
+    if (!defined('TEMPLATE_VERSION')) define('TEMPLATE_VERSION', $result['version']);
+} catch (\Doctrine\DBAL\DBALException $e) {
+    throw new \Exception($e);
+}
 
 // register the Translator
 $tools->register(new Silex\Provider\TranslationServiceProvider(), array(
@@ -160,22 +202,25 @@ $tools['translator'] = $tools->share($tools->extend('translator', function($tran
 }));
 
 // set the locale from the CMS
-$tools['translator']->setLocale(CMS_LANGUAGE);
+$tools['translator']->setLocale(CMS_LOCALE);
 
 // load the language files for the TemplateTools
 $tools['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/TemplateTools/Data/Locale');
 $tools['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/TemplateTools/Data/Locale/Custom');
 
-if ($tools['filesystem']->exists(ACTIVE_TEMPLATE_PATH.'/locale')) {
+// load the metric language file from BASIC
+$tools['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
+
+if ($tools['filesystem']->exists(TEMPLATE_PATH.'/locale')) {
     // if the template has a /locale directory load these language files also
-    $tools['utils']->addLanguageFiles(ACTIVE_TEMPLATE_PATH.'/locale');
+    $tools['utils']->addLanguageFiles(TEMPLATE_PATH.'/locale');
 }
 
 // register Twig
 $tools->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => array(
-        ACTIVE_TEMPLATE_PATH,
-        CMS_TEMPLATE_PATH),
+        TEMPLATE_PATH
+        ),
     'twig.options' => array(
         'cache' => FRAMEWORK_CACHE ? FRAMEWORK_PATH . '/temp/cache/' : false,
         'strict_variables' => FRAMEWORK_DEBUG,
@@ -184,6 +229,11 @@ $tools->register(new Silex\Provider\TwigServiceProvider(), array(
     )
 ));
 
+// add namespaces for easy template access
+$tools['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH, 'phpManufaktur');
+$tools['twig.loader.filesystem']->addPath(THIRDPARTY_PATH, 'thirdParty');
+$tools['twig.loader.filesystem']->addPath(CMS_TEMPLATES_PATH, 'Templates');
+$tools['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH.'/TemplateTools/Template', 'TemplateTools');
 
 $tools['twig'] = $tools->share($tools->extend('twig', function($twig, $tools)
 {
@@ -209,7 +259,7 @@ $tools['droplet'] = $tools->share(function($tools) {
 });
 
 // execute kitCommands
-$tools['command'] = $tools->share(function($tools) {
+$tools['kitcommand'] = $tools->share(function($tools) {
     return new kitCommandFunctions($tools);
 });
 

@@ -1,0 +1,20 @@
+/**
+ * TemplateTools
+ *
+ * @author Team phpManufaktur <team@phpmanufaktur.de>
+ * @link https://kit2.phpmanufaktur.de
+ * @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+ */
+
+#bootstrap-login .forgotten,
+#bootstrap-login .signup {
+  font-size: smaller;
+}
+
+#bootstrap-login .forgotten {
+  padding: 10px 0 0 0;
+}
+#bootstrap-login .welcome {
+  padding: 0 0 15px 0;
+}
