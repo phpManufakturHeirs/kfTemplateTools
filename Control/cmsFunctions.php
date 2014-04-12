@@ -34,11 +34,24 @@ class cmsFunctions
     /**
      * Return the page description for the actual PAGE_ID
      *
+     * @param boolean $prompt
      * @return string
      */
-    public function page_description()
+    public function page_description($prompt=true)
     {
-        return \page_description();
+        if (function_exists('page_description')) {
+            if ($prompt) {
+                \page_description();
+            }
+            else {
+                ob_start();
+                \page_description();
+                return ob_get_clean();
+            }
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -46,32 +59,71 @@ class cmsFunctions
      *
      * @param string $spacer
      * @param string $template
+     * @param boolean $prompt
      * @return string
      */
-    public function page_title($spacer=' - ', $template='[PAGE_TITLE]')
+    public function page_title($spacer=' - ', $template='[PAGE_TITLE]', $prompt=true)
     {
-        return \page_title($spacer, $template);
+        if (function_exists('page_title')) {
+            if ($prompt) {
+                \page_title($spacer, $template);
+            }
+            else {
+                ob_start();
+                \page_title($spacer, $template);
+                return ob_get_clean();
+            }
+        }
+        else {
+            return null;
+        }
     }
 
     /**
      * Return the page keywords for the actual PAGE_ID
      *
+     * @param boolean $prompt
      * @return string
      */
-    public function page_keywords()
+    public function page_keywords($prompt=true)
     {
-        return \page_keywords();
+        if (function_exists('page_keywords')) {
+            if ($prompt) {
+                \page_keywords();
+            }
+            else {
+                ob_start();
+                \page_keywords();
+                return ob_get_clean();
+            }
+        }
+        else {
+            return null;
+        }
     }
 
     /**
      * Return the page content by the given block for the actual PAGE_ID
      *
      * @param number $block
+     * @param boolean $prompt
      * @return string
      */
-    public function page_content($block=1)
+    public function page_content($block=1, $prompt=true)
     {
-        return \page_content($block);
+        if (function_exists('page_content')) {
+            if ($prompt) {
+                \page_content($block);
+            }
+            else {
+                ob_start();
+                \page_content($block);
+                return ob_get_clean();
+            }
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -104,15 +156,20 @@ class cmsFunctions
         $prompt         = true
         )
     {
-        if ($prompt) {
-            \show_menu2($aMenu,$aStart,$aMaxLevel,$aOptions,$aItemOpen,
-                $aItemClose,$aMenuOpen,$aMenuClose,$aTopItemOpen,$aTopMenuOpen);
+        if (function_exists('show_menu2')) {
+            if ($prompt) {
+                \show_menu2($aMenu,$aStart,$aMaxLevel,$aOptions,$aItemOpen,
+                    $aItemClose,$aMenuOpen,$aMenuClose,$aTopItemOpen,$aTopMenuOpen);
+            }
+            else {
+                ob_start();
+                \show_menu2($aMenu,$aStart,$aMaxLevel,$aOptions,$aItemOpen,
+                    $aItemClose,$aMenuOpen,$aMenuClose,$aTopItemOpen,$aTopMenuOpen);
+                return ob_get_clean();
+            }
         }
         else {
-            ob_start();
-            \show_menu2($aMenu,$aStart,$aMaxLevel,$aOptions,$aItemOpen,
-                $aItemClose,$aMenuOpen,$aMenuClose,$aTopItemOpen,$aTopMenuOpen);
-            return ob_get_clean();
+            return null;
         }
     }
 
@@ -122,12 +179,18 @@ class cmsFunctions
      *
      * @param integer $page_id
      * @param null|array $arguments
+     * @param boolean $prompt
      * @throws \Exception
      * @return string URL of the page
      */
-    public function page_url($page_id, $arguments=null)
+    public function page_url($page_id, $arguments=null, $prompt=true)
     {
-        return $this->PageData->getURL($page_id, $arguments);
+        if ($prompt) {
+            echo $this->PageData->getURL($page_id, $arguments);
+        }
+        else {
+            return $this->PageData->getURL($page_id, $arguments);
+        }
     }
 
     /**
@@ -135,34 +198,45 @@ class cmsFunctions
      * You can use the placeholders [YEAR] and [PROCESS_TIME]
      *
      * @param string $date_format for the [YEAR] placeholder
+     * @param boolean $prompt
      * @return string formatted
      */
     public function page_footer($date_format='Y', $prompt=true)
     {
-        if ($prompt) {
-            \page_footer($date_format);
+        if (function_exists('page_footer')) {
+            if ($prompt) {
+                \page_footer($date_format);
+            }
+            else {
+                ob_start();
+                \page_footer($date_format);
+                return ob_get_clean();
+            }
         }
         else {
-            ob_start();
-            \page_footer($date_format);
-            return ob_get_clean();
+            return null;
         }
     }
 
     /**
      * Return the page header from the CMS options.
      *
-     * @param string $date_format (not supported)
+     * @param boolean $prompt
      */
     public function page_header($prompt=true)
     {
-        if ($prompt) {
-            \page_header();
+        if (function_exists('page_header')) {
+            if ($prompt) {
+                \page_header();
+            }
+            else {
+                ob_start();
+                \page_header();
+                return ob_get_clean();
+            }
         }
         else {
-            ob_start();
-            \page_header();
-            return ob_get_clean();
+            return null;
         }
     }
 
@@ -176,17 +250,18 @@ class cmsFunctions
      */
     public function register_frontend_modfiles($file_type='css', $prompt=true)
     {
-        if (!function_exists('register_frontend_modfiles')) {
-            // i.e. BlackCat does not support this function!
-            return '';
-        }
-        if ($prompt) {
-            \register_frontend_modfiles($file_type);
+        if (function_exists('register_frontend_modfiles')) {
+            if ($prompt) {
+                \register_frontend_modfiles($file_type);
+            }
+            else {
+                ob_start();
+                \register_frontend_modfiles($file_type);
+                return ob_get_clean();
+            }
         }
         else {
-            ob_start();
-            \register_frontend_modfiles($file_type);
-            return ob_get_clean();
+            return null;
         }
     }
 
@@ -201,16 +276,17 @@ class cmsFunctions
     public function register_frontend_modfiles_body($file_type='js', $prompt=true)
     {
         if (!function_exists('register_frontend_modfiles_body')) {
-            // i.e. BlackCat does not support this function!
-            return '';
-        }
-        if ($prompt) {
-            \register_frontend_modfiles_body($file_type);
+            if ($prompt) {
+                \register_frontend_modfiles_body($file_type);
+            }
+            else {
+                ob_start();
+                \register_frontend_modfiles_body($file_type);
+                return ob_get_clean();
+            }
         }
         else {
-            ob_start();
-            \register_frontend_modfiles_body($file_type);
-            return ob_get_clean();
+            return null;
         }
     }
 }

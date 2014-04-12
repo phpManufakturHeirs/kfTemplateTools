@@ -60,7 +60,9 @@ class TwigExtension extends Twig_Extension
             'CMS_LOGOUT_URL' => CMS_LOGOUT_URL,
             'CMS_MEDIA_PATH' => CMS_MEDIA_PATH,
             'CMS_MEDIA_URL' => CMS_MEDIA_URL,
+            'CMS_PAGES_DIRECTORY' => CMS_PAGES_DIRECTORY,
             'CMS_PATH' => CMS_PATH,
+            'CMS_SEARCH_VISIBILITY' => CMS_SEARCH_VISIBILITY,
             'CMS_TABLE_PREFIX' => CMS_TABLE_PREFIX,
             'CMS_TEMPLATES_PATH' => CMS_TEMPLATES_PATH,
             'CMS_TEMPLATES_URL' => CMS_TEMPLATES_URL,
@@ -94,13 +96,19 @@ class TwigExtension extends Twig_Extension
             'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
             'MANUFAKTUR_URL' => MANUFAKTUR_URL,
 
+            'NEWS_ID' => NEWS_ID,
+
             'PAGE_DESCRIPTION' => PAGE_DESCRIPTION,
+            'PAGE_EXTENSION' => PAGE_EXTENSION,
             'PAGE_FOOTER' => PAGE_FOOTER,
             'PAGE_HEADER' => PAGE_HEADER,
             'PAGE_ID' => PAGE_ID,
             'PAGE_KEYWORDS' => PAGE_KEYWORDS,
+            'PAGE_MENU_LEVEL' => PAGE_MENU_LEVEL,
+            'PAGE_MENU_TITLE' => PAGE_MENU_TITLE,
             'PAGE_MODIFIED_BY' => PAGE_MODIFIED_BY,
             'PAGE_MODIFIED_WHEN' => PAGE_MODIFIED_WHEN,
+            'PAGE_PARENT_ID' => PAGE_PARENT_ID,
             'PAGE_TITLE' => PAGE_TITLE,
             'PAGE_URL' => PAGE_URL,
             'PAGE_VISIBILITY' => PAGE_VISIBILITY,
@@ -128,15 +136,16 @@ class TwigExtension extends Twig_Extension
             'SM2_TRIM' => SM2_TRIM,
             'SM2_XHTML_STRICT' => SM2_XHTML_STRICT,
 
-            'TEMPLATE_DESCRIPTION' => TEMPLATE_DESCRIPTION,
+            'TEMPLATE_DEFAULT_NAME' => TEMPLATE_DEFAULT_NAME,
             'TEMPLATE_DIRECTORY' => TEMPLATE_DIRECTORY,
             'TEMPLATE_NAME' => TEMPLATE_NAME,
             'TEMPLATE_PATH' => TEMPLATE_PATH,
             'TEMPLATE_URL' => TEMPLATE_URL,
-            'TEMPLATE_VERSION' => TEMPLATE_VERSION,
 
             'THIRDPARTY_PATH' => THIRDPARTY_PATH,
             'THIRDPARTY_URL' => THIRDPARTY_URL,
+
+            'TOPIC_ID' => TOPIC_ID,
 
         );
     }
