@@ -19,7 +19,6 @@ use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 use Silex\Application;
 use Symfony\Component\Filesystem\Filesystem;
-use phpManufaktur\Basic\Control\Utils;
 use phpManufaktur\TemplateTools\Control\cmsFunctions;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Bridge\Monolog\Logger;
@@ -28,6 +27,7 @@ use phpManufaktur\TemplateTools\Control\TwigExtension;
 use phpManufaktur\TemplateTools\Control\DropletFunctions;
 use phpManufaktur\TemplateTools\Control\kitCommandFunctions;
 use phpManufaktur\Basic\Control\Image;
+use phpManufaktur\TemplateTools\Control\Tools;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -42,12 +42,12 @@ $template = new Application();
 if (!defined('BOOTSTRAP_PATH')) define('BOOTSTRAP_PATH', WB_PATH.'/kit2');
 
 // register the Framework Utils
-$template['utils'] = $template->share(function($template) {
-    return new Utils($template);
+$template['tools'] = $template->share(function($template) {
+    return new Tools($template);
 });
 
 // define needed constants
-if (!defined('CMS_PATH')) define('CMS_PATH', $template['utils']->sanitizePath(WB_PATH));
+if (!defined('CMS_PATH')) define('CMS_PATH', $template['tools']->sanitizePath(WB_PATH));
 if (!defined('CMS_URL')) define('CMS_URL', WB_URL);
 if (!defined('CMS_MEDIA_PATH')) define('CMS_MEDIA_PATH', CMS_PATH.MEDIA_DIRECTORY);
 if (!defined('CMS_MEDIA_URL')) define('CMS_MEDIA_URL', CMS_URL.MEDIA_DIRECTORY);
@@ -66,6 +66,9 @@ if (!defined('CMS_LOGIN_ENABLED')) define('CMS_LOGIN_ENABLED', FRONTEND_LOGIN);
 if (!defined('CMS_LOGIN_URL')) define('CMS_LOGIN_URL', LOGIN_URL);
 if (!defined('CMS_LOGIN_FORGOTTEN_URL')) define('CMS_LOGIN_FORGOTTEN_URL', FORGOT_URL);
 if (!defined('CMS_PAGES_DIRECTORY')) define('CMS_PAGES_DIRECTORY', PAGES_DIRECTORY);
+if (!defined('CMS_TITLE')) define('CMS_TITLE', WEBSITE_TITLE);
+if (!defined('CMS_DESCRIPTION')) define('CMS_DESCRIPTION', WEBSITE_DESCRIPTION);
+if (!defined('CMS_KEYWORDS')) define('CMS_KEYWORDS', WEBSITE_KEYWORDS);
 
 // get the redirect URL for the login
 $redirect_url = ((isset($_SESSION['HTTP_REFERER']) && $_SESSION['HTTP_REFERER'] != '') ? $_SESSION['HTTP_REFERER'] : CMS_URL);
@@ -77,7 +80,7 @@ if (!defined('CMS_LOGOUT_URL')) define('CMS_LOGOUT_URL', LOGOUT_URL);
 if (!defined('CMS_SEARCH_VISIBILITY')) define('CMS_SEARCH_VISIBILITY', SEARCH);
 
 // check for the framework configuration file
-$framework_config = $template['utils']->readConfiguration(realpath(BOOTSTRAP_PATH . '/config/framework.json'));
+$framework_config = $template['tools']->readJSON(realpath(BOOTSTRAP_PATH . '/config/framework.json'));
 
 if (!defined('FRAMEWORK_DEBUG')) define('FRAMEWORK_DEBUG', (isset($framework_config['DEBUG'])) ? $framework_config['DEBUG'] : false);
 $app['debug'] = FRAMEWORK_DEBUG;
@@ -126,9 +129,9 @@ $template['monolog']->pushHandler(new Monolog\Handler\RotatingFileHandler(
 $template['monolog']->addDebug('Monolog initialized.');
 
 // read the CMS configuration
-$cms_config = $template['utils']->readConfiguration(FRAMEWORK_PATH . '/config/cms.json');
+$cms_config = $template['tools']->readJSON(FRAMEWORK_PATH . '/config/cms.json');
 
-if (!defined('CMS_ADMIN_PATH')) define('CMS_ADMIN_PATH', $template['utils']->sanitizePath($cms_config['CMS_ADMIN_PATH']));
+if (!defined('CMS_ADMIN_PATH')) define('CMS_ADMIN_PATH', $template['tools']->sanitizePath($cms_config['CMS_ADMIN_PATH']));
 if (!defined('CMS_ADMIN_URL')) define('CMS_ADMIN_URL', $cms_config['CMS_ADMIN_URL']);
 if (!defined('CMS_TYPE')) define('CMS_TYPE', $cms_config['CMS_TYPE']);
 if (!defined('CMS_VERSION')) define('CMS_VERSION', $cms_config['CMS_VERSION']);
@@ -138,7 +141,7 @@ $template['cms'] = $template->share(function($template) {
 });
 
 // read the doctrine configuration
-$doctrine_config = $template['utils']->readConfiguration(FRAMEWORK_PATH.'/config/doctrine.cms.json');
+$doctrine_config = $template['tools']->readJSON(FRAMEWORK_PATH.'/config/doctrine.cms.json');
 
 if (!defined('CMS_TABLE_PREFIX')) define('CMS_TABLE_PREFIX', $doctrine_config['TABLE_PREFIX']);
 if (!defined('FRAMEWORK_TABLE_PREFIX')) define('FRAMEWORK_TABLE_PREFIX', $doctrine_config['TABLE_PREFIX'] . 'kit2_');
@@ -154,7 +157,6 @@ $template->register(new Silex\Provider\DoctrineServiceProvider(), array(
     )
 ));
 
-if (!defined('PAGE_DESCRIPTION')) define('PAGE_DESCRIPTION', $template['cms']->page_description());
 if (!defined('PAGE_FOOTER')) define('PAGE_FOOTER', $template['cms']->page_footer('Y', false));
 if (!defined('PAGE_HEADER')) define('PAGE_HEADER', $template['cms']->page_header(false));
 if (!defined('PAGE_KEYWORDS')) define('PAGE_KEYWORDS', $template['cms']->page_keywords());
@@ -162,7 +164,7 @@ if (!defined('PAGE_MENU_LEVEL')) define('PAGE_MENU_LEVEL', LEVEL);
 if (!defined('PAGE_MENU_TITLE')) define('PAGE_MENU_TITLE', MENU_TITLE);
 if (!defined('PAGE_PARENT_ID')) define('PAGE_PARENT_ID', PARENT);
 if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title());
-if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(PAGE_ID, null, false));
+if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(null, false));
 if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
 
 try {
@@ -180,7 +182,7 @@ try {
 }
 
 global $post_id;
-if (!defined('NEWS_ID')) define('NEWS_ID', (defined('POST_ID')) ? POST_ID : (isset($post_id)) ? $post_id : -1);
+if (!defined('POST_ID')) define('POST_ID', isset($post_id) ? $post_id : -1);
 if (!defined('TOPIC_ID')) define('TOPIC_ID', -1);
 
 if (!defined('TEMPLATE_DEFAULT_NAME')) define('TEMPLATE_DEFAULT_NAME', DEFAULT_TEMPLATE);
@@ -203,15 +205,15 @@ $template['translator'] = $template->share($template->extend('translator', funct
 $template['translator']->setLocale(CMS_LOCALE);
 
 // load the language files for the TemplateTools
-$template['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/TemplateTools/Data/Locale');
-$template['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/TemplateTools/Data/Locale/Custom');
+$template['tools']->addLanguageFiles(MANUFAKTUR_PATH.'/TemplateTools/Data/Locale');
+$template['tools']->addLanguageFiles(MANUFAKTUR_PATH.'/TemplateTools/Data/Locale/Custom');
 
 // load the metric language file from BASIC
-$template['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
+$template['tools']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
 
 if ($template['filesystem']->exists(TEMPLATE_PATH.'/locale')) {
     // if the template has a /locale directory load these language files also
-    $template['utils']->addLanguageFiles(TEMPLATE_PATH.'/locale');
+    $template['tools']->addLanguageFiles(TEMPLATE_PATH.'/locale');
 }
 
 // register Twig
@@ -257,7 +259,7 @@ $template['droplet'] = $template->share(function($template) {
 });
 
 // execute kitCommands
-$template['kitcommand'] = $template->share(function($template) {
+$template['command'] = $template->share(function($template) {
     return new kitCommandFunctions($template);
 });
 

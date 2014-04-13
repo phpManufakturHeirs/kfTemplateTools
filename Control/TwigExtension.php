@@ -47,10 +47,12 @@ class TwigExtension extends Twig_Extension
         return array(
             'CMS_ADDONS_PATH' => CMS_ADDONS_PATH,
             'CMS_ADDONS_URL' => CMS_ADDONS_URL,
-            'CMS_LOCALE' => CMS_LOCALE,
             'CMS_ADMIN_PATH' => CMS_ADMIN_PATH,
             'CMS_ADMIN_URL' => CMS_ADMIN_URL,
             'CMS_ADDONS_PATH' => CMS_ADDONS_PATH,
+            'CMS_DESCRIPTION' => CMS_DESCRIPTION,
+            'CMS_KEYWORDS' => CMS_KEYWORDS,
+            'CMS_LOCALE' => CMS_LOCALE,
             'CMS_LOGIN_ENABLED' => CMS_LOGIN_ENABLED,
             'CMS_LOGIN_FORGOTTEN_URL' => CMS_LOGIN_FORGOTTEN_URL,
             'CMS_LOGIN_REDIRECT_URL' => CMS_LOGIN_REDIRECT_URL,
@@ -66,6 +68,7 @@ class TwigExtension extends Twig_Extension
             'CMS_TABLE_PREFIX' => CMS_TABLE_PREFIX,
             'CMS_TEMPLATES_PATH' => CMS_TEMPLATES_PATH,
             'CMS_TEMPLATES_URL' => CMS_TEMPLATES_URL,
+            'CMS_TITLE' => CMS_TITLE,
             'CMS_TYPE' => CMS_TYPE,
             'CMS_URL' => CMS_URL,
             'CMS_USER_ACCOUNT_URL' => CMS_USER_ACCOUNT_URL,
@@ -96,8 +99,6 @@ class TwigExtension extends Twig_Extension
             'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
             'MANUFAKTUR_URL' => MANUFAKTUR_URL,
 
-            'NEWS_ID' => NEWS_ID,
-
             'PAGE_DESCRIPTION' => PAGE_DESCRIPTION,
             'PAGE_EXTENSION' => PAGE_EXTENSION,
             'PAGE_FOOTER' => PAGE_FOOTER,
@@ -112,6 +113,8 @@ class TwigExtension extends Twig_Extension
             'PAGE_TITLE' => PAGE_TITLE,
             'PAGE_URL' => PAGE_URL,
             'PAGE_VISIBILITY' => PAGE_VISIBILITY,
+
+            'POST_ID' => POST_ID,
 
             'SM2_ALL' => SM2_ALL,
             'SM2_ALLINFO' => SM2_ALLINFO,
@@ -169,14 +172,16 @@ class TwigExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
+            'command' => new \Twig_Function_Method($this, 'functionKitCommand'),
+            'droplet' => new \Twig_Function_Method($this, 'functionDroplet'),
             'image' => new \Twig_Function_Method($this, 'functionImage'),
             'markdown' => new \Twig_Function_Method($this, 'functionMarkdown'),
             'page_content' => new \Twig_Function_Method($this, 'functionPageContent'),
-            'show_menu2' => new \Twig_Function_Method($this, 'functionShowMenu2'),
-            'droplet' => new \Twig_Function_Method($this, 'functionDroplet'),
-            'kitcommand' => new \Twig_Function_Method($this, 'functionKitCommand'),
+            'page_description' => new \Twig_Function_Method($this, 'functionPageDescription'),
+            'page_title' => new \Twig_Function_Method($this, 'functionPageTitle'),
             'register_frontend_modfiles' => new \Twig_Function_Method($this, 'functionRegisterFrontendModfiles'),
             'register_frontend_modfiles_body' => new \Twig_Function_Method($this, 'functionRegisterFrontendModfilesBody'),
+            'show_menu2' => new \Twig_Function_Method($this, 'functionShowMenu2'),
 
         );
     }
@@ -193,7 +198,7 @@ class TwigExtension extends Twig_Extension
      */
     public function filterEllipsis($text, $length=100, $striptags=true, $htmlpurifier=false)
     {
-        return $this->app['utils']->Ellipsis($text, $length, $striptags, $htmlpurifier);
+        return $this->app['tools']->Ellipsis($text, $length, $striptags, $htmlpurifier);
     }
 
     /**
@@ -221,12 +226,12 @@ class TwigExtension extends Twig_Extension
      */
     public function functionImage($relative_image_path, $max_width=null, $max_height=null, $parent_path=FRAMEWORK_PATH, $parent_url=FRAMEWORK_URL, $cache=true)
     {
-        $relative_image_path = $this->app['utils']->sanitizePath($relative_image_path);
+        $relative_image_path = $this->app['tools']->sanitizePath($relative_image_path);
         if ($relative_image_path[0] != '/') {
             $relative_image_path = '/'.$relative_image_path;
         }
 
-        $parent_path = $this->app['utils']->sanitizePath($parent_path);
+        $parent_path = $this->app['tools']->sanitizePath($parent_path);
 
         if ($parent_url[strlen($parent_url)-1] == '/') {
             $parent_url = substr($parent_url, 0, -1);
@@ -378,11 +383,51 @@ class TwigExtension extends Twig_Extension
      * of the frontend
      *
      * @param string $file_type
-     * @param boolean $prompt
      * @return string
      */
     public function functionRegisterFrontendModfilesBody($file_type='css')
     {
         return $this->app['cms']->register_frontend_modfiles_body($file_type, false);
+    }
+
+    /**
+     * Return the page description for the actual PAGE_ID.
+     * If $arguments is an array and key = 'topic_id' or 'post_id' and value > 0
+     * the function return the description for TOPICS oder NEWS
+     *
+     * @param array $arguments
+     * @return string
+     */
+    public function functionPageDescription($arguments=null)
+    {
+        return $this->app['cms']->page_description($arguments, false);
+    }
+
+    /**
+     * Return the page title for the actual PAGE_ID
+     * If $arguments is an array and key = 'topic_id' or 'post_id' and value > 0
+     * the function return the title for TOPICS oder NEWS
+     *
+     * @param array $arguments
+     * @param string $spacer
+     * @param string $template
+     * @return string
+     */
+    public function functionPageTitle($arguments=null, $spacer= ' - ', $template='[PAGE_TITLE]')
+    {
+        return $this->app['cms']->page_title($arguments, false, $spacer, $template);
+    }
+
+    /**
+     * Return the page keywords for the actual PAGE_ID
+     * If $arguments is an array and key = 'topic_id' or 'post_id' and value > 0
+     * the function return the keywords for TOPICS oder NEWS
+     *
+     * @param boolean $prompt
+     * @return string
+     */
+    public function functionPageKeywords($arguments=null)
+    {
+        return $this->app['cms']->page_keywords($arguments, false);
     }
 }

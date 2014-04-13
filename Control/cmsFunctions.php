@@ -32,14 +32,44 @@ class cmsFunctions
     }
 
     /**
-     * Return the page description for the actual PAGE_ID
+     * Return the page description for the actual PAGE_ID.
+     * If $arguments is an array and key = 'topic_id' or 'post_id' and value > 0
+     * the function return the description for TOPICS oder NEWS
      *
+     * @param array $arguments
      * @param boolean $prompt
      * @return string
      */
-    public function page_description($prompt=true)
+    public function page_description($arguments=null, $prompt=true)
     {
-        if (function_exists('page_description')) {
+        if (isset($arguments['topic_id']) && (is_int($arguments['topic_id'])) && ($arguments['topic_id'] > 0)) {
+            if (!file_exists(CMS_ADDONS_PATH . '/topics/module_settings.php')) {
+                throw new \Exception('A TOPIC_ID was submitted, but TOPICS is not installed!');
+            }
+            // get the title
+            $SQL = "SELECT `description` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".$arguments['topic_id'];
+            $description = $this->app['db']->fetchColumn($SQL);
+            if ($prompt) {
+                echo $description;
+            }
+            else {
+                return $description;
+            }
+        }
+        elseif (isset($arguments['post_id']) && is_int($arguments['post_id']) && ($arguments['post_id'] > 0)) {
+            // indicate a NEWS page
+            if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
+                throw new \Exception('A POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
+            }
+            // there is no description available, so we return the CMS_DESCRIPTION
+            if ($prompt) {
+                echo CMS_DESCRIPTION;
+            }
+            else {
+                return CMS_DESCRIPTION;
+            }
+        }
+        elseif (function_exists('page_description')) {
             if ($prompt) {
                 \page_description();
             }
@@ -56,15 +86,54 @@ class cmsFunctions
 
     /**
      * Return the page title for the actual PAGE_ID
+     * If $arguments is an array and key = 'topic_id' or 'post_id' and value > 0
+     * the function return the title for TOPICS oder NEWS
      *
+     * @param array $arguments
+     * @param boolean $prompt
      * @param string $spacer
      * @param string $template
-     * @param boolean $prompt
      * @return string
      */
-    public function page_title($spacer=' - ', $template='[PAGE_TITLE]', $prompt=true)
+    public function page_title($arguments=null, $prompt=true, $spacer= ' - ', $template='[PAGE_TITLE]')
     {
-        if (function_exists('page_title')) {
+        if (isset($arguments['topic_id']) && (is_int($arguments['topic_id'])) && ($arguments['topic_id'] > 0)) {
+            if (!file_exists(CMS_ADDONS_PATH . '/topics/module_settings.php')) {
+                throw new \Exception('A TOPIC_ID was submitted, but TOPICS is not installed!');
+            }
+            // get the title
+            $SQL = "SELECT `title` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".$arguments['topic_id'];
+            $title = $this->app['db']->fetchColumn($SQL);
+
+            $placeholders = array('[WEBSITE_TITLE]', '[PAGE_TITLE]', '[MENU_TITLE]', '[SPACER]');
+            $values = array(WEBSITE_TITLE, $title, MENU_TITLE, $spacer);
+
+            if ($prompt) {
+                echo str_replace($placeholders, $values, $template);
+            }
+            else {
+                return str_replace($placeholders, $values, $template);
+            }
+        }
+        elseif (isset($arguments['post_id']) && is_int($arguments['post_id']) && ($arguments['post_id'] > 0)) {
+            // indicate a NEWS page
+            if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
+                throw new \Exception('A POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
+            }
+            $SQL = "SELECT `title` FROM `".CMS_TABLE_PREFIX."mod_news_posts` WHERE `post_id`='".$arguments['post_id']."'";
+            $title = $this->app['db']->fetchColumn($SQL);
+
+            $placeholders = array('[WEBSITE_TITLE]', '[PAGE_TITLE]', '[MENU_TITLE]', '[SPACER]');
+            $values = array(WEBSITE_TITLE, $title, MENU_TITLE, $spacer);
+
+            if ($prompt) {
+                echo str_replace($placeholders, $values, $template);
+            }
+            else {
+                return str_replace($placeholders, $values, $template);
+            }
+        }
+        elseif (function_exists('page_title')) {
             if ($prompt) {
                 \page_title($spacer, $template);
             }
@@ -81,13 +150,42 @@ class cmsFunctions
 
     /**
      * Return the page keywords for the actual PAGE_ID
+     * If $arguments is an array and key = 'topic_id' or 'post_id' and value > 0
+     * the function return the keywords for TOPICS oder NEWS
      *
      * @param boolean $prompt
      * @return string
      */
-    public function page_keywords($prompt=true)
+    public function page_keywords($arguments=null, $prompt=true)
     {
-        if (function_exists('page_keywords')) {
+        if (isset($arguments['topic_id']) && (is_int($arguments['topic_id'])) && ($arguments['topic_id'] > 0)) {
+            if (!file_exists(CMS_ADDONS_PATH . '/topics/module_settings.php')) {
+                throw new \Exception('A TOPIC_ID was submitted, but TOPICS is not installed!');
+            }
+            // get the title
+            $SQL = "SELECT `keywords` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".$arguments['topic_id'];
+            $keywords = $this->app['db']->fetchColumn($SQL);
+            if ($prompt) {
+                echo keywords;
+            }
+            else {
+                return $keywords;
+            }
+        }
+        elseif (isset($arguments['post_id']) && is_int($arguments['post_id']) && ($arguments['post_id'] > 0)) {
+            // indicate a NEWS page
+            if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
+                throw new \Exception('A POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
+            }
+            // there are no keywords available, so we return the CMS_KEYWORDS
+            if ($prompt) {
+                echo CMS_KEYWORDS;
+            }
+            else {
+                return CMS_KEYWORDS;
+            }
+        }
+        elseif (function_exists('page_keywords')) {
             if ($prompt) {
                 \page_keywords();
             }
@@ -177,19 +275,18 @@ class cmsFunctions
      * Get the URL of the given page ID. If arguments 'topic_id' or 'post_id'
      * the function will return the URL for the given TOPICS or NEWS article
      *
-     * @param integer $page_id
      * @param null|array $arguments
      * @param boolean $prompt
      * @throws \Exception
      * @return string URL of the page
      */
-    public function page_url($page_id, $arguments=null, $prompt=true)
+    public function page_url($arguments=null, $prompt=true)
     {
         if ($prompt) {
-            echo $this->PageData->getURL($page_id, $arguments);
+            echo $this->PageData->getURL(PAGE_ID, $arguments);
         }
         else {
-            return $this->PageData->getURL($page_id, $arguments);
+            return $this->PageData->getURL(PAGE_ID, $arguments);
         }
     }
 
@@ -266,27 +363,58 @@ class cmsFunctions
     }
 
     /**
-     * Function to add optional module Javascript into the <body> section
-     * of the frontend
+     * Function to add optional frontend_body.js files before the </body> tag.
+     * This function override the original and does NOT include jQuery files
+     * into the <head> section.
      *
-     * @param string $file_type
      * @param boolean $prompt
      * @return string
      */
-    public function register_frontend_modfiles_body($file_type='js', $prompt=true)
+    public function register_frontend_modfiles_body($prompt=true)
     {
-        if (!function_exists('register_frontend_modfiles_body')) {
-            if ($prompt) {
-                \register_frontend_modfiles_body($file_type);
+        global $include_body_links;
+
+        if (!defined('MOD_FRONTEND_BODY_JAVASCRIPT_REGISTERED')) {
+            define('MOD_FRONTEND_BODY_JAVASCRIPT_REGISTERED', true);
+        }
+
+        $body_links = '';
+        $base_link = '<script src="'.CMS_URL.'/modules/{MODULE_DIRECTORY}/frontend_body.js" type="text/javascript"></script>';
+        $base_file = "frontend_body.js";
+
+        // ensure that frontend_body.js is only added once per module type
+        if (!empty($include_body_links)) {
+            if (strpos($body_links, $include_body_links) === false) {
+                $body_links .= $include_body_links;
             }
-            else {
-                ob_start();
-                \register_frontend_modfiles_body($file_type);
-                return ob_get_clean();
+            $include_body_links = '';
+        }
+
+        // gather information for all models embedded on actual page
+        $SQL = "SELECT `module` FROM `".CMS_TABLE_PREFIX."sections` WHERE `page_id`=".PAGE_ID." AND `module`<>'wysiwyg'";
+        $modules = $this->app['db']->fetchAll($SQL);
+        if (is_array($modules)) {
+            foreach ($modules as $module) {
+                if ($this->app['filesystem']->exists(CMS_PATH.'/modules/'.$module['module'].'/'.$base_file)) {
+                    // create link with frontend_body.js source for the current module
+                    $tmp_link = str_replace("{MODULE_DIRECTORY}", $module['module'], $base_link);
+                    // define constant indicating that the register_frontent_files_body was invoked
+                    if (!defined('MOD_FRONTEND_BODY_JAVASCRIPT_REGISTERED')) {
+                        define('MOD_FRONTEND_BODY_JAVASCRIPT_REGISTERED', true);
+                    }
+                    // ensure that frontend_body.js is only added once per module type
+                    if (strpos($body_links, $tmp_link) === false) {
+                        $body_links .= $tmp_link;
+                    }
+                }
             }
         }
+
+        if ($prompt) {
+            echo $body_links;
+        }
         else {
-            return null;
+            return $body_links;
         }
     }
 }
