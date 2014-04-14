@@ -167,16 +167,25 @@ if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title())
 if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(null, false));
 if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
 
+if (!defined('PAGE_DESCRIPTION')) define('PAGE_DESCRIPTION', '');
+
 try {
     // get PAGE_MODIFIED_WHEN and PAGE_MODIFIED_BY
-    $SQL = "SELECT `modified_when`, `display_name` FROM `".CMS_TABLE_PREFIX."pages`, `".CMS_TABLE_PREFIX."users` ".
-        "WHERE `user_id`=`modified_by` AND `page_id`=".PAGE_ID;
-    $result = $template['db']->fetchAssoc($SQL);
-    if (!isset($result['modified_when'])) {
-        throw new \Exception("Can't read the page information for ID ".PAGE_ID." from the database!");
+    if (PAGE_ID > 0) {
+        $SQL = "SELECT `modified_when`, `display_name` FROM `".CMS_TABLE_PREFIX."pages`, `".CMS_TABLE_PREFIX."users` ".
+            "WHERE `user_id`=`modified_by` AND `page_id`=".PAGE_ID;
+        $result = $template['db']->fetchAssoc($SQL);
+        if (!isset($result['modified_when'])) {
+            throw new \Exception("Can't read the page information for ID ".PAGE_ID." from the database!");
+        }
+        if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s', $result['modified_when']));
+        if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $result['display_name']);
     }
-    if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s', $result['modified_when']));
-    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $result['display_name']);
+    else {
+        // no valid PAGE_ID, i.e. at search pages
+        if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s'));
+        if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', '- unknown -');
+    }
 } catch (\Doctrine\DBAL\DBALException $e) {
     throw new \Exception($e);
 }
