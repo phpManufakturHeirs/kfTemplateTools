@@ -94,11 +94,20 @@ class Tools
      * @param number $length
      * @param boolean $striptags remove HTML tags by default
      * @param boolean $htmlpurifier use HTML Purifier (false by default, ignored if striptags=true)
+     * @param boolean $prompt
      * @return string
+     * @todo DOM Parser does not work properly, disabled $htmlpurifier !!!
      */
-    public function Ellipsis($text, $length=100, $striptags=true, $htmlpurifier=false)
+    public function ellipsis($text, $length=100, $striptags=true, $htmlpurifier=false, $prompt=true)
     {
-        return $this->utils->Ellipsis($text, $length, $striptags, $htmlpurifier);
+        // at the moment we support only striped text ...
+        $result = $this->utils->Ellipsis($text, $length, true, false);
+        if ($prompt) {
+            echo $result;
+        }
+        else {
+            return $result;
+        }
     }
 
     /**
@@ -109,11 +118,18 @@ class Tools
      * turned to lowercase.
      *
      * @param string $text The text to humanize.
+     * @param boolean $prompt
      * @return string The humanized text.
      */
-    public function humanize($text)
+    public function humanize($text, $prompt=true)
     {
-        return $this->utils->humanize($text);
+        $result = $this->utils->humanize($text);
+        if ($prompt) {
+            echo $result;
+        }
+        else {
+            return $result;
+        }
     }
 
     /**

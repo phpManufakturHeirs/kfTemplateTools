@@ -160,8 +160,9 @@ class TwigExtension extends Twig_Extension
     public function getFilters()
     {
         return array(
-            'ellipsis' => new \Twig_Filter_Method($this, 'filterEllipsis'),
-            'markdown' => new \Twig_Filter_Method($this, 'filterMarkdown'),
+            'ellipsis' => new \Twig_Filter_Method($this, 'functionEllipsis'),
+            'markdown' => new \Twig_Filter_Method($this, 'functionMarkdownHTML'),
+            'humanize' => new \Twig_Filter_Method($this, 'functionHumanize'),
         );
     }
 
@@ -174,8 +175,11 @@ class TwigExtension extends Twig_Extension
         return array(
             'command' => new \Twig_Function_Method($this, 'functionKitCommand'),
             'droplet' => new \Twig_Function_Method($this, 'functionDroplet'),
+            'ellipsis' => new \Twig_Function_Method($this, 'functionEllipsis'),
+            'humanize' => new \Twig_Function_Method($this, 'functionHumanize'),
             'image' => new \Twig_Function_Method($this, 'functionImage'),
-            'markdown' => new \Twig_Function_Method($this, 'functionMarkdown'),
+            'markdown' => new \Twig_Function_Method($this, 'functionMarkdownHTML'),
+            'markdown_file' => new \Twig_Function_Method($this, 'functionMarkdownFile'),
             'page_content' => new \Twig_Function_Method($this, 'functionPageContent'),
             'page_description' => new \Twig_Function_Method($this, 'functionPageDescription'),
             'page_title' => new \Twig_Function_Method($this, 'functionPageTitle'),
@@ -196,20 +200,9 @@ class TwigExtension extends Twig_Extension
      * @param boolean $htmlpurifier use HTML Purifier (false by default, ignored if striptags=true)
      * @return string
      */
-    public function filterEllipsis($text, $length=100, $striptags=true, $htmlpurifier=false)
+    public function functionEllipsis($text, $length=100, $striptags=true, $htmlpurifier=false)
     {
-        return $this->app['tools']->Ellipsis($text, $length, $striptags, $htmlpurifier);
-    }
-
-    /**
-     * Return the given markdown $text as HTML
-     *
-     * @param string $text
-     * @param boolean $extra
-     */
-    public function filterMarkdown($text, $extra=true)
-    {
-        return $this->app['markdown']->html($text, $extra, false);
+        return $this->app['tools']->ellipsis($text, $length, $striptags, $htmlpurifier, false);
     }
 
     /**
@@ -296,9 +289,20 @@ class TwigExtension extends Twig_Extension
      * @param string $text
      * @param boolean $extra
      */
-    public function functionMarkdown($text, $extra)
+    public function functionMarkdownHTML($text, $extra=true)
     {
         return $this->app['markdown']->html($text, $extra, false);
+    }
+
+    /**
+     * Read the given Markdown file and return the content as HTML
+     *
+     * @param string $path
+     * @param string $extra
+     */
+    public function functionMarkdownFile($path, $extra=true)
+    {
+        return $this->app['markdown']->file($path, $extra, false);
     }
 
     /**
@@ -308,7 +312,7 @@ class TwigExtension extends Twig_Extension
      */
     public function functionPageContent($block=1)
     {
-        return $this->app['cms']->page_content($block);
+        return $this->app['cms']->page_content($block, false);
     }
 
     /**
@@ -429,5 +433,21 @@ class TwigExtension extends Twig_Extension
     public function functionPageKeywords($arguments=null)
     {
         return $this->app['cms']->page_keywords($arguments, false);
+    }
+
+    /**
+     * Makes a technical name human readable.
+     *
+     * Sequences of underscores are replaced by single spaces. The first letter
+     * of the resulting string is capitalized, while all other letters are
+     * turned to lowercase.
+     *
+     * @param string $text The text to humanize.
+     * @param boolean $prompt
+     * @return string The humanized text.
+     */
+    public function functionHumanize($text, $prompt=true)
+    {
+        return $this->app['tools']->humanize($text, $prompt);
     }
 }
