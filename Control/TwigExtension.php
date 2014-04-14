@@ -363,7 +363,7 @@ class TwigExtension extends Twig_Extension
      */
     public function functionKitCommand($command, $parameter=array())
     {
-        return $this->app['kitcommand']->execute($command, $parameter, false);
+        return $this->app['command']->execute($command, $parameter, false);
     }
 
     /**

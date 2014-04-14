@@ -167,6 +167,7 @@ if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title())
 if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(null, false));
 if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
 
+// normally set by CMS but not at SEARCH pages!
 if (!defined('PAGE_DESCRIPTION')) define('PAGE_DESCRIPTION', '');
 
 try {
@@ -225,6 +226,11 @@ if ($template['filesystem']->exists(TEMPLATE_PATH.'/locale')) {
     $template['tools']->addLanguageFiles(TEMPLATE_PATH.'/locale');
 }
 
+// Markdown Parser
+$template['markdown'] = $template->share(function($template) {
+    return new MarkdownFunctions($template);
+});
+
 // register Twig
 $template->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => array(
@@ -257,10 +263,6 @@ $template['twig'] = $template->share($template->extend('twig', function($twig, $
 
 $template['monolog']->addDebug('TwigServiceProvider registered.');
 
-// Markdown Parser
-$template['markdown'] = $template->share(function($template) {
-    return new MarkdownFunctions($template);
-});
 
 // execute droplets
 $template['droplet'] = $template->share(function($template) {

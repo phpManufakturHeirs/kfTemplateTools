@@ -39,7 +39,7 @@ class kitCommandFunctions
     {
         $params = array(
             'cms' => array(
-                'locale' => CMS_LANGUAGE,
+                'locale' => CMS_LOCALE,
                 'page_id' => PAGE_ID,
                 'page_url' => PAGE_URL,
                 'user' => array(
@@ -54,12 +54,13 @@ class kitCommandFunctions
         );
 
         $option = array(
-            CURLOPT_URL => FRAMEWORK_URL.'/command/'.strtolower($command),
+            CURLOPT_URL => FRAMEWORK_URL.'/kit_command/'.strtolower($command),
             CURLOPT_HEADER => false,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_USERAGENT => 'kitFramework:TemplateTools',
-            CURLOPT_POSTFIELDS => $parameter,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => $params), '', '&'),
             CURLOPT_TIMEOUT => 30,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false
