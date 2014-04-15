@@ -1,0 +1,31 @@
+{% spaceless %}
+<head>
+  {% block meta %}
+    {# declare the content type #}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    {# declare the charset #}
+    <meta charset="utf-8">
+    {# IE support #}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {# define the initial viewport #}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {# get the page title from CMS #}
+    <title>{{ page_title({'post_id':POST_ID,'topic_id':TOPIC_ID}) }}</title>
+    {# get the page description from CMS #}
+    <meta name="description" content="{{ page_description({'post_id':POST_ID,'topic_id':TOPIC_ID}) }}" />
+    {# get the page keywords from CMS #}
+    <meta name="keywords" content="{{ page_description({'post_id':POST_ID,'topic_id':TOPIC_ID}) }}" />
+  {% endblock meta %}
+
+  {% block css %}
+    {{ register_frontend_modfiles('css') }}
+  {% endblock css %}
+
+  {% block jquery %}
+    {{ register_frontend_modfiles('js') }}
+  {% endblock jquery %}  
+
+</head>
+{% endspaceless %}
+

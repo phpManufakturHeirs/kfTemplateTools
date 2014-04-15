@@ -214,12 +214,12 @@ $template['translator'] = $template->share($template->extend('translator', funct
 // set the locale from the CMS
 $template['translator']->setLocale(CMS_LOCALE);
 
+// load the metric language file from BASIC
+$template['tools']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
+
 // load the language files for the TemplateTools
 $template['tools']->addLanguageFiles(MANUFAKTUR_PATH.'/TemplateTools/Data/Locale');
 $template['tools']->addLanguageFiles(MANUFAKTUR_PATH.'/TemplateTools/Data/Locale/Custom');
-
-// load the metric language file from BASIC
-$template['tools']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
 
 if ($template['filesystem']->exists(TEMPLATE_PATH.'/locale')) {
     // if the template has a /locale directory load these language files also
@@ -246,9 +246,13 @@ $template->register(new Silex\Provider\TwigServiceProvider(), array(
 
 // add namespaces for easy template access
 $template['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH, 'phpManufaktur');
+$template['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH, 'phpmanufaktur');
 $template['twig.loader.filesystem']->addPath(THIRDPARTY_PATH, 'thirdParty');
+$template['twig.loader.filesystem']->addPath(THIRDPARTY_PATH, 'thirdparty');
+$template['twig.loader.filesystem']->addPath(CMS_TEMPLATES_PATH, 'templates');
 $template['twig.loader.filesystem']->addPath(CMS_TEMPLATES_PATH, 'Templates');
-$template['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH.'/TemplateTools/Template', 'TemplateTools');
+$template['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH.'/TemplateTools/Pattern', 'pattern');
+$template['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH.'/TemplateTools/Pattern', 'Pattern');
 
 $template['twig'] = $template->share($template->extend('twig', function($twig, $template)
 {
