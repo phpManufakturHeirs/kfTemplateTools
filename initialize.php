@@ -160,7 +160,16 @@ $template->register(new Silex\Provider\DoctrineServiceProvider(), array(
 if (!defined('PAGE_FOOTER')) define('PAGE_FOOTER', $template['cms']->page_footer('Y', false));
 if (!defined('PAGE_HEADER')) define('PAGE_HEADER', $template['cms']->page_header(false));
 if (!defined('PAGE_KEYWORDS')) define('PAGE_KEYWORDS', $template['cms']->page_keywords());
-if (!defined('PAGE_MENU_LEVEL')) define('PAGE_MENU_LEVEL', LEVEL);
+if (!defined('PAGE_MENU_LEVEL')) {
+    if (PAGE_ID > 0) {
+        $SQL = "SELECT `level` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=".PAGE_ID;
+        $page_level = $template['db']->fetchColumn($SQL);
+        define('PAGE_MENU_LEVEL', $page_level);
+    }
+    else {
+        define('PAGE_MENU_LEVEL', 0);
+    }
+}
 if (!defined('PAGE_MENU_TITLE')) define('PAGE_MENU_TITLE', MENU_TITLE);
 if (!defined('PAGE_PARENT_ID')) define('PAGE_PARENT_ID', PARENT);
 if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title());
