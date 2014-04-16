@@ -61,10 +61,10 @@ if (!defined('CMS_USER_USERNAME')) define('CMS_USER_USERNAME', isset($_SESSION['
 if (!defined('CMS_USER_DISPLAYNAME')) define('CMS_USER_DISPLAYNAME', isset($_SESSION['DISPLAY_NAME']) ? $_SESSION['DISPLAY_NAME'] : 'anonymous');
 if (!defined('CMS_USER_EMAIL')) define('CMS_USER_EMAIL', isset($_SESSION['EMAIL']) ? $_SESSION['EMAIL'] : '');
 if (!defined('CMS_USER_IS_AUTHENTICATED')) define('CMS_USER_IS_AUTHENTICATED', ((CMS_USER_ID > 0) && (CMS_USER_EMAIL != '')));
-if (!defined('CMS_USER_ACCOUNT_URL')) define('CMS_USER_ACCOUNT_URL', PREFERENCES_URL);
+if (!defined('CMS_USER_ACCOUNT_URL')) define('CMS_USER_ACCOUNT_URL', defined('PREFERENCES_URL') ? PREFERENCES_URL : CMS_URL);
 if (!defined('CMS_LOGIN_ENABLED')) define('CMS_LOGIN_ENABLED', FRONTEND_LOGIN);
-if (!defined('CMS_LOGIN_URL')) define('CMS_LOGIN_URL', LOGIN_URL);
-if (!defined('CMS_LOGIN_FORGOTTEN_URL')) define('CMS_LOGIN_FORGOTTEN_URL', FORGOT_URL);
+if (!defined('CMS_LOGIN_URL')) define('CMS_LOGIN_URL', defined('LOGIN_URL') ? LOGIN_URL : CMS_URL);
+if (!defined('CMS_LOGIN_FORGOTTEN_URL')) define('CMS_LOGIN_FORGOTTEN_URL', defined('FORGOT_URL') ? FORGOT_URL : CMS_URL);
 if (!defined('CMS_PAGES_DIRECTORY')) define('CMS_PAGES_DIRECTORY', PAGES_DIRECTORY);
 if (!defined('CMS_TITLE')) define('CMS_TITLE', WEBSITE_TITLE);
 if (!defined('CMS_DESCRIPTION')) define('CMS_DESCRIPTION', WEBSITE_DESCRIPTION);
@@ -75,8 +75,8 @@ $redirect_url = ((isset($_SESSION['HTTP_REFERER']) && $_SESSION['HTTP_REFERER'] 
 $redirect_url = (isset($_REQUEST['redirect']) && !empty($_REQUEST['redirect'])) ? $_REQUEST['redirect'] : $redirect_url;
 if (!defined('CMS_LOGIN_REDIRECT_URL')) define('CMS_LOGIN_REDIRECT_URL', $redirect_url);
 if (!defined('CMS_LOGIN_SIGNUP_ENABLED')) define('CMS_LOGIN_SIGNUP_ENABLED', FRONTEND_SIGNUP);
-if (!defined('CMS_LOGIN_SIGNUP_URL')) define('CMS_LOGIN_SIGNUP_URL', SIGNUP_URL);
-if (!defined('CMS_LOGOUT_URL')) define('CMS_LOGOUT_URL', LOGOUT_URL);
+if (!defined('CMS_LOGIN_SIGNUP_URL')) define('CMS_LOGIN_SIGNUP_URL', defined('SIGNUP_URL') ? SIGNUP_URL : CMS_URL);
+if (!defined('CMS_LOGOUT_URL')) define('CMS_LOGOUT_URL', defined('LOGOUT_URL') ? LOGOUT_URL : CMS_URL);
 if (!defined('CMS_SEARCH_VISIBILITY')) define('CMS_SEARCH_VISIBILITY', SEARCH);
 
 // check for the framework configuration file
