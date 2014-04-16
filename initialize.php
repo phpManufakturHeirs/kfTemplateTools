@@ -162,6 +162,7 @@ if (!defined('PAGE_HEADER')) define('PAGE_HEADER', $template['cms']->page_header
 if (!defined('PAGE_KEYWORDS')) define('PAGE_KEYWORDS', $template['cms']->page_keywords());
 if (!defined('PAGE_MENU_LEVEL')) {
     if (PAGE_ID > 0) {
+        // get the MENU LEVEL of the current page
         $SQL = "SELECT `level` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=".PAGE_ID;
         $page_level = $template['db']->fetchColumn($SQL);
         define('PAGE_MENU_LEVEL', $page_level);
@@ -171,7 +172,17 @@ if (!defined('PAGE_MENU_LEVEL')) {
     }
 }
 if (!defined('PAGE_MENU_TITLE')) define('PAGE_MENU_TITLE', MENU_TITLE);
-if (!defined('PAGE_PARENT_ID')) define('PAGE_PARENT_ID', PARENT);
+if (!defined('PAGE_PARENT_ID')) {
+    if (PAGE_ID > 0) {
+        // get the parent PAGE_ID
+        $SQL = "SELECT `parent` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=".PAGE_ID;
+        $parent_id = $template['db']->fetchColumn($SQL);
+        define('PAGE_PARENT_ID', $parent_id);
+    }
+    else {
+        define('PAGE_PARENT_ID', 0);
+    }
+}
 if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title());
 if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(null, false));
 if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
@@ -179,25 +190,21 @@ if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
 // normally set by CMS but not at SEARCH pages!
 if (!defined('PAGE_DESCRIPTION')) define('PAGE_DESCRIPTION', '');
 
-try {
-    // get PAGE_MODIFIED_WHEN and PAGE_MODIFIED_BY
-    if (PAGE_ID > 0) {
-        $SQL = "SELECT `modified_when`, `display_name` FROM `".CMS_TABLE_PREFIX."pages`, `".CMS_TABLE_PREFIX."users` ".
-            "WHERE `user_id`=`modified_by` AND `page_id`=".PAGE_ID;
-        $result = $template['db']->fetchAssoc($SQL);
-        if (!isset($result['modified_when'])) {
-            throw new \Exception("Can't read the page information for ID ".PAGE_ID." from the database!");
-        }
-        if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s', $result['modified_when']));
-        if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $result['display_name']);
+// get PAGE_MODIFIED_WHEN and PAGE_MODIFIED_BY
+if (PAGE_ID > 0) {
+    $SQL = "SELECT `modified_when`, `display_name` FROM `".CMS_TABLE_PREFIX."pages`, `".CMS_TABLE_PREFIX."users` ".
+        "WHERE `user_id`=`modified_by` AND `page_id`=".PAGE_ID;
+    $result = $template['db']->fetchAssoc($SQL);
+    if (!isset($result['modified_when'])) {
+        throw new \Exception("Can't read the page information for ID ".PAGE_ID." from the database!");
     }
-    else {
-        // no valid PAGE_ID, i.e. at search pages
-        if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s'));
-        if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', '- unknown -');
-    }
-} catch (\Doctrine\DBAL\DBALException $e) {
-    throw new \Exception($e);
+    if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s', $result['modified_when']));
+    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $result['display_name']);
+}
+else {
+    // no valid PAGE_ID, i.e. at search pages
+    if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s'));
+    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', '- unknown -');
 }
 
 global $post_id;
