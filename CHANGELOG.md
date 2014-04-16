@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.13** - 2014-04-16
+
+* fixed: constant `PARENT` is not available in BlackCat CMS
+
 **0.12** - 2014-04-16
 
 * fixed: constant `LEVEL` is not available in BlackCat CMS
