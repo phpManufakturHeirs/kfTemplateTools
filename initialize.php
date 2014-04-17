@@ -187,8 +187,8 @@ if (!defined('PAGE_PARENT_ID')) {
 if (!defined('PAGE_HAS_CHILD')) {
     if (PAGE_ID > 0) {
         $SQL = "SELECT `page_id` FROM `".CMS_TABLE_PREFIX."pages` WHERE `parent`=".PAGE_ID." LIMIT 1";
-        $child_id = $this->app['db']->fetchColumn($SQL);
-        define('PAGE_HAS_CHILD', ($page_id > 0));
+        $child_id = $template['db']->fetchColumn($SQL);
+        define('PAGE_HAS_CHILD', ($child_id > 0));
     }
     else {
         define('PAGE_HAS_CHILD', false);

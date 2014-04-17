@@ -1,0 +1,12 @@
+<ol class="breadcrumb">
+  {% if link_home %}
+    <li{% if active %} class="active"{% endif %}>
+      {% if active %}
+        <i class="glyphicon glyphicon-home"></i>
+      {% else %}  
+        <a href="{{ CMS_URL }}" title="{{ 'Home'|trans }}"><i class="glyphicon glyphicon-home"></i></a>
+      {% endif %}
+    </li>
+  {% endif %}
+  {{ breadcrumbs }}
+</ol>

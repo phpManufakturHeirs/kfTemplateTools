@@ -186,7 +186,7 @@ class TwigExtension extends Twig_Extension
             'register_frontend_modfiles' => new \Twig_Function_Method($this, 'functionRegisterFrontendModfiles'),
             'register_frontend_modfiles_body' => new \Twig_Function_Method($this, 'functionRegisterFrontendModfilesBody'),
             'show_menu2' => new \Twig_Function_Method($this, 'functionShowMenu2'),
-
+            'bootstrap_nav' => new \Twig_Function_Method($this, 'functionBootstrapNav'),
         );
     }
 
@@ -449,5 +449,17 @@ class TwigExtension extends Twig_Extension
     public function functionHumanize($text, $prompt=true)
     {
         return $this->app['tools']->humanize($text, $prompt);
+    }
+
+    /**
+     * Create a unsorted list for the Bootstrap nav components
+     *
+     * @param string $class
+     * @param array $options
+     * @return string
+     */
+    public function functionBootstrapNav($class, $options=array())
+    {
+        return $this->app['bootstrap']->nav($class, $options, false);
     }
 }

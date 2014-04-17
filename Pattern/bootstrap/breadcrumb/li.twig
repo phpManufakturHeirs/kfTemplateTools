@@ -1,0 +1,7 @@
+<li{% if active %} class="active"{% endif %}>
+  {% if active %}
+    {{ menu_title }}
+  {% else %}  
+    <a href="{{ page_url }}" title="{{ page_title }}">{{ menu_title }}</a>
+  {% endif %}
+</li>

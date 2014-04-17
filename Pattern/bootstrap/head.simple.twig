@@ -5,7 +5,7 @@
   @link https://kit2.phpmanufaktur.de
   @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
-#} 
+#}
 {% spaceless %}
 <head>
   {% block meta %}
@@ -32,20 +32,33 @@
     <meta name="robots" content="noodp" />
     {# robots: index this page and follow all links #}
     <meta name="robots" content="index,follow" />
+    
   {% endblock meta %}
 
   {% block css %}
+    {# load the needed CSS files #}
+    <link href="{{ LIBRARY_URL }}/bootstrap/latest/css/bootstrap.min.css" rel="stylesheet" />
     {# load CSS for the TemplateTools Pattern #}
-    <link href="{{ MANUFAKTUR_URL }}/TemplateTools/Pattern/classic/css/pattern.min.css" rel="stylesheet" />
-    {# register the frontend.css files for the CMS add-ons #}    
+    <link href="{{ MANUFAKTUR_URL }}/TemplateTools/Pattern/bootstrap/css/pattern.min.css" rel="stylesheet" />
+    {# register the frontend.css files for the CMS add-ons #}
     {{ register_frontend_modfiles('css') }}
   {% endblock css %}
 
+  {# HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries 
+     WARNING: Respond.js doesn't work if you view the page via file:// #}
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  
   {% block jquery %}
+    {# jQuery (necessary for Bootstrap's JavaScript plugins) #}
+    <script src="{{ LIBRARY_URL }}/jquery/jquery/latest/jquery.min.js"></script>
+    {# Include all compiled plugins (below), or include individual files as needed #}
+    <script src="{{ LIBRARY_URL }}/bootstrap/latest/js/bootstrap.min.js"></script>
     {# register the frontend.js files for the CMS add-ons #}
     {{ register_frontend_modfiles('js') }}
   {% endblock jquery %}  
 
 </head>
 {% endspaceless %}
-
