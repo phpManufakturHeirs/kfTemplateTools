@@ -28,6 +28,7 @@ use phpManufaktur\TemplateTools\Control\DropletFunctions;
 use phpManufaktur\TemplateTools\Control\kitCommandFunctions;
 use phpManufaktur\Basic\Control\Image;
 use phpManufaktur\TemplateTools\Control\Tools;
+use phpManufaktur\TemplateTools\Control\Bootstrap;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -183,6 +184,16 @@ if (!defined('PAGE_PARENT_ID')) {
         define('PAGE_PARENT_ID', 0);
     }
 }
+if (!defined('PAGE_HAS_CHILD')) {
+    if (PAGE_ID > 0) {
+        $SQL = "SELECT `page_id` FROM `".CMS_TABLE_PREFIX."pages` WHERE `parent`=".PAGE_ID." LIMIT 1";
+        $child_id = $this->app['db']->fetchColumn($SQL);
+        define('PAGE_HAS_CHILD', ($page_id > 0));
+    }
+    else {
+        define('PAGE_HAS_CHILD', false);
+    }
+}
 if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title());
 if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(null, false));
 if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
@@ -299,6 +310,10 @@ $template['image'] = $template->share(function($template) {
     return new Image($template);
 });
 
+// Bootstrap tools
+$template['bootstrap'] = $template->share(function($template) {
+    return new Bootstrap($template);
+});
 
 if (FRAMEWORK_CACHE) {
     // register the HTTP Cache Service
