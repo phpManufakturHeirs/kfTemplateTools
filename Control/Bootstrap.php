@@ -46,6 +46,13 @@ class Bootstrap
         return $this->Nav->nav($class, $options, $prompt);
     }
 
+    /**
+     * Create a breadcrumb navigation
+     *
+     * @param array $options
+     * @param boolean $prompt
+     * @return string breadcrumb
+     */
     public function breadcrumb($options=array(), $prompt=true)
     {
         return $this->Breadcrumb->breadcrumb($options, $prompt);

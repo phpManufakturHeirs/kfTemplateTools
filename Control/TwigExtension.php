@@ -187,6 +187,7 @@ class TwigExtension extends Twig_Extension
             'register_frontend_modfiles_body' => new \Twig_Function_Method($this, 'functionRegisterFrontendModfilesBody'),
             'show_menu2' => new \Twig_Function_Method($this, 'functionShowMenu2'),
             'bootstrap_nav' => new \Twig_Function_Method($this, 'functionBootstrapNav'),
+            'bootstrap_breadcrumb' => new \Twig_Function_Method($this, 'functionBootstrapBreadcrumb'),
         );
     }
 
@@ -461,5 +462,16 @@ class TwigExtension extends Twig_Extension
     public function functionBootstrapNav($class, $options=array())
     {
         return $this->app['bootstrap']->nav($class, $options, false);
+    }
+
+    /**
+     * Create a breadcrumb navigation
+     *
+     * @param array $options
+     * @return string breadcrumb
+     */
+    public function functionBootstrapBreadcrumb($options=array())
+    {
+        return $this->app['bootstrap']->breadcrumb($options, false);
     }
 }

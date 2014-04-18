@@ -49,6 +49,11 @@ class Breadcrumb
         }
     }
 
+    /**
+     * Get information about the given PAGE_ID
+     *
+     * @param integer $page_id
+     */
     protected function getPageInformation($page_id)
     {
         $SQL = "SELECT `page_id`, `link`, `menu_title`, `page_title`, `description` FROM `".
@@ -56,6 +61,13 @@ class Breadcrumb
         return $this->app['db']->fetchAssoc($SQL);
     }
 
+    /**
+     * Create a breadcrumb navigation
+     *
+     * @param array $options
+     * @param boolean $prompt
+     * @return string breadcrumb
+     */
     public function breadcrumb($options=array(), $prompt=true)
     {
         $SQL = "SELECT `page_trail` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=".PAGE_ID;
@@ -73,6 +85,7 @@ class Breadcrumb
                 $trails = array(intval($page_trails));
             }
             foreach ($trails as $trail) {
+                // walk through the trails of the current page
                 $page = $this->getPageInformation($trail);
                 $breadcrumbs .= $this->app['twig']->render(
                     self::$options['template_directory'].'li.twig',
