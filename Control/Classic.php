@@ -12,16 +12,14 @@
 namespace phpManufaktur\TemplateTools\Control;
 
 use Silex\Application;
-use phpManufaktur\TemplateTools\Control\Bootstrap\Nav;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Breadcrumb;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Pager;
 
-class Bootstrap
+class Classic
 {
     protected $app = null;
-    protected $Nav = null;
-    protected $Breadcrumb = null;
-    protected $Pager = null;
+    protected $BootstrapBreadcrumb = null;
+    protected $BootstrapPager = null;
 
     /**
      * Constructor
@@ -31,22 +29,8 @@ class Bootstrap
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->Nav = new Nav($app);
-        $this->Breadcrumb = new Breadcrumb($app);
-        $this->Pager = new Pager($app);
-    }
-
-    /**
-     * Create a unsorted list for the Bootstrap nav components
-     *
-     * @param string $class
-     * @param array $options
-     * @param boolean $prompt
-     * @return string
-     */
-    public function nav($class, $options=array(), $prompt=true)
-    {
-        return $this->Nav->nav($class, $options, $prompt);
+        $this->BootstrapBreadcrumb = new Breadcrumb($app);
+        $this->BootstrapPager = new Pager($app);
     }
 
     /**
@@ -58,11 +42,16 @@ class Bootstrap
      */
     public function breadcrumb($options=array(), $prompt=true)
     {
-        return $this->Breadcrumb->breadcrumb($options, $prompt);
+        // we are using the Bootstrap Breadcrumb function!
+        if (!isset($options['template_directory'])) {
+            // the only difference are the used templates ...
+            $options['template_directory'] = '@pattern/classic/breadcrumb';
+        }
+        return $this->BootstrapBreadcrumb->breadcrumb($options, $prompt);
     }
 
     /**
-     * Create a Bootstrap Pager to step through the site
+     * Create a Pager to step through the site
      *
      * @param array $options
      * @param boolean $prompt
@@ -70,6 +59,11 @@ class Bootstrap
      */
     public function pager($options=array(), $prompt=true)
     {
-        return $this->Pager->pager($options, $prompt);
+        // we are using the Bootstrap Breadcrumb function!
+        if (!isset($options['template_directory'])) {
+            // the only difference are the used templates ...
+            $options['template_directory'] = '@pattern/classic/';
+        }
+        return $this->BootstrapPager->pager($options, $prompt);
     }
 }

@@ -61,7 +61,7 @@ class Nav
         if (isset($options['icons']['height']) && is_numeric($options['icons']['height'])) {
             self::$options['icons']['height'] = intval($options['icons']['height']);
         }
-        if (isset($options['visibility']) && !empty($options['visibility'])) self::$options['visibility'] = $options['visibility'];
+        if (isset($options['visibility']) && is_array($options['visibility'])) self::$options['visibility'] = $options['visibility'];
         if (isset($options['template_directory']) && !empty($options['template_directory'])) {
             self::$options['template_directory'] = rtrim($options['template_directory'], '/').'/';
         }

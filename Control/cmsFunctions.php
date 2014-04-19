@@ -19,6 +19,7 @@ class cmsFunctions
 {
     protected $app = null;
     protected $PageData = null;
+    private static $page_sequence = null;
 
     /**
      * Constructor
@@ -280,13 +281,13 @@ class cmsFunctions
      * @throws \Exception
      * @return string URL of the page
      */
-    public function page_url($arguments=null, $prompt=true)
+    public function page_url($page_id=PAGE_ID, $arguments=null, $prompt=true)
     {
         if ($prompt) {
-            echo $this->PageData->getURL(PAGE_ID, $arguments);
+            echo $this->PageData->getURL($page_id, $arguments);
         }
         else {
-            return $this->PageData->getURL(PAGE_ID, $arguments);
+            return $this->PageData->getURL($page_id, $arguments);
         }
     }
 
@@ -417,4 +418,165 @@ class cmsFunctions
             return $body_links;
         }
     }
+
+    /**
+     * Get the previous page ID for the given page ID
+     *
+     * @param integer $page_id
+     * @param array $page_visibility
+     * @param boolean $prompt
+     * @return integer
+     */
+    public function page_previous_id($page_id=PAGE_ID, $page_visibility=array('public'), $prompt=true)
+    {
+        if (!is_array($page_visibility) || empty($page_visibility)) {
+            $page_visibility = array('public');
+        }
+
+        $SQL = "SELECT `menu` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
+        $menu = $this->app['db']->fetchColumn($SQL);
+
+        // get the page sequence
+        $sequence = $this->page_sequence($menu, 0, $page_visibility);
+
+        $result = -1;
+
+        if (false !== ($key = array_search($page_id, $sequence))) {
+            if (isset($sequence[$key-1])) {
+                $result = $sequence[$key-1];
+            }
+        }
+
+        if ($prompt) {
+            echo $result;
+        }
+        return $result;
+    }
+
+
+    /**
+     * Get the next page ID for the given page ID
+     *
+     * @param integer $page_id
+     * @param array $page_visibility
+     * @param boolean $prompt
+     * @return integer
+     */
+    public function page_next_id($page_id=PAGE_ID, $page_visibility=array('public'), $prompt=true)
+    {
+        if (!is_array($page_visibility) || empty($page_visibility)) {
+            $page_visibility = array('public');
+        }
+
+        $SQL = "SELECT `menu` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
+        $menu = $this->app['db']->fetchColumn($SQL);
+
+        // get the page sequence
+        $sequence = $this->page_sequence($menu, 0, $page_visibility);
+
+        $result = -1;
+
+        if (false !== ($key = array_search($page_id, $sequence))) {
+            if (isset($sequence[$key+1])) {
+                $result = $sequence[$key+1];
+            }
+        }
+
+        if ($prompt) {
+            echo $result;
+        }
+        return $result;
+    }
+
+    /**
+     * Callback function to add a page ID to the page sequence array
+     *
+     * @param integer $id
+     * @see page_sequence()
+     */
+    private static function add_page_sequence_id($id)
+    {
+        self::$page_sequence[] = $id;
+    }
+
+    /**
+     * Create a array with the complete page sequence for the given menu, level
+     * and visibility. Can be used to create a sitemap or step through the site.
+     *
+     * @param number $menu
+     * @param number $start_level
+     * @param array $page_visibility
+     */
+    public function page_sequence($menu=1, $start_level=0, $page_visibility=array('public'))
+    {
+        if (!is_array($page_visibility) || empty($page_visibility)) {
+            $page_visibility = array('public');
+        }
+        $visibility = '';
+        foreach ($page_visibility as $visi) {
+            if (!empty($visibility)) {
+                $visibility .= ' OR ';
+            }
+            $visibility .= "`visibility`='$visi'";
+        }
+
+        $sequence = array();
+
+        $SQL = "SELECT `page_id` FROM `".CMS_TABLE_PREFIX."pages` WHERE `menu`=$menu AND ".
+            "`level`=$start_level AND ($visibility) ORDER BY `position` ASC";
+        $pages = $this->app['db']->fetchAll($SQL);
+
+        foreach ($pages as $page) {
+            $sequence[$page['page_id']][] = $page['page_id'];
+        }
+
+        $SQL = "SELECT MAX(`level`) FROM `".CMS_TABLE_PREFIX."pages` WHERE `menu`=$menu";
+        $max_level = $this->app['db']->fetchColumn($SQL);
+
+        for ($level=$start_level+1; $level < $max_level+1; $level++) {
+            $SQL = "SELECT `page_id`, `page_trail` FROM `".CMS_TABLE_PREFIX."pages` WHERE ".
+                "`menu`=$menu AND `level`=$level AND ($visibility) ORDER BY `position` ASC";
+            $pages = $this->app['db']->fetchAll($SQL);
+            foreach ($pages as $page) {
+                $t = explode(',', $page['page_trail']);
+                switch ($level) {
+                    case 1:
+                        $sequence[$t[0]][$t[1]][] = $page['page_id'];
+                        break;
+                    case 2:
+                        $sequence[$t[0]][$t[1]][$t[2]][] = $page['page_id'];
+                        break;
+                    case 3:
+                        $sequence[$t[0]][$t[1]][$t[2]][$t[3]][] = $page['page_id'];
+                        break;
+                    case 4:
+                        $sequence[$t[0]][$t[1]][$t[2]][$t[3]][$t[4]][] = $page['page_id'];
+                        break;
+                    case 5:
+                        $sequence[$t[0]][$t[1]][$t[2]][$t[3]][$t[4]][$t[5]][] = $page['page_id'];
+                        break;
+                    case 6:
+                        $sequence[$t[0]][$t[1]][$t[2]][$t[3]][$t[4]][$t[5]][$t[6]][] = $page['page_id'];
+                        break;
+                    case 7:
+                        $sequence[$t[0]][$t[1]][$t[2]][$t[3]][$t[4]][$t[5]][$t[6]][$t[7]][] = $page['page_id'];
+                        break;
+                    case 8:
+                        $sequence[$t[0]][$t[1]][$t[2]][$t[3]][$t[4]][$t[5]][$t[6]][$t[7]][$t[8]][] = $page['page_id'];
+                        break;
+                    case 9:
+                        $sequence[$t[0]][$t[1]][$t[2]][$t[3]][$t[4]][$t[5]][$t[6]][$t[7]][$t[8]][$t[9]][] = $page['page_id'];
+                        break;
+                }
+            }
+        }
+
+        // reset sequence array
+        self::$page_sequence = array();
+        // create the page sequence
+        array_walk_recursive($sequence, array($this, 'add_page_sequence_id'));
+
+        return self::$page_sequence;
+    }
+
 }

@@ -29,6 +29,7 @@ use phpManufaktur\TemplateTools\Control\kitCommandFunctions;
 use phpManufaktur\Basic\Control\Image;
 use phpManufaktur\TemplateTools\Control\Tools;
 use phpManufaktur\TemplateTools\Control\Bootstrap;
+use phpManufaktur\TemplateTools\Control\Classic;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -195,7 +196,7 @@ if (!defined('PAGE_HAS_CHILD')) {
     }
 }
 if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title());
-if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(null, false));
+if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(PAGE_ID, null, false));
 if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
 
 // normally set by CMS but not at SEARCH pages!
@@ -313,6 +314,11 @@ $template['image'] = $template->share(function($template) {
 // Bootstrap tools
 $template['bootstrap'] = $template->share(function($template) {
     return new Bootstrap($template);
+});
+
+// Classic tools
+$template['classic'] = $template->share(function($template) {
+    return new Classic($template);
 });
 
 if (FRAMEWORK_CACHE) {

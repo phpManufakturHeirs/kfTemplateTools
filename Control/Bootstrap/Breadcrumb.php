@@ -12,7 +12,6 @@
 namespace phpManufaktur\TemplateTools\Control\Bootstrap;
 
 use Silex\Application;
-use phpManufaktur\Basic\Data\CMS\Page;
 
 class Breadcrumb
 {
@@ -21,7 +20,6 @@ class Breadcrumb
         'link_home' => true,
         'template_directory' => '@pattern/bootstrap/breadcrumb/'
     );
-    protected $Page = null;
 
     /**
      * Constructor
@@ -31,7 +29,6 @@ class Breadcrumb
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->Page = new Page($app);
     }
 
     /**
@@ -70,6 +67,9 @@ class Breadcrumb
      */
     public function breadcrumb($options=array(), $prompt=true)
     {
+        // first check the $options
+        $this->checkOptions($options);
+
         $SQL = "SELECT `page_trail` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=".PAGE_ID;
         $page_trails = $this->app['db']->fetchColumn($SQL);
 
@@ -92,7 +92,7 @@ class Breadcrumb
                     array(
                         'active' => ($trail == PAGE_ID),
                         'menu_title' => $page['menu_title'],
-                        'page_url' => $this->Page->getURL($trail),
+                        'page_url' => $this->app['cms']->page_url($trail, null, false),
                         'page_title' => $page['page_title'],
                         'page_description' => $page['description']
                     )

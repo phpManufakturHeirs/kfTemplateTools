@@ -102,6 +102,7 @@ class TwigExtension extends Twig_Extension
             'PAGE_DESCRIPTION' => PAGE_DESCRIPTION,
             'PAGE_EXTENSION' => PAGE_EXTENSION,
             'PAGE_FOOTER' => PAGE_FOOTER,
+            'PAGE_HAS_CHILD' => PAGE_HAS_CHILD,
             'PAGE_HEADER' => PAGE_HEADER,
             'PAGE_ID' => PAGE_ID,
             'PAGE_KEYWORDS' => PAGE_KEYWORDS,
@@ -160,9 +161,9 @@ class TwigExtension extends Twig_Extension
     public function getFilters()
     {
         return array(
-            'ellipsis' => new \Twig_Filter_Method($this, 'functionEllipsis'),
-            'markdown' => new \Twig_Filter_Method($this, 'functionMarkdownHTML'),
-            'humanize' => new \Twig_Filter_Method($this, 'functionHumanize'),
+            'ellipsis' => new \Twig_Filter_Method($this, 'Ellipsis'),
+            'markdown' => new \Twig_Filter_Method($this, 'MarkdownHTML'),
+            'humanize' => new \Twig_Filter_Method($this, 'Humanize'),
         );
     }
 
@@ -173,21 +174,28 @@ class TwigExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            'command' => new \Twig_Function_Method($this, 'functionKitCommand'),
-            'droplet' => new \Twig_Function_Method($this, 'functionDroplet'),
-            'ellipsis' => new \Twig_Function_Method($this, 'functionEllipsis'),
-            'humanize' => new \Twig_Function_Method($this, 'functionHumanize'),
-            'image' => new \Twig_Function_Method($this, 'functionImage'),
-            'markdown' => new \Twig_Function_Method($this, 'functionMarkdownHTML'),
-            'markdown_file' => new \Twig_Function_Method($this, 'functionMarkdownFile'),
-            'page_content' => new \Twig_Function_Method($this, 'functionPageContent'),
-            'page_description' => new \Twig_Function_Method($this, 'functionPageDescription'),
-            'page_title' => new \Twig_Function_Method($this, 'functionPageTitle'),
-            'register_frontend_modfiles' => new \Twig_Function_Method($this, 'functionRegisterFrontendModfiles'),
-            'register_frontend_modfiles_body' => new \Twig_Function_Method($this, 'functionRegisterFrontendModfilesBody'),
-            'show_menu2' => new \Twig_Function_Method($this, 'functionShowMenu2'),
-            'bootstrap_nav' => new \Twig_Function_Method($this, 'functionBootstrapNav'),
-            'bootstrap_breadcrumb' => new \Twig_Function_Method($this, 'functionBootstrapBreadcrumb'),
+            'bootstrap_nav' => new \Twig_Function_Method($this, 'BootstrapNav'),
+            'bootstrap_breadcrumb' => new \Twig_Function_Method($this, 'BootstrapBreadcrumb'),
+            'bootstrap_pager' => new \Twig_Function_Method($this, 'BootstrapPager'),
+            'classic_breadcrumb' => new \Twig_Function_Method($this, 'ClassicBreadcrumb'),
+            'classic_pager' => new \Twig_Function_Method($this, 'ClassicPager'),
+            'command' => new \Twig_Function_Method($this, 'kitCommand'),
+            'droplet' => new \Twig_Function_Method($this, 'Droplet'),
+            'ellipsis' => new \Twig_Function_Method($this, 'Ellipsis'),
+            'humanize' => new \Twig_Function_Method($this, 'Humanize'),
+            'image' => new \Twig_Function_Method($this, 'Image'),
+            'markdown' => new \Twig_Function_Method($this, 'MarkdownHTML'),
+            'markdown_file' => new \Twig_Function_Method($this, 'MarkdownFile'),
+            'page_content' => new \Twig_Function_Method($this, 'PageContent'),
+            'page_description' => new \Twig_Function_Method($this, 'PageDescription'),
+            'page_next_id' => new \Twig_Function_Method($this, 'PageNextID'),
+            'page_previous_id' => new \Twig_Function_Method($this, 'PagePreviousID'),
+            'page_title' => new \Twig_Function_Method($this, 'PageTitle'),
+            'page_url' => new \Twig_Function_Method($this, 'PageURL'),
+            'register_frontend_modfiles' => new \Twig_Function_Method($this, 'RegisterFrontendModfiles'),
+            'register_frontend_modfiles_body' => new \Twig_Function_Method($this, 'RegisterFrontendModfilesBody'),
+            'show_menu2' => new \Twig_Function_Method($this, 'ShowMenu2'),
+
         );
     }
 
@@ -201,7 +209,7 @@ class TwigExtension extends Twig_Extension
      * @param boolean $htmlpurifier use HTML Purifier (false by default, ignored if striptags=true)
      * @return string
      */
-    public function functionEllipsis($text, $length=100, $striptags=true, $htmlpurifier=false)
+    public function Ellipsis($text, $length=100, $striptags=true, $htmlpurifier=false)
     {
         return $this->app['tools']->ellipsis($text, $length, $striptags, $htmlpurifier, false);
     }
@@ -218,7 +226,7 @@ class TwigExtension extends Twig_Extension
      * @param boolean $cache by default cache the file
      * @return array with src, width, height and path
      */
-    public function functionImage($relative_image_path, $max_width=null, $max_height=null, $parent_path=FRAMEWORK_PATH, $parent_url=FRAMEWORK_URL, $cache=true)
+    public function Image($relative_image_path, $max_width=null, $max_height=null, $parent_path=FRAMEWORK_PATH, $parent_url=FRAMEWORK_URL, $cache=true)
     {
         $relative_image_path = $this->app['tools']->sanitizePath($relative_image_path);
         if ($relative_image_path[0] != '/') {
@@ -290,7 +298,7 @@ class TwigExtension extends Twig_Extension
      * @param string $text
      * @param boolean $extra
      */
-    public function functionMarkdownHTML($text, $extra=true)
+    public function MarkdownHTML($text, $extra=true)
     {
         return $this->app['markdown']->html($text, $extra, false);
     }
@@ -301,7 +309,7 @@ class TwigExtension extends Twig_Extension
      * @param string $path
      * @param string $extra
      */
-    public function functionMarkdownFile($path, $extra=true)
+    public function MarkdownFile($path, $extra=true)
     {
         return $this->app['markdown']->file($path, $extra, false);
     }
@@ -311,7 +319,7 @@ class TwigExtension extends Twig_Extension
      *
      * @param number $block
      */
-    public function functionPageContent($block=1)
+    public function PageContent($block=1)
     {
         return $this->app['cms']->page_content($block, false);
     }
@@ -331,7 +339,7 @@ class TwigExtension extends Twig_Extension
      * @param string $aTopMenuOpen
      * @return Ambigous <boolean, string, unknown>
      */
-    public function functionShowMenu2(
+    public function ShowMenu2(
         $aMenu          = 0,
         $aStart         = SM2_ROOT,
         $aMaxLevel      = -1999, // SM2_CURR+1
@@ -354,7 +362,7 @@ class TwigExtension extends Twig_Extension
      * @param array $parameter
      * @return string
      */
-    public function functionDroplet($droplet, $parameter=array())
+    public function Droplet($droplet, $parameter=array())
     {
         return $this->app['droplet']->execute($droplet, $parameter, false);
     }
@@ -366,7 +374,7 @@ class TwigExtension extends Twig_Extension
      * @param parameter $parameter
      * @return string
      */
-    public function functionKitCommand($command, $parameter=array())
+    public function kitCommand($command, $parameter=array())
     {
         return $this->app['command']->execute($command, $parameter, false);
     }
@@ -378,7 +386,7 @@ class TwigExtension extends Twig_Extension
      * @param string $file_type
      * @return string
      */
-    public function functionRegisterFrontendModfiles($file_type='css')
+    public function RegisterFrontendModfiles($file_type='css')
     {
         return $this->app['cms']->register_frontend_modfiles($file_type, false);
     }
@@ -390,7 +398,7 @@ class TwigExtension extends Twig_Extension
      * @param string $file_type
      * @return string
      */
-    public function functionRegisterFrontendModfilesBody($file_type='css')
+    public function RegisterFrontendModfilesBody($file_type='css')
     {
         return $this->app['cms']->register_frontend_modfiles_body($file_type, false);
     }
@@ -403,7 +411,7 @@ class TwigExtension extends Twig_Extension
      * @param array $arguments
      * @return string
      */
-    public function functionPageDescription($arguments=null)
+    public function PageDescription($arguments=null)
     {
         return $this->app['cms']->page_description($arguments, false);
     }
@@ -418,7 +426,7 @@ class TwigExtension extends Twig_Extension
      * @param string $template
      * @return string
      */
-    public function functionPageTitle($arguments=null, $spacer= ' - ', $template='[PAGE_TITLE]')
+    public function PageTitle($arguments=null, $spacer= ' - ', $template='[PAGE_TITLE]')
     {
         return $this->app['cms']->page_title($arguments, false, $spacer, $template);
     }
@@ -431,7 +439,7 @@ class TwigExtension extends Twig_Extension
      * @param boolean $prompt
      * @return string
      */
-    public function functionPageKeywords($arguments=null)
+    public function PageKeywords($arguments=null)
     {
         return $this->app['cms']->page_keywords($arguments, false);
     }
@@ -447,7 +455,7 @@ class TwigExtension extends Twig_Extension
      * @param boolean $prompt
      * @return string The humanized text.
      */
-    public function functionHumanize($text, $prompt=true)
+    public function Humanize($text, $prompt=true)
     {
         return $this->app['tools']->humanize($text, $prompt);
     }
@@ -459,19 +467,91 @@ class TwigExtension extends Twig_Extension
      * @param array $options
      * @return string
      */
-    public function functionBootstrapNav($class, $options=array())
+    public function BootstrapNav($class, $options=array())
     {
         return $this->app['bootstrap']->nav($class, $options, false);
     }
 
     /**
-     * Create a breadcrumb navigation
+     * Create a Bootstrap breadcrumb navigation
      *
      * @param array $options
      * @return string breadcrumb
      */
-    public function functionBootstrapBreadcrumb($options=array())
+    public function BootstrapBreadcrumb($options=array())
     {
         return $this->app['bootstrap']->breadcrumb($options, false);
+    }
+
+    /**
+     * Create a Classic breadcrumb navigation
+     *
+     * @param array $options
+     * @return string breadcrumb
+     */
+    public function ClassicBreadcrumb($options=array())
+    {
+        return $this->app['classic']->breadcrumb($options, false);
+    }
+
+    /**
+     * Get the URL of the given page ID. If arguments 'topic_id' or 'post_id'
+     * the function will return the URL for the given TOPICS or NEWS article
+     *
+     * @param null|array $arguments
+     * @param boolean $prompt
+     * @throws \Exception
+     * @return string URL of the page
+     */
+    public function PageURL($page_id=PAGE_ID, $arguments=null)
+    {
+        return $this->app['cms']->page_url($page_id, $arguments, false);
+    }
+
+    /**
+     * Get the next page ID for the given page ID
+     *
+     * @param integer $page_id
+     * @param array $page_visibility
+     * @return integer
+     */
+    public function PageNextID($page_id=PAGE_ID, $visibility=array('public'))
+    {
+        return $this->app['cms']->page_next_id($page_id, $visibility, false);
+    }
+
+    /**
+     * Get the previous page ID for the given page ID
+     *
+     * @param integer $page_id
+     * @param array $page_visibility
+     * @param boolean $prompt
+     * @return integer
+     */
+    public function PagePreviousID($page_id=PAGE_ID, $visibility=array('public'))
+    {
+        return $this->app['cms']->page_previous_id($page_id, $visibility, false);
+    }
+
+    /**
+     * Create a Bootstrap Pager to step through the site
+     *
+     * @param array $options
+     * @return string
+     */
+    public function BootstrapPager($options=array())
+    {
+        return $this->app['bootstrap']->pager($options, false);
+    }
+
+    /**
+     * Create a Pager to step through the site
+     *
+     * @param array $options
+     * @return string
+     */
+    public function ClassicPager($options=array())
+    {
+        return $this->app['classic']->pager($options, false);
     }
 }
