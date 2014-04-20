@@ -1,0 +1,56 @@
+{#
+  TemplateTools
+ 
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#} 
+<!DOCTYPE html>
+<html lang="en">  
+  <head>
+    {% block meta %}
+      {# declare the content type #}
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      {# declare the charset #}
+      <meta charset="utf-8">
+      {# IE support #}
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      {# define the initial viewport #}
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
+      {# get the page title from CMS #}
+      <title>{{ page_title({'post_id':POST_ID,'topic_id':TOPIC_ID}) }}</title>
+      {# get the page description from CMS #}
+      <meta name="description" content="{{ page_description({'post_id':POST_ID,'topic_id':TOPIC_ID}) }}" />
+      {# get the page keywords from CMS #}
+      <meta name="keywords" content="{{ page_description({'post_id':POST_ID,'topic_id':TOPIC_ID}) }}" />
+
+      {# declare the language for the CONTENT #}
+      <meta name="language" content="{{ CMS_LOCALE }}" />
+
+      {# robots: don't use the ODP entry #}
+      <meta name="robots" content="noodp" />
+      {# robots: index this page and follow all links #}
+      <meta name="robots" content="index,follow" />
+    {% endblock meta %}
+
+    {% block css %}
+      {# load CSS for the TemplateTools Pattern #}
+      <link href="{{ MANUFAKTUR_URL }}/TemplateTools/Pattern/classic/css/pattern.min.css" rel="stylesheet" />
+      {# register the frontend.css files for the CMS add-ons #}    
+      {{ register_frontend_modfiles('css') }}
+    {% endblock css %}
+
+    {% block jquery %}
+      {# register the frontend.js files for the CMS add-ons #}
+      {{ register_frontend_modfiles('js') }}
+    {% endblock jquery %}  
+
+  </head>
+  <body>
+    {% block body %}
+    {% endblock body %}  
+  </body>
+</html>  
+
