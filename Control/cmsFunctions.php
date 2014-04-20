@@ -434,7 +434,10 @@ class cmsFunctions
         }
 
         $SQL = "SELECT `menu` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
-        $menu = $this->app['db']->fetchColumn($SQL);
+        if (null == ($menu = $this->app['db']->fetchColumn($SQL))) {
+            // no result - possible at search pages etc.
+            return -1;
+        }
 
         // get the page sequence
         $sequence = $this->page_sequence($menu, 0, $page_visibility);
@@ -469,7 +472,10 @@ class cmsFunctions
         }
 
         $SQL = "SELECT `menu` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
-        $menu = $this->app['db']->fetchColumn($SQL);
+        if (null == ($menu = $this->app['db']->fetchColumn($SQL))) {
+            // no result - possible at search pages etc.
+            return -1;
+        }
 
         // get the page sequence
         $sequence = $this->page_sequence($menu, 0, $page_visibility);
