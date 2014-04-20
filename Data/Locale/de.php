@@ -39,6 +39,9 @@ return array(
     'Password'
         => 'Passwort',
 
+    'Search'
+        => 'Suche',
+
     'The Droplet %droplet% does not exists!'
         => 'Das Droplet <i>%droplet%</i> existiert nicht!',
 
