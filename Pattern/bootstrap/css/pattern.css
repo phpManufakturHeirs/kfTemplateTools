@@ -63,3 +63,14 @@
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+
+/**
+  Needed for the Breadcrumb
+**/
+.breadcrumb {
+  padding-left: 0;
+  padding-bottom: 0;
+  margin-left: 0;
+  font-size: 11px;
+  background-color: transparent;
+}
