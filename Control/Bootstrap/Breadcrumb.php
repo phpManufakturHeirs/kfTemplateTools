@@ -67,6 +67,11 @@ class Breadcrumb
      */
     public function breadcrumb($options=array(), $prompt=true)
     {
+        if (PAGE_ID < 1) {
+            // don't show the breadcrump i.e. at search result pages ...
+            return '';
+        }
+
         // first check the $options
         $this->checkOptions($options);
 
