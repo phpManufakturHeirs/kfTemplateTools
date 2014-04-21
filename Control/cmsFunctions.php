@@ -227,8 +227,15 @@ class cmsFunctions
     public function page_content($block=1, $prompt=true)
     {
         if (!is_numeric($block) && is_string($block) && is_array(self::$page_block)) {
-            // try to get the Block ID by the description value
-            $block = (false !== ($id = array_search($block, self::$page_block))) ? $id : null;
+            // try to get the Block ID by the Block Name
+            $search = $block;
+            $block = null;
+            foreach (self::$page_block as $id => $name) {
+                if (strtolower($search) == strtolower($name)) {
+                    $block = $id;
+                    break;
+                }
+            }
         }
 
         if (function_exists('page_content')) {
@@ -249,7 +256,7 @@ class cmsFunctions
     /**
      * Mapping the show_menu2()
      *
-     * @param number $aMenu
+     * @param number|string $aMenu
      * @param string $aStart
      * @param unknown $aMaxLevel
      * @param string $aOptions
@@ -276,9 +283,16 @@ class cmsFunctions
         $prompt         = true
         )
     {
-        if (!is_numeric($aMenu) && is_string($aMenu) && is_array(self::$page_menu)) {
-            // try to get the Menu ID by the description value
-            $aMenu = (false !== ($id = array_search($aMenu, self::$page_menu))) ? $id : null;
+        if (!is_numeric($aMenu) && is_string($aMenu) && !empty($aMenu) && is_array(self::$page_menu)) {
+            // try to get the Menu ID by the Menu Name
+            $search = $aMenu;
+            $aMenu = 999; // set Menu ID to a non existing one
+            foreach (self::$page_menu as $id => $name) {
+                if (strtolower($search) == strtolower($name)) {
+                    $aMenu = $id;
+                    break;
+                }
+            }
         }
 
         if (function_exists('show_menu2')) {
