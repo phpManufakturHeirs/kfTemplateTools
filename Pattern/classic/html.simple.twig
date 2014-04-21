@@ -11,13 +11,13 @@
   <head>
     {% block meta %}
       {# declare the content type #}
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       {# declare the charset #}
       <meta charset="utf-8">
       {# IE support #}
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
       {# define the initial viewport #}
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
 
       {# get the page title from CMS #}
       <title>{{ page_title({'post_id':POST_ID,'topic_id':TOPIC_ID}) }}</title>
@@ -29,7 +29,7 @@
       {# declare the language for the CONTENT #}
       <meta name="language" content="{{ CMS_LOCALE }}" />
 
-      {# robots: don't use the ODP entry #}
+      {# robots: don't use the Open Directory entry #}
       <meta name="robots" content="noodp" />
       {# robots: index this page and follow all links #}
       <meta name="robots" content="index,follow" />

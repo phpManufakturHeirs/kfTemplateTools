@@ -39,7 +39,7 @@ class DropletFunctions
      */
     protected function doEval($code, $parameter)
     {
-        extract($parameter, EXTR_SKIP );
+        extract($parameter, EXTR_SKIP);
         if (false === ($result = eval($code))) {
             return $this->app['translator']->trans('A error occured while executing the Droplet, please check the PHP code.');
         }

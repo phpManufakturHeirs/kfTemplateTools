@@ -20,6 +20,8 @@ class cmsFunctions
     protected $app = null;
     protected $PageData = null;
     private static $page_sequence = null;
+    private static $page_block = null;
+    private static $page_menu = null;
 
     /**
      * Constructor
@@ -30,6 +32,20 @@ class cmsFunctions
     {
         $this->app = $app;
         $this->PageData = new Page($app);
+
+        // use the origin constants, our own maybe not defined yet ...
+        $info_path = WB_PATH.substr(TEMPLATE_DIR, strlen(WB_URL)).'/info.php';
+        if ($app['filesystem']->exists($info_path)) {
+            global $block;
+            global $menu;
+            require_once $info_path;
+            if (is_array($block)) {
+                self::$page_block = $block;
+            }
+            if (is_array($menu)) {
+                self::$page_menu = $menu;
+            }
+        }
     }
 
     /**
@@ -204,12 +220,17 @@ class cmsFunctions
     /**
      * Return the page content by the given block for the actual PAGE_ID
      *
-     * @param number $block
+     * @param number|string $block
      * @param boolean $prompt
      * @return string
      */
     public function page_content($block=1, $prompt=true)
     {
+        if (!is_numeric($block) && is_string($block) && is_array(self::$page_block)) {
+            // try to get the Block ID by the description value
+            $block = (false !== ($id = array_search($block, self::$page_block))) ? $id : null;
+        }
+
         if (function_exists('page_content')) {
             if ($prompt) {
                 \page_content($block);
@@ -255,6 +276,11 @@ class cmsFunctions
         $prompt         = true
         )
     {
+        if (!is_numeric($aMenu) && is_string($aMenu) && is_array(self::$page_menu)) {
+            // try to get the Menu ID by the description value
+            $aMenu = (false !== ($id = array_search($aMenu, self::$page_menu))) ? $id : null;
+        }
+
         if (function_exists('show_menu2')) {
             if ($prompt) {
                 \show_menu2($aMenu,$aStart,$aMaxLevel,$aOptions,$aItemOpen,
@@ -584,5 +610,6 @@ class cmsFunctions
 
         return self::$page_sequence;
     }
+
 
 }
