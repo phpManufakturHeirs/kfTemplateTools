@@ -185,16 +185,7 @@ if (!defined('PAGE_PARENT_ID')) {
         define('PAGE_PARENT_ID', 0);
     }
 }
-if (!defined('PAGE_HAS_CHILD')) {
-    if (PAGE_ID > 0) {
-        $SQL = "SELECT `page_id` FROM `".CMS_TABLE_PREFIX."pages` WHERE `parent`=".PAGE_ID." LIMIT 1";
-        $child_id = $template['db']->fetchColumn($SQL);
-        define('PAGE_HAS_CHILD', ($child_id > 0));
-    }
-    else {
-        define('PAGE_HAS_CHILD', false);
-    }
-}
+if (!defined('PAGE_HAS_CHILD')) define('PAGE_HAS_CHILD', $template['cms']->page_has_child());
 if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title());
 if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(PAGE_ID, null, false));
 if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
