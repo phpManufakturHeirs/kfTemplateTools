@@ -174,8 +174,9 @@ class TwigExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            'bootstrap_nav' => new \Twig_Function_Method($this, 'BootstrapNav'),
+            'bootstrap_alert' => new \Twig_Function_Method($this, 'BootstrapAlert'),
             'bootstrap_breadcrumb' => new \Twig_Function_Method($this, 'BootstrapBreadcrumb'),
+            'bootstrap_nav' => new \Twig_Function_Method($this, 'BootstrapNav'),
             'bootstrap_pager' => new \Twig_Function_Method($this, 'BootstrapPager'),
             'classic_breadcrumb' => new \Twig_Function_Method($this, 'ClassicBreadcrumb'),
             'classic_pager' => new \Twig_Function_Method($this, 'ClassicPager'),
@@ -553,5 +554,17 @@ class TwigExtension extends Twig_Extension
     public function ClassicPager($options=array())
     {
         return $this->app['classic']->pager($options, false);
+    }
+    
+    /**
+     * Use the Bootstrap Alert Component to alert a message
+     * 
+     * @param string $message
+     * @param array $options
+     * @return string rendered alert
+     */
+    public function BootstrapAlert($message='', $options=array())
+    {
+        return $this->app['bootstrap']->alert($message, $options, false);
     }
 }
