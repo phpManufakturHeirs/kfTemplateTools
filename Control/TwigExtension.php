@@ -183,6 +183,7 @@ class TwigExtension extends Twig_Extension
             'command' => new \Twig_Function_Method($this, 'kitCommand'),
             'droplet' => new \Twig_Function_Method($this, 'Droplet'),
             'ellipsis' => new \Twig_Function_Method($this, 'Ellipsis'),
+            'file_exists' => new \Twig_Function_Method($this, 'FileExists'),
             'humanize' => new \Twig_Function_Method($this, 'Humanize'),
             'image' => new \Twig_Function_Method($this, 'Image'),
             'markdown' => new \Twig_Function_Method($this, 'MarkdownHTML'),
@@ -566,5 +567,16 @@ class TwigExtension extends Twig_Extension
     public function BootstrapAlert($message='', $options=array())
     {
         return $this->app['bootstrap']->alert($message, $options, false);
+    }
+    
+    /**
+     * Check if the given file in $path exists
+     * 
+     * @param string $path
+     * @return boolean
+     */
+    public function FileExists($path)
+    {
+        return $this->app['filesystem']->exists($path);
     }
 }
