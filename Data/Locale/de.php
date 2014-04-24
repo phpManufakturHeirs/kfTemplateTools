@@ -35,9 +35,17 @@ return array(
         => 'Anmelden',
     'Logout'
         => 'Abmelden',
+    
+    'Missing the message to alert!'
+        => 'Es wurde keine Mitteilung übergeben, die gemeldet werden kann!',
+    
+    'Next'
+        => 'Nächste',
 
     'Password'
         => 'Passwort',
+    'Previous'
+        => 'Vorherige',
 
     'Search'
         => 'Suche',
