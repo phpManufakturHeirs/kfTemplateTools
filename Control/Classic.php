@@ -45,7 +45,7 @@ class Classic
         // we are using the Bootstrap Breadcrumb function!
         if (!isset($options['template_directory'])) {
             // the only difference are the used templates ...
-            $options['template_directory'] = '@pattern/classic/breadcrumb';
+            $options['template_directory'] = '@pattern/classic/function/breadcrumb/';
         }
         return $this->BootstrapBreadcrumb->breadcrumb($options, $prompt);
     }
@@ -62,7 +62,7 @@ class Classic
         // we are using the Bootstrap Breadcrumb function!
         if (!isset($options['template_directory'])) {
             // the only difference are the used templates ...
-            $options['template_directory'] = '@pattern/classic/';
+            $options['template_directory'] = '@pattern/classic/function/pager/';
         }
         return $this->BootstrapPager->pager($options, $prompt);
     }

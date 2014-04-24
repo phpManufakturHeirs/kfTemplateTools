@@ -23,7 +23,7 @@ class Pager
         'visibility' => array(
             'public'
         ),
-        'template_directory' => '@pattern/bootstrap/'
+        'template_directory' => '@pattern/bootstrap/function/pager/'
     );
 
     /**

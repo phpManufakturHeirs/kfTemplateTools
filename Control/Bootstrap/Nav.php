@@ -31,7 +31,7 @@ class Nav
         'visibility' => array(
             'public'
         ),
-        'template_directory' => '@pattern/bootstrap/nav/'
+        'template_directory' => '@pattern/bootstrap/function/nav/'
     );
 
     /**
@@ -134,20 +134,6 @@ class Nav
     }
 
     /**
-     * Check if the given PAGE ID has a child
-     *
-     * @param integer $page_id
-     * @throws \Exception
-     * @return boolean
-     */
-    protected function PageHasChild($page_id)
-    {
-        $SQL = "SELECT `page_id` FROM `".CMS_TABLE_PREFIX."pages` WHERE `parent` = $page_id LIMIT 1";
-        $page_id = $this->app['db']->fetchColumn($SQL);
-        return ($page_id > 0);
-    }
-
-    /**
      * Build the nav items recursivly
      *
      * @param integer $menu
@@ -162,7 +148,7 @@ class Nav
         if (is_array($page_ids)) {
             foreach ($page_ids as $page_id) {
                 if (false !== ($info = $this->getMenuInformation($page_id))) {
-                    if ($this->PageHasChild($page_id) && ((self::$options['menu_level_max'] < 0) || (self::$options['menu_level_max'] > $level))) {
+                    if ($this->app['cms']->page_has_child($page_id) && ((self::$options['menu_level_max'] < 0) || (self::$options['menu_level_max'] > $level))) {
                         if ($level == self::$options['menu_level']) {
                             $nav .= $this->app['twig']->render(
                                 self::$options['template_directory'].'li.dropdown.twig',

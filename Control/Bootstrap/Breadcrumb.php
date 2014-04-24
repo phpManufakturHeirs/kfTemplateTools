@@ -18,7 +18,7 @@ class Breadcrumb
     protected $app = null;
     protected static $options = array(
         'link_home' => true,
-        'template_directory' => '@pattern/bootstrap/breadcrumb/'
+        'template_directory' => '@pattern/bootstrap/function/breadcrumb/'
     );
 
     /**
