@@ -625,5 +625,22 @@ class cmsFunctions
         return self::$page_sequence;
     }
 
-
+    /**
+     * Check if the given PAGE ID has a child
+     *
+     * @param integer $page_id
+     * @throws \Exception
+     * @return boolean
+     */
+    public function page_has_child($page_id=PAGE_ID)
+    {
+        if ($page_id > 0) {
+            $SQL = "SELECT `page_id` FROM `".CMS_TABLE_PREFIX."pages` WHERE `parent` = $page_id LIMIT 1";
+            $page_id = $this->app['db']->fetchColumn($SQL);
+            return ($page_id > 0);
+        }
+        else {
+            return false;
+        }
+    }
 }
