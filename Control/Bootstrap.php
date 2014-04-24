@@ -15,6 +15,7 @@ use Silex\Application;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Nav;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Breadcrumb;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Pager;
+use phpManufaktur\TemplateTools\Control\Bootstrap\Alert;
 
 class Bootstrap
 {
@@ -22,6 +23,7 @@ class Bootstrap
     protected $Nav = null;
     protected $Breadcrumb = null;
     protected $Pager = null;
+    protected $Alert = null;
 
     /**
      * Constructor
@@ -34,6 +36,7 @@ class Bootstrap
         $this->Nav = new Nav($app);
         $this->Breadcrumb = new Breadcrumb($app);
         $this->Pager = new Pager($app);
+        $this->Alert = new Alert($app);
     }
 
     /**
@@ -44,7 +47,7 @@ class Bootstrap
      * @param boolean $prompt
      * @return string
      */
-    public function nav($class, $options=array(), $prompt=true)
+    public function nav($class='nav nav-tabs', $options=array(), $prompt=true)
     {
         return $this->Nav->nav($class, $options, $prompt);
     }
@@ -71,5 +74,18 @@ class Bootstrap
     public function pager($options=array(), $prompt=true)
     {
         return $this->Pager->pager($options, $prompt);
+    }
+    
+    /**
+     * Use the Bootstrap Alert Component to alert a message
+     * 
+     * @param string $message
+     * @param array $options
+     * @param boolean $prompt
+     * @return string rendered alert
+     */
+    public function alert($message='', $options=array(), $prompt=true)
+    {
+        return $this->Alert->alert($message, $options, $prompt);
     }
 }
