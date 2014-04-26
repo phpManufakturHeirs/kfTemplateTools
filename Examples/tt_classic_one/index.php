@@ -18,8 +18,9 @@
     // initialize the TemplateTools
     require_once WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/TemplateTools/initialize.php';  
 
-    // include a simple <head> .. </head> section
-    $template['twig']->display('twig/head.twig');
+    // use the unchanged pattern to include a simple <head> section
+    // the pattern will also load the /css/screen.css !
+    $template['twig']->display('@pattern/classic/head.simple.twig');
   ?>
   <body>
     <div class="body-container">
