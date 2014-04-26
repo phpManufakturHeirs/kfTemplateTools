@@ -18,7 +18,7 @@ $template_platform = '2.8.x';
 $template_license = '<a href="http://www.opensource.org/licenses/MIT">MIT License (MIT)</a>';
 $template_license_terms = '-';
 $template_author = 'Ralf Hertsch, phpManufaktur';
-$template_description = '';
+$template_description = 'Example Template (Bootstrap Style) for the usage of the TemplateTools';
 $template_guid = '012EFA8A-08D1-4F97-90E9-3EEB43C3C155';
 
 // OPTIONAL VARIABLES FOR ADDITIONAL MENUES AND BLOCKS
