@@ -40,6 +40,21 @@
     <link href="{{ LIBRARY_URL }}/bootstrap/latest/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
     {# load CSS for the TemplateTools Pattern #}
     <link href="{{ MANUFAKTUR_URL }}/TemplateTools/Pattern/bootstrap/css/pattern.min.css" type="text/css" rel="stylesheet" />
+    
+    {# load the screen CSS for the template #}
+    {% if file_exists(TEMPLATE_PATH ~ '/css/template.css') %}      
+      <link href="{{ TEMPLATE_URL }}/css/template.css" rel="stylesheet" />
+    {% elseif file_exists(TEMPLATE_PATH ~ '/template.css') %}
+      <link href="{{ TEMPLATE_URL }}/template.css" rel="stylesheet" />
+    {% endif %}
+    
+    {# load the print CSS for the template #}
+    {% if file_exists(TEMPLATE_PATH ~ '/css/print.css') %}      
+      <link href="{{ TEMPLATE_URL }}/css/print.css" rel="stylesheet" />
+    {% elseif file_exists(TEMPLATE_PATH ~ '/print.css') %}      
+      <link href="{{ TEMPLATE_URL }}/print.css" rel="stylesheet" />
+    {% endif %}
+        
     {# register the frontend.css files for the CMS add-ons #}
     {{ register_frontend_modfiles('css') }}
   {% endblock css %}
