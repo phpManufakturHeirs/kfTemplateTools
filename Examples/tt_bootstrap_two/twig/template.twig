@@ -9,11 +9,6 @@
 
 {% extends "@pattern/bootstrap/html.simple.twig" %}
 
-{% block css %}
-  {{ parent() }}
-  <link href="{{ TEMPLATE_URL }}/css/screen.css" rel="stylesheet" />
-{% endblock css %}  
-
 {% block body %}
    <div class="container">
       
@@ -51,7 +46,7 @@
           {{ show_menu2() }}
         </div>
         
-      </div><!-- /content -->
+      </div>
       
       <div class="footer row">
         <div class="col-sm-9 col-sm-offset-3">
