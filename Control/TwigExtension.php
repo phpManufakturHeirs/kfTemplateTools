@@ -197,7 +197,7 @@ class TwigExtension extends Twig_Extension
             'register_frontend_modfiles' => new \Twig_Function_Method($this, 'RegisterFrontendModfiles'),
             'register_frontend_modfiles_body' => new \Twig_Function_Method($this, 'RegisterFrontendModfilesBody'),
             'show_menu2' => new \Twig_Function_Method($this, 'ShowMenu2'),
-
+            'wysiwyg_content' => new \Twig_Function_Method($this, 'WYSIWYGcontent'),
         );
     }
 
@@ -556,10 +556,10 @@ class TwigExtension extends Twig_Extension
     {
         return $this->app['classic']->pager($options, false);
     }
-    
+
     /**
      * Use the Bootstrap Alert Component to alert a message
-     * 
+     *
      * @param string $message
      * @param array $options
      * @return string rendered alert
@@ -568,15 +568,28 @@ class TwigExtension extends Twig_Extension
     {
         return $this->app['bootstrap']->alert($message, $options, false);
     }
-    
+
     /**
      * Check if the given file in $path exists
-     * 
+     *
      * @param string $path
      * @return boolean
      */
     public function FileExists($path)
     {
         return $this->app['filesystem']->exists($path);
+    }
+
+    /**
+     * Return the WYSIWYG content of the given section ID
+     *
+     * @param integer $section_id
+     * @param boolean $prompt
+     * @throws \InvalidArgumentException
+     * @return string
+     */
+    public function WYSIWYGcontent($section_id)
+    {
+        return $this->app['cms']->wysiwyg_content($section_id, false);
     }
 }

@@ -643,4 +643,26 @@ class cmsFunctions
             return false;
         }
     }
+
+    /**
+     * Return the WYSIWYG content of the given section ID
+     *
+     * @param integer $section_id
+     * @param boolean $prompt
+     * @throws \InvalidArgumentException
+     * @return string
+     */
+    public function wysiwyg_content($section_id, $prompt=true)
+    {
+        if (false === ($section_id = filter_var($section_id, FILTER_VALIDATE_INT))) {
+            throw new \InvalidArgumentException('The $section_id must be of type integer!');
+        }
+        $SQL = "SELECT `content` FROM `".CMS_TABLE_PREFIX."mod_wysiwyg` WHERE `section_id`=$section_id";
+        $content = $this->app['db']->fetchColumn($SQL);
+        $result = (!empty($content)) ? $this->app['tools']->unsanitizeText($content) : '';
+        if ($prompt) {
+            echo $result;
+        }
+        return $result;
+    }
 }
