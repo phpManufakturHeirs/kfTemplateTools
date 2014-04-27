@@ -592,4 +592,5 @@ class TwigExtension extends Twig_Extension
     {
         return $this->app['cms']->wysiwyg_content($section_id, false);
     }
+
 }
