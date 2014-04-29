@@ -13,6 +13,7 @@ namespace phpManufaktur\TemplateTools\Control;
 
 use Silex\Application;
 use phpManufaktur\Basic\Control\Utils;
+use Symfony\Component\Finder\Finder;
 
 class Tools
 {
@@ -83,7 +84,19 @@ class Tools
      */
     function addLanguageFiles($locale_path)
     {
-        return $this->utils->addLanguageFiles($locale_path);
+        // load the language files for all extensions
+        $locales = new Finder();
+        $locales->name('*.php')->in($locale_path);
+        $locales->depth('== 0');
+        foreach ($locales as $locale) {
+            // add the locale resource file
+            $this->app['translator'] = $this->app->share($this->app->extend('translator', function ($translator) use ($locale) {
+                $lang_array = include_once $locale->getRealpath();
+                $translator->addResource('array', $lang_array, $locale->getBasename('.php'));
+                return $translator;
+            }));
+            $this->app['monolog']->addDebug('Added language file: '.$locale->getRealpath());
+        }
     }
 
     /**
