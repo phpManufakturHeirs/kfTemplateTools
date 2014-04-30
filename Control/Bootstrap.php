@@ -16,6 +16,7 @@ use phpManufaktur\TemplateTools\Control\Bootstrap\Nav;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Breadcrumb;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Pager;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Alert;
+use phpManufaktur\TemplateTools\Control\Classic\SocialSharingButtons;
 
 class Bootstrap
 {
@@ -24,6 +25,7 @@ class Bootstrap
     protected $Breadcrumb = null;
     protected $Pager = null;
     protected $Alert = null;
+    protected $SocialSharingButtons = null;
 
     /**
      * Constructor
@@ -37,6 +39,7 @@ class Bootstrap
         $this->Breadcrumb = new Breadcrumb($app);
         $this->Pager = new Pager($app);
         $this->Alert = new Alert($app);
+        $this->SocialSharingButtons = new SocialSharingButtons($app);
     }
 
     /**
@@ -87,5 +90,18 @@ class Bootstrap
     public function alert($message='', $options=array(), $prompt=true)
     {
         return $this->Alert->alert($message, $options, $prompt);
+    }
+    
+    /**
+     * Create responsive social sharing buttons
+     *
+     * @param array $buttons
+     * @param array $options
+     * @param boolean $prompt
+     * @return string
+     */
+    public function social_sharing_buttons($buttons=array(), $options=array(), $prompt=true)
+    {
+        return $this->SocialSharingButtons->social_sharing_buttons($buttons, $options, $prompt);
     }
 }
