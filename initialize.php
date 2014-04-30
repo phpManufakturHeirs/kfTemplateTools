@@ -85,7 +85,7 @@ if (!defined('CMS_SEARCH_VISIBILITY')) define('CMS_SEARCH_VISIBILITY', SEARCH);
 $framework_config = $template['tools']->readJSON(realpath(BOOTSTRAP_PATH . '/config/framework.json'));
 
 if (!defined('FRAMEWORK_DEBUG')) define('FRAMEWORK_DEBUG', (isset($framework_config['DEBUG'])) ? $framework_config['DEBUG'] : false);
-$app['debug'] = FRAMEWORK_DEBUG;
+$template['debug'] = FRAMEWORK_DEBUG;
 
 if (!defined('FRAMEWORK_CACHE')) define('FRAMEWORK_CACHE', (isset($framework_config['CACHE'])) ? $framework_config['CACHE'] : true);
 
@@ -258,7 +258,7 @@ $template->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.options' => array(
         'cache' => FRAMEWORK_CACHE ? FRAMEWORK_PATH . '/temp/cache/' : false,
         'strict_variables' => FRAMEWORK_DEBUG,
-        'debug' => FRAMEWORK_DEBUG ? true : false,
+        'debug' => FRAMEWORK_DEBUG,
         'autoescape' => false
     )
 ));
