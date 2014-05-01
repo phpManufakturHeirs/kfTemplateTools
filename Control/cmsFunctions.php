@@ -13,6 +13,7 @@ namespace phpManufaktur\TemplateTools\Control;
 
 use Silex\Application;
 use phpManufaktur\Basic\Data\CMS\Page;
+use phpManufaktur\TemplateTools\Control\CMS\PageImage;
 
 
 class cmsFunctions
@@ -664,5 +665,19 @@ class cmsFunctions
             echo $result;
         }
         return $result;
+    }
+    
+    /**
+     * Get the first content image from any WYSIWYG, NEWS, TOPICS or flexContent article.
+     * Try alternate to get a teaser image (TOPICS, flexContent)
+     * 
+     * @param integer $page_id
+     * @param array $options
+     * @return string return the URL of the image or an empty string
+     */
+    public function page_image($page_id=PAGE_ID, $options=array())
+    {
+        $PageImage = new PageImage($this->app);
+        return $PageImage->page_image($page_id, $options);
     }
 }
