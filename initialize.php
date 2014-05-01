@@ -15,37 +15,30 @@ if (!defined('WB_PATH')) {
 
 require_once realpath(WB_PATH.'/kit2/framework/autoload.php');
 
-use Symfony\Component\HttpKernel\Debug\ErrorHandler;
-use Symfony\Component\HttpKernel\Debug\ExceptionHandler;
-use Silex\Application;
-use Symfony\Component\Filesystem\Filesystem;
-use phpManufaktur\TemplateTools\Control\cmsFunctions;
-use Symfony\Component\Translation\Loader\ArrayLoader;
-use Symfony\Bridge\Monolog\Logger;
-use phpManufaktur\Basic\Control\MarkdownFunctions;
-use phpManufaktur\TemplateTools\Control\TwigExtension;
-use phpManufaktur\TemplateTools\Control\DropletFunctions;
-use phpManufaktur\TemplateTools\Control\kitCommandFunctions;
-use phpManufaktur\Basic\Control\Image;
-use phpManufaktur\TemplateTools\Control\Tools;
-use phpManufaktur\TemplateTools\Control\Bootstrap;
-use phpManufaktur\TemplateTools\Control\Classic;
 
 // set the error handling
 ini_set('display_errors', 1);
 error_reporting(-1);
-ErrorHandler::register();
+Symfony\Component\HttpKernel\Debug\ErrorHandler::register();
 if ('cli' !== php_sapi_name()) {
-    ExceptionHandler::register();
+    Symfony\Component\HttpKernel\Debug\ExceptionHandler::register();
 }
 
-$template = new Application();
+$template = new Silex\Application();
 
 if (!defined('BOOTSTRAP_PATH')) define('BOOTSTRAP_PATH', WB_PATH.'/kit2');
 
-// register the Framework Utils
+// register the validator service
+$template->register(new Silex\Provider\ValidatorServiceProvider());
+
+// register the Framework Tools
 $template['tools'] = $template->share(function($template) {
-    return new Tools($template);
+    return new phpManufaktur\TemplateTools\Control\Tools($template);
+});
+
+// INTERNAL - we need also the utils to access orginal kitFramework Classes!
+$template['utils'] = $template->share(function($template) {
+    return new phpManufaktur\Basic\Control\Utils($template);
 });
 
 // define needed constants
@@ -111,13 +104,13 @@ if (!defined('HELPER_URL')) define('HELPER_URL', MANUFAKTUR_URL.'/Library/Helper
 
 // get the filesystem into the application
 $template['filesystem'] = function() {
-    return new Filesystem();
+    return new Symfony\Component\Filesystem\Filesystem();
 };
 
 // register monolog
 $template->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => FRAMEWORK_PATH.'/logfile/templatetools.log',
-    'monolog.level' => FRAMEWORK_DEBUG ? Logger::DEBUG : Logger::WARNING,
+    'monolog.level' => FRAMEWORK_DEBUG ? Symfony\Bridge\Monolog\Logger::DEBUG : Symfony\Bridge\Monolog\Logger::WARNING,
     'monolog.name' => 'TemplateTools',
     'monolog.maxfiles' => isset($framework_config['LOGFILE_ROTATE_MAXFILES']) ? $framework_config['LOGFILE_ROTATE_MAXFILES'] : 10
 ));
@@ -139,7 +132,7 @@ if (!defined('CMS_TYPE')) define('CMS_TYPE', $cms_config['CMS_TYPE']);
 if (!defined('CMS_VERSION')) define('CMS_VERSION', $cms_config['CMS_VERSION']);
 
 $template['cms'] = $template->share(function($template) {
-    return new cmsFunctions($template);
+    return new phpManufaktur\TemplateTools\Control\cmsFunctions($template);
 });
 
 // read the doctrine configuration
@@ -226,7 +219,7 @@ $template->register(new Silex\Provider\TranslationServiceProvider(), array(
 ));
 $template['translator'] = $template->share($template->extend('translator', function($translator, $template)
 {
-    $translator->addLoader('array', new ArrayLoader());
+    $translator->addLoader('array', new Symfony\Component\Translation\Loader\ArrayLoader());
     return $translator;
 }));
 
@@ -247,7 +240,7 @@ if ($template['filesystem']->exists(TEMPLATE_PATH.'/locale')) {
 
 // Markdown Parser
 $template['markdown'] = $template->share(function($template) {
-    return new MarkdownFunctions($template);
+    return new phpManufaktur\Basic\Control\MarkdownFunctions($template);
 });
 
 // register Twig
@@ -276,7 +269,7 @@ $template['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH.'/TemplateTools/Pat
 $template['twig'] = $template->share($template->extend('twig', function($twig, $template)
 {
     // add global variables, functions etc. for the templates
-    $twig->addExtension(new TwigExtension($template));
+    $twig->addExtension(new phpManufaktur\TemplateTools\Control\TwigExtension($template));
     if ($template['debug']) {
         $twig->addExtension(new Twig_Extension_Debug());
     }
@@ -289,27 +282,27 @@ $template['monolog']->addDebug('TwigServiceProvider registered.');
 
 // execute droplets
 $template['droplet'] = $template->share(function($template) {
-    return new DropletFunctions($template);
+    return new phpManufaktur\TemplateTools\Control\DropletFunctions($template);
 });
 
 // execute kitCommands
 $template['command'] = $template->share(function($template) {
-    return new kitCommandFunctions($template);
+    return new phpManufaktur\TemplateTools\Control\kitCommandFunctions($template);
 });
 
 // image tools
 $template['image'] = $template->share(function($template) {
-    return new Image($template);
+    return new phpManufaktur\Basic\Control\Image($template);
 });
 
 // Bootstrap tools
 $template['bootstrap'] = $template->share(function($template) {
-    return new Bootstrap($template);
+    return new phpManufaktur\TemplateTools\Control\Bootstrap($template);
 });
 
 // Classic tools
 $template['classic'] = $template->share(function($template) {
-    return new Classic($template);
+    return new phpManufaktur\TemplateTools\Control\Classic($template);
 });
 
 if (FRAMEWORK_CACHE) {
