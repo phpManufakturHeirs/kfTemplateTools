@@ -21,12 +21,7 @@ use phpManufaktur\TemplateTools\Control\Classic\SocialSharingButtons;
 class Bootstrap
 {
     protected $app = null;
-    protected $Nav = null;
-    protected $Breadcrumb = null;
-    protected $Pager = null;
-    protected $Alert = null;
-    protected $SocialSharingButtons = null;
-
+    
     /**
      * Constructor
      *
@@ -35,11 +30,6 @@ class Bootstrap
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->Nav = new Nav($app);
-        $this->Breadcrumb = new Breadcrumb($app);
-        $this->Pager = new Pager($app);
-        $this->Alert = new Alert($app);
-        $this->SocialSharingButtons = new SocialSharingButtons($app);
     }
 
     /**
@@ -52,7 +42,8 @@ class Bootstrap
      */
     public function nav($class='nav nav-tabs', $options=array(), $prompt=true)
     {
-        return $this->Nav->nav($class, $options, $prompt);
+        $Nav = new Nav($this->app);
+        return $Nav->nav($class, $options, $prompt);
     }
 
     /**
@@ -64,7 +55,8 @@ class Bootstrap
      */
     public function breadcrumb($options=array(), $prompt=true)
     {
-        return $this->Breadcrumb->breadcrumb($options, $prompt);
+        $Breadcrumb = new Breadcrumb($app);
+        return $Breadcrumb->breadcrumb($options, $prompt);
     }
 
     /**
@@ -76,7 +68,8 @@ class Bootstrap
      */
     public function pager($options=array(), $prompt=true)
     {
-        return $this->Pager->pager($options, $prompt);
+        $Pager = new Pager($app);
+        return $Pager->pager($options, $prompt);
     }
     
     /**
@@ -89,7 +82,8 @@ class Bootstrap
      */
     public function alert($message='', $options=array(), $prompt=true)
     {
-        return $this->Alert->alert($message, $options, $prompt);
+        $Alert = new Alert($app);
+        return $Alert->alert($message, $options, $prompt);
     }
     
     /**
@@ -102,6 +96,7 @@ class Bootstrap
      */
     public function social_sharing_buttons($buttons=array(), $options=array(), $prompt=true)
     {
-        return $this->SocialSharingButtons->social_sharing_buttons($buttons, $options, $prompt);
+        $SocialSharingButtons = new SocialSharingButtons($app);
+        return $SocialSharingButtons->social_sharing_buttons($buttons, $options, $prompt);
     }
 }
