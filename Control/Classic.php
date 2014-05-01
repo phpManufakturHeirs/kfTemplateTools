@@ -21,7 +21,6 @@ class Classic
     protected $app = null;
     protected $BootstrapBreadcrumb = null;
     protected $BootstrapPager = null;
-    protected $SocialSharingButtons = null;
 
     /**
      * Constructor
@@ -33,7 +32,6 @@ class Classic
         $this->app = $app;
         $this->BootstrapBreadcrumb = new Breadcrumb($app);
         $this->BootstrapPager = new Pager($app);
-        $this->SocialSharingButtons = new SocialSharingButtons($app);
     }
 
     /**
@@ -80,6 +78,7 @@ class Classic
      */
     public function social_sharing_buttons($buttons=array(), $options=array(), $prompt=true)
     {
-        return $this->SocialSharingButtons->social_sharing_buttons($buttons, $options, $prompt);
+        $SocialSharingButtons = new SocialSharingButtons($this->app);
+        return $SocialSharingButtons->social_sharing_buttons($buttons, $options, $prompt);
     }
 }
