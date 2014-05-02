@@ -96,7 +96,7 @@ class Tools
                 return $translator;
             }));
             $this->app['monolog']->addDebug('Added language file: '.$locale->getRealpath());
-        }
+        }        
     }
 
     /**
