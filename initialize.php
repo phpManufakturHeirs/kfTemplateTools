@@ -61,6 +61,7 @@ if (!defined('CMS_LOGIN_ENABLED')) define('CMS_LOGIN_ENABLED', FRONTEND_LOGIN);
 if (!defined('CMS_LOGIN_URL')) define('CMS_LOGIN_URL', defined('LOGIN_URL') ? LOGIN_URL : CMS_URL);
 if (!defined('CMS_LOGIN_FORGOTTEN_URL')) define('CMS_LOGIN_FORGOTTEN_URL', defined('FORGOT_URL') ? FORGOT_URL : CMS_URL);
 if (!defined('CMS_PAGES_DIRECTORY')) define('CMS_PAGES_DIRECTORY', PAGES_DIRECTORY);
+if (!defined('CMS_PAGES_EXTENSION')) define('CMS_PAGES_EXTENSION', PAGE_EXTENSION);
 if (!defined('CMS_TITLE')) define('CMS_TITLE', WEBSITE_TITLE);
 if (!defined('CMS_DESCRIPTION')) define('CMS_DESCRIPTION', WEBSITE_DESCRIPTION);
 if (!defined('CMS_KEYWORDS')) define('CMS_KEYWORDS', WEBSITE_KEYWORDS);
@@ -154,7 +155,7 @@ $template->register(new Silex\Provider\DoctrineServiceProvider(), array(
 
 if (!defined('PAGE_FOOTER')) define('PAGE_FOOTER', $template['cms']->page_footer('Y', false));
 if (!defined('PAGE_HEADER')) define('PAGE_HEADER', $template['cms']->page_header(false));
-if (!defined('PAGE_KEYWORDS')) define('PAGE_KEYWORDS', $template['cms']->page_keywords());
+if (!defined('PAGE_KEYWORDS')) define('PAGE_KEYWORDS', $template['cms']->page_keywords(false));
 if (!defined('PAGE_MENU_LEVEL')) {
     if (PAGE_ID > 0) {
         // get the MENU LEVEL of the current page
@@ -179,9 +180,14 @@ if (!defined('PAGE_PARENT_ID')) {
     }
 }
 if (!defined('PAGE_HAS_CHILD')) define('PAGE_HAS_CHILD', $template['cms']->page_has_child());
-if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title());
-if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(PAGE_ID, null, false));
+if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title(' - ', '[PAGE_TITLE]', false));
+if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(PAGE_ID, false));
+if (!defined('PAGE_LINK')) define('PAGE_LINK', $template['cms']->page_link(PAGE_ID));
 if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
+if (!defined('PAGE_ID_HOME')) {
+    $sequence = $template['cms']->page_sequence();
+    define('PAGE_ID_HOME', isset($sequence[0]) ? $sequence[0] : -1);
+}
 
 // normally set by CMS but not at SEARCH pages!
 if (!defined('PAGE_DESCRIPTION')) define('PAGE_DESCRIPTION', '');
