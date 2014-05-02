@@ -13,8 +13,9 @@ namespace phpManufaktur\TemplateTools\Control;
 
 use Silex\Application;
 use phpManufaktur\Basic\Data\CMS\Page;
-use phpManufaktur\TemplateTools\Control\CMS\PageImage;
-
+use phpManufaktur\flexContent\Data\Content\Content as flexContentData;
+use phpManufaktur\flexContent\Control\Command\Tools as flexContentTools;
+use phpManufaktur\TemplateTools\Control\cmsFunctions\PageImage;
 
 class cmsFunctions
 {
@@ -51,30 +52,26 @@ class cmsFunctions
 
     /**
      * Return the page description for the actual PAGE_ID.
-     * If $arguments is an array and key = 'topic_id' or 'post_id' and value > 0
-     * the function return the description for TOPICS oder NEWS
+     * The function detect TOPICS, NEWS and flexContent article and return specific descriptions
      *
-     * @param array $arguments
      * @param boolean $prompt
      * @return string
      */
-    public function page_description($arguments=null, $prompt=true)
+    public function page_description($prompt=true)
     {
-        if (isset($arguments['topic_id']) && (is_int($arguments['topic_id'])) && ($arguments['topic_id'] > 0)) {
+        if (defined('TOPIC_ID') && (TOPIC_ID > 0)) {
             if (!file_exists(CMS_ADDONS_PATH . '/topics/module_settings.php')) {
                 throw new \Exception('A TOPIC_ID was submitted, but TOPICS is not installed!');
             }
             // get the title
-            $SQL = "SELECT `description` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".$arguments['topic_id'];
+            $SQL = "SELECT `description` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".TOPIC_ID;
             $description = $this->app['db']->fetchColumn($SQL);
             if ($prompt) {
                 echo $description;
             }
-            else {
-                return $description;
-            }
+            return $description;
         }
-        elseif (isset($arguments['post_id']) && is_int($arguments['post_id']) && ($arguments['post_id'] > 0)) {
+        elseif (defined('POST_ID') && (POST_ID > 0)) {
             // indicate a NEWS page
             if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
                 throw new \Exception('A POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
@@ -83,9 +80,20 @@ class cmsFunctions
             if ($prompt) {
                 echo CMS_DESCRIPTION;
             }
-            else {
-                return CMS_DESCRIPTION;
+            return CMS_DESCRIPTION;
+        }
+        elseif (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
+            isset($_GET['action']) && ($_GET['action'] == 'view') &&
+            isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
+            // this is a flexContent article
+            $flexContentData = new flexContentData($this->app);
+            if (false !== ($content = $flexContentData->select($_GET['content_id']))) {
+                if ($prompt) {
+                    echo $content['description'];
+                }
+                return $content['description'];
             }
+            return null;            
         }
         elseif (function_exists('page_description')) {
             if ($prompt) {
@@ -101,55 +109,74 @@ class cmsFunctions
             return null;
         }
     }
+    
+    /**
+     * Create a page title for the given Template
+     * 
+     * @param string $title
+     * @return string
+     */
+    protected function replaceTitlePlaceholders($title, $spacer=' - ', $template='[PAGE_TITLE]')
+    {
+        $placeholders = array('[WEBSITE_TITLE]', '[PAGE_TITLE]', '[MENU_TITLE]', '[SPACER]');
+        $values = array(WEBSITE_TITLE, $title, MENU_TITLE, $spacer);
+        
+        return str_replace($placeholders, $values, $template);
+    }
 
     /**
      * Return the page title for the actual PAGE_ID
-     * If $arguments is an array and key = 'topic_id' or 'post_id' and value > 0
-     * the function return the title for TOPICS oder NEWS
+     * This function detect NEWS, TOPICS and flexContent articles and return the correct titles
      *
-     * @param array $arguments
-     * @param boolean $prompt
      * @param string $spacer
      * @param string $template
+     * @param boolean $prompt
      * @return string
      */
-    public function page_title($arguments=null, $prompt=true, $spacer= ' - ', $template='[PAGE_TITLE]')
+    public function page_title($spacer= ' - ', $template='[PAGE_TITLE]', $prompt=true)
     {
-        if (isset($arguments['topic_id']) && (is_int($arguments['topic_id'])) && ($arguments['topic_id'] > 0)) {
+        if (defined('TOPIC_ID') && (TOPIC_ID  > 0)) {
+            // this is a TOPIC article
             if (!file_exists(CMS_ADDONS_PATH . '/topics/module_settings.php')) {
                 throw new \Exception('A TOPIC_ID was submitted, but TOPICS is not installed!');
             }
             // get the title
-            $SQL = "SELECT `title` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".$arguments['topic_id'];
+            $SQL = "SELECT `title` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".TOPIC_ID;
             $title = $this->app['db']->fetchColumn($SQL);
 
-            $placeholders = array('[WEBSITE_TITLE]', '[PAGE_TITLE]', '[MENU_TITLE]', '[SPACER]');
-            $values = array(WEBSITE_TITLE, $title, MENU_TITLE, $spacer);
-
+            $title = $this->replaceTitlePlaceholders($title, $spacer, $template);            
             if ($prompt) {
-                echo str_replace($placeholders, $values, $template);
+                echo $title;
             }
-            else {
-                return str_replace($placeholders, $values, $template);
-            }
+            return $title;
         }
-        elseif (isset($arguments['post_id']) && is_int($arguments['post_id']) && ($arguments['post_id'] > 0)) {
-            // indicate a NEWS page
+        elseif (defined(POST_ID) && (POST_ID > 0)) {
+            // this is a NEWS article
             if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
                 throw new \Exception('A POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
             }
-            $SQL = "SELECT `title` FROM `".CMS_TABLE_PREFIX."mod_news_posts` WHERE `post_id`='".$arguments['post_id']."'";
+            $SQL = "SELECT `title` FROM `".CMS_TABLE_PREFIX."mod_news_posts` WHERE `post_id`=".POST_ID;
             $title = $this->app['db']->fetchColumn($SQL);
 
-            $placeholders = array('[WEBSITE_TITLE]', '[PAGE_TITLE]', '[MENU_TITLE]', '[SPACER]');
-            $values = array(WEBSITE_TITLE, $title, MENU_TITLE, $spacer);
-
+            $title = $this->replaceTitlePlaceholders($title, $spacer, $template);
             if ($prompt) {
-                echo str_replace($placeholders, $values, $template);
+                echo $title;
             }
-            else {
-                return str_replace($placeholders, $values, $template);
+            return $title;
+        }
+        elseif (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
+            isset($_GET['action']) && ($_GET['action'] == 'view') &&
+            isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
+            // this is a flexContent article
+            $flexContentData = new flexContentData($this->app);
+            if (false !== ($content = $flexContentData->select($_GET['content_id']))) {
+                $title = $this->replaceTitlePlaceholders($content['title'], $spacer, $template);
+                if ($prompt) {
+                    echo $title;
+                }
+                return $title;
             }
+            return null;
         }
         elseif (function_exists('page_title')) {
             if ($prompt) {
@@ -168,29 +195,26 @@ class cmsFunctions
 
     /**
      * Return the page keywords for the actual PAGE_ID
-     * If $arguments is an array and key = 'topic_id' or 'post_id' and value > 0
-     * the function return the keywords for TOPICS oder NEWS
+     * The function detect TOPICS, NEWS and flexContent articles and return specific keywords
      *
      * @param boolean $prompt
      * @return string
      */
-    public function page_keywords($arguments=null, $prompt=true)
+    public function page_keywords($prompt=true)
     {
-        if (isset($arguments['topic_id']) && (is_int($arguments['topic_id'])) && ($arguments['topic_id'] > 0)) {
+        if (defined('TOPIC_ID') && (TOPIC_ID > 0)) {
             if (!file_exists(CMS_ADDONS_PATH . '/topics/module_settings.php')) {
                 throw new \Exception('A TOPIC_ID was submitted, but TOPICS is not installed!');
             }
             // get the title
-            $SQL = "SELECT `keywords` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".$arguments['topic_id'];
+            $SQL = "SELECT `keywords` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".TOPIC_ID;
             $keywords = $this->app['db']->fetchColumn($SQL);
             if ($prompt) {
-                echo keywords;
+                echo $keywords;
             }
-            else {
-                return $keywords;
-            }
+            return $keywords;
         }
-        elseif (isset($arguments['post_id']) && is_int($arguments['post_id']) && ($arguments['post_id'] > 0)) {
+        elseif (defined('POST_ID') && (POST_ID > 0)) {
             // indicate a NEWS page
             if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
                 throw new \Exception('A POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
@@ -199,9 +223,20 @@ class cmsFunctions
             if ($prompt) {
                 echo CMS_KEYWORDS;
             }
-            else {
-                return CMS_KEYWORDS;
+            return CMS_KEYWORDS;
+        }
+        elseif (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
+            isset($_GET['action']) && ($_GET['action'] == 'view') &&
+            isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
+            // this is a flexContent article
+            $flexContentData = new flexContentData($this->app);
+            if (false !== ($content = $flexContentData->select($_GET['content_id']))) {
+                if ($prompt) {
+                    echo $content['keywords'];
+                }
+                return $content['keywords'];
             }
+            return null;            
         }
         elseif (function_exists('page_keywords')) {
             if ($prompt) {
@@ -314,6 +349,21 @@ class cmsFunctions
     }
 
     /**
+     * Get the page link for the given page ID
+     * 
+     * @param string $page_id
+     * @return string|NULL
+     */
+    public function page_link($page_id=PAGE_ID)
+    {
+        if (!is_numeric($page_id) || ($page_id < 1)) {
+            return null;
+        } 
+        $SQL = "SELECT `link` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
+        return $this->app['db']->fetchColumn($SQL);
+    }
+    
+    /**
      * Get the URL of the given page ID. If arguments 'topic_id' or 'post_id'
      * the function will return the URL for the given TOPICS or NEWS article
      *
@@ -322,14 +372,37 @@ class cmsFunctions
      * @throws \Exception
      * @return string URL of the page
      */
-    public function page_url($page_id=PAGE_ID, $arguments=null, $prompt=true)
+    public function page_url($page_id=PAGE_ID, $prompt=true)
     {
-        if ($prompt) {
-            echo $this->PageData->getURL($page_id, $arguments);
+        if (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
+            isset($_GET['action']) && ($_GET['action'] == 'view') &&
+            isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
+            // this is a flexContent Article...
+            $flexContentData = new flexContentData($this->app);
+            if (false !== ($content = $flexContentData->selectPermaLinkByContentID($_GET['content_id']))) {
+                $flexContentTools = new flexContentTools($this->app);
+                $base_url = $flexContentTools->getPermalinkBaseURL($content['language']);
+                $url = $base_url.'/'.$content['permalink'];
+            }
+            else {
+                $url = CMS_URL. CMS_PAGES_DIRECTORY. $this->page_link($page_id). CMS_PAGES_EXTENSION;    
+            }             
+        }        
+        elseif (is_numeric($page_id) && ($page_id > 0)) {
+            // this is a regular CMS page
+            $url = $this->PageData->getURL($page_id, array(
+                'topic_id' => (defined('TOPIC_ID') && (TOPIC_ID > 0)) ? TOPIC_ID : null,
+                'post_id' => (defined('POST_ID') && (POST_ID > 0)) ? POST_ID : null
+            )); 
         }
         else {
-            return $this->PageData->getURL($page_id, $arguments);
+            $url = $_SERVER['REQUEST_URI'];
         }
+                    
+        if ($prompt) {
+            echo $url;
+        }
+        return $url;
     }
 
     /**
@@ -541,7 +614,7 @@ class cmsFunctions
      * @param integer $id
      * @see page_sequence()
      */
-    private static function add_page_sequence_id($id)
+    protected static function add_page_sequence_id($id)
     {
         self::$page_sequence[] = $id;
     }
@@ -677,7 +750,7 @@ class cmsFunctions
      */
     public function page_image($page_id=PAGE_ID, $options=array())
     {
-        $PageImage = new PageImage($this->app);
+        $PageImage = new PageImage($this->app); 
         return $PageImage->page_image($page_id, $options);
     }
 }
