@@ -9,12 +9,13 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-namespace phpManufaktur\TemplateTools\Control\CMS;
+namespace phpManufaktur\TemplateTools\Control\cmsFunctions;
 
 use Silex\Application;
 use Symfony\Component\Validator\Constraints as Assert;
 use phpManufaktur\flexContent\Data\Content\Content as flexContentData;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Finder\Finder;
 
 class PageImage
 {
@@ -80,7 +81,7 @@ class PageImage
      */
     protected function validateImage($image_path)
     {
-        if ($this->app['filesystem']->exists($image_path)) {
+        if ($this->app['filesystem']->exists($image_path)) { 
             $errors = $this->app['validator']->validateValue($image_path, new Assert\Image(array(
                 'minWidth' => self::$options['minimum_size']['width'],
                 'minHeight' => self::$options['minimum_size']['height']
@@ -89,7 +90,7 @@ class PageImage
                 // this image is valid
                 return true;
             }
-        }
+        } 
         return false;
     }
     
@@ -137,7 +138,7 @@ class PageImage
         if (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
             isset($_GET['action']) && ($_GET['action'] == 'view') &&
             isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
-            // this is a flexContent Article...
+            // this is a flexContent Article...            
             $flexContentData = new flexContentData($this->app);
             if (false !== ($content = $flexContentData->select($_GET['content_id']))) {
                 if (false === ($image = $this->getImage($content['content']))) {
@@ -205,14 +206,22 @@ class PageImage
             // invalid page, perhaps search results?
             return '';
         }
-        
+       
         if ((false === $image) && self::$options['fallback_image']['active'] && 
             (false !== strpos(self::$options['fallback_image']['url'], CMS_URL))) {
             // no image detected, try to load the fallback image
             $image_path = CMS_PATH.substr(self::$options['fallback_image']['url'], strlen(CMS_URL));
-            if ($this->validateImage($image_path)) {
-               return self::$options['fallback_image']['url'];
-            }            
+            $path_info = pathinfo($image_path);
+            if ($this->app['filesystem']->exists($path_info['dirname'])) {
+                $images = new Finder();
+                $images->name($path_info['basename'])->in($path_info['dirname']);
+                $images->depth('== 0');
+                foreach ($images as $image) {
+                    if ($this->validateImage($image->getRealpath())) {
+                        return str_replace('\\', '/', CMS_URL.substr($image->getRealpath(), strlen(CMS_PATH)));
+                    }
+                }            
+            }
         }
         
         // no hit, return empty string
