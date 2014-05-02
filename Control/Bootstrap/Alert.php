@@ -81,6 +81,9 @@ class Alert
      */
     public function alert($message='', $options=array(), $prompt=true)
     {
+        // first check the options
+        $this->checkOptions($options);
+        
         $message = trim($message);
         if (empty($message)) {
             self::$options['type'] = self::DANGER;
