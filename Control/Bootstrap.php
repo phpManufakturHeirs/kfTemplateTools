@@ -55,7 +55,7 @@ class Bootstrap
      */
     public function breadcrumb($options=array(), $prompt=true)
     {
-        $Breadcrumb = new Breadcrumb($app);
+        $Breadcrumb = new Breadcrumb($this->app);
         return $Breadcrumb->breadcrumb($options, $prompt);
     }
 
@@ -68,7 +68,7 @@ class Bootstrap
      */
     public function pager($options=array(), $prompt=true)
     {
-        $Pager = new Pager($app);
+        $Pager = new Pager($this->app);
         return $Pager->pager($options, $prompt);
     }
     
@@ -82,7 +82,7 @@ class Bootstrap
      */
     public function alert($message='', $options=array(), $prompt=true)
     {
-        $Alert = new Alert($app);
+        $Alert = new Alert($this->app);
         return $Alert->alert($message, $options, $prompt);
     }
     
@@ -96,7 +96,7 @@ class Bootstrap
      */
     public function social_sharing_buttons($buttons=array(), $options=array(), $prompt=true)
     {
-        $SocialSharingButtons = new SocialSharingButtons($app);
+        $SocialSharingButtons = new SocialSharingButtons($this->app);
         return $SocialSharingButtons->social_sharing_buttons($buttons, $options, $prompt);
     }
 }
