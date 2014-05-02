@@ -63,6 +63,7 @@ class TwigExtension extends Twig_Extension
             'CMS_MEDIA_PATH' => CMS_MEDIA_PATH,
             'CMS_MEDIA_URL' => CMS_MEDIA_URL,
             'CMS_PAGES_DIRECTORY' => CMS_PAGES_DIRECTORY,
+            'CMS_PAGES_EXTENSION' => CMS_PAGES_EXTENSION,
             'CMS_PATH' => CMS_PATH,
             'CMS_SEARCH_VISIBILITY' => CMS_SEARCH_VISIBILITY,
             'CMS_TABLE_PREFIX' => CMS_TABLE_PREFIX,
@@ -100,12 +101,15 @@ class TwigExtension extends Twig_Extension
             'MANUFAKTUR_URL' => MANUFAKTUR_URL,
 
             'PAGE_DESCRIPTION' => PAGE_DESCRIPTION,
+            'PAGE_DIRECTORY' => PAGES_DIRECTORY,
             'PAGE_EXTENSION' => PAGE_EXTENSION,
             'PAGE_FOOTER' => PAGE_FOOTER,
             'PAGE_HAS_CHILD' => PAGE_HAS_CHILD,
             'PAGE_HEADER' => PAGE_HEADER,
             'PAGE_ID' => PAGE_ID,
+            'PAGE_ID_HOME' => PAGE_ID_HOME,
             'PAGE_KEYWORDS' => PAGE_KEYWORDS,
+            'PAGE_LINK' => PAGE_LINK,
             'PAGE_MENU_LEVEL' => PAGE_MENU_LEVEL,
             'PAGE_MENU_TITLE' => PAGE_MENU_TITLE,
             'PAGE_MODIFIED_BY' => PAGE_MODIFIED_BY,
@@ -190,6 +194,8 @@ class TwigExtension extends Twig_Extension
             'markdown_file' => new \Twig_Function_Method($this, 'MarkdownFile'),
             'page_content' => new \Twig_Function_Method($this, 'PageContent'),
             'page_description' => new \Twig_Function_Method($this, 'PageDescription'),
+            'page_image' => new \Twig_Function_Method($this, 'PageImage'),
+            'page_keywords' => new \Twig_Function_Method($this, 'PageKeywords'),
             'page_next_id' => new \Twig_Function_Method($this, 'PageNextID'),
             'page_previous_id' => new \Twig_Function_Method($this, 'PagePreviousID'),
             'page_title' => new \Twig_Function_Method($this, 'PageTitle'),
@@ -413,9 +419,9 @@ class TwigExtension extends Twig_Extension
      * @param array $arguments
      * @return string
      */
-    public function PageDescription($arguments=null)
+    public function PageDescription()
     {
-        return $this->app['cms']->page_description($arguments, false);
+        return $this->app['cms']->page_description(false);
     }
 
     /**
@@ -428,9 +434,9 @@ class TwigExtension extends Twig_Extension
      * @param string $template
      * @return string
      */
-    public function PageTitle($arguments=null, $spacer= ' - ', $template='[PAGE_TITLE]')
+    public function PageTitle($spacer= ' - ', $template='[PAGE_TITLE]')
     {
-        return $this->app['cms']->page_title($arguments, false, $spacer, $template);
+        return $this->app['cms']->page_title($spacer, $template, false);
     }
 
     /**
@@ -438,12 +444,11 @@ class TwigExtension extends Twig_Extension
      * If $arguments is an array and key = 'topic_id' or 'post_id' and value > 0
      * the function return the keywords for TOPICS oder NEWS
      *
-     * @param boolean $prompt
      * @return string
      */
-    public function PageKeywords($arguments=null)
+    public function PageKeywords()
     {
-        return $this->app['cms']->page_keywords($arguments, false);
+        return $this->app['cms']->page_keywords(false);
     }
 
     /**
@@ -505,9 +510,9 @@ class TwigExtension extends Twig_Extension
      * @throws \Exception
      * @return string URL of the page
      */
-    public function PageURL($page_id=PAGE_ID, $arguments=null)
+    public function PageURL($page_id=PAGE_ID)
     {
-        return $this->app['cms']->page_url($page_id, $arguments, false);
+        return $this->app['cms']->page_url($page_id, false);
     }
 
     /**
@@ -593,4 +598,17 @@ class TwigExtension extends Twig_Extension
         return $this->app['cms']->wysiwyg_content($section_id, false);
     }
 
+    /**
+     * Get the first content image from any WYSIWYG, NEWS, TOPICS or flexContent article.
+     * Try alternate to get a teaser image (TOPICS, flexContent)
+     * 
+     * @param integer $page_id
+     * @param array $options
+     * @return string return the URL of the image or an empty string
+     */
+    public function PageImage($page_id=PAGE_ID, $options=array())
+    {
+        return $this->app['cms']->page_image($page_id, $options);
+    }
+    
 }
