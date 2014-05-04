@@ -6,6 +6,18 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.15** - 2014-05-04
+
+* add `normalize.css` to the classic `head.simple.twig` and `html.simple.twig`
+* added `social_sharing_buttons()`
+* introduce function `page_image()` to retrieve the URL of the first image of a WYSIWYG section, NEWS, TOPICS or flexContent
+* introduce new example template `tt_bootstrap_three`
+* extended `<head>` support in all patterns
+* massive changes in the CMS Service, added support for TOPICS, NEWS and flexContent
+* Changed handling of the EXTRA constants for NEWS and TOPICS to avoid conflicts at different platforms
+* The NEWS addon has a small bug (missing a global declaration for `$MOD_NEWS`) which will be now fixed by the Setup/Update
+* Introduce the new Service for `Browser`
+
 **0.14** - 2014-04-27
 
 * added constant `PAGE_HAS_CHILD` and function `$template['cms']->page_has_child()`
