@@ -45,6 +45,43 @@ class TwigExtension extends Twig_Extension
     public function getGlobals()
     {
         return array(
+            'BROWSER_UNKNOWN' => 'unknown',
+            'BROWSER_AMAYA' => 'Amaya',
+            'BROWSER_IE' => 'Internet Explorer',
+            'BROWSER_POCKET_IE' => 'Pocket Internet Explorer',
+            'BROWSER_OPERA' => 'Opera',
+            'BROWSER_OPERA_MINI' => 'Opera Mini',
+            'BROWSER_WEBTV' => 'WebTV',
+            'BROWSER_KONQUEROR' => 'Konqueror',
+            'BROWSER_ICAB' => 'iCab',
+            'BROWSER_OMNIWEB' => 'OmniWeb',
+            'BROWSER_FIREBIRD' => 'Firebird',
+            'BROWSER_FIREFOX' => 'Firefox',
+            'BROWSER_ICEWEASEL' => 'Iceweasel',
+            'BROWSER_SHIRETOKO' => 'Shiretoko',
+            'BROWSER_MOZILLA' => 'Mozilla',
+            'BROWSER_LYNX' => 'Lynx',
+            'BROWSER_SAFARI' => 'Safari',
+            'BROWSER_IPHONE' => 'iPhone',
+            'BROWSER_IPOD' => 'iPod',
+            'BROWSER_IPAD' => 'iPad',
+            'BROWSER_CHROME' => 'Chrome',
+            'BROWSER_ANDROID' => 'Android',
+            'BROWSER_GOOGLEBOT' => 'GoogleBot',
+            'BROWSER_SLURP' => 'Yahoo! Slurp',
+            'BROWSER_W3CVALIDATOR' => 'W3C Validator',
+            'BROWSER_BLACKBERRY' => 'BlackBerry',
+            'BROWSER_ICECAT' => 'IceCat',
+            'BROWSER_NOKIA_S60' => 'Nokia S60 OSS Browser',
+            'BROWSER_NOKIA' => 'Nokia Browser',
+            'BROWSER_MSN' => 'MSN Browser',
+            'BROWSER_MSNBOT' => 'MSN Bot',
+            'BROWSER_BINGBOT' => 'Bing Bot',
+            'BROWSER_NETSCAPE_NAVIGATOR' => 'Netscape Navigator',
+            'BROWSER_GALEON' => 'Galeon',
+            'BROWSER_NETPOSITIVE' => 'NetPositive',
+            'BROWSER_PHOENIX' => 'Phoenix',
+
             'CMS_ADDONS_PATH' => CMS_ADDONS_PATH,
             'CMS_ADDONS_URL' => CMS_ADDONS_URL,
             'CMS_ADMIN_PATH' => CMS_ADMIN_PATH,
@@ -83,6 +120,9 @@ class TwigExtension extends Twig_Extension
             'EXTENSION_PATH' => EXTENSION_PATH,
             'EXTENSION_URL' => EXTENSION_URL,
 
+            'EXTRA_POST_ID' => EXTRA_POST_ID,
+            'EXTRA_TOPIC_ID' => EXTRA_TOPIC_ID,
+
             'FRAMEWORK_CACHE' => FRAMEWORK_CACHE,
             'FRAMEWORK_DEBUG' => FRAMEWORK_DEBUG,
             'FRAMEWORK_MEDIA_PATH' => FRAMEWORK_MEDIA_PATH,
@@ -119,7 +159,24 @@ class TwigExtension extends Twig_Extension
             'PAGE_URL' => PAGE_URL,
             'PAGE_VISIBILITY' => PAGE_VISIBILITY,
 
-            'POST_ID' => POST_ID,
+            'PLATFORM_UNKNOWN' => 'unknown',
+            'PLATFORM_WINDOWS' => 'Windows',
+            'PLATFORM_WINDOWS_CE' => 'Windows CE',
+            'PLATFORM_APPLE' => 'Apple',
+            'PLATFORM_LINUX' => 'Linux',
+            'PLATFORM_OS2' => 'OS/2',
+            'PLATFORM_BEOS' => 'BeOS',
+            'PLATFORM_IPHONE' => 'iPhone',
+            'PLATFORM_IPOD' => 'iPod',
+            'PLATFORM_IPAD' => 'iPad',
+            'PLATFORM_BLACKBERRY' => 'BlackBerry',
+            'PLATFORM_NOKIA' => 'Nokia',
+            'PLATFORM_FREEBSD' => 'FreeBSD',
+            'PLATFORM_OPENBSD' => 'OpenBSD',
+            'PLATFORM_NETBSD' => 'NetBSD',
+            'PLATFORM_SUNOS' => 'SunOS',
+            'PLATFORM_OPENSOLARIS' => 'OpenSolaris',
+            'PLATFORM_ANDROID' => 'Android',
 
             'SM2_ALL' => SM2_ALL,
             'SM2_ALLINFO' => SM2_ALLINFO,
@@ -153,7 +210,6 @@ class TwigExtension extends Twig_Extension
             'THIRDPARTY_PATH' => THIRDPARTY_PATH,
             'THIRDPARTY_URL' => THIRDPARTY_URL,
 
-            'TOPIC_ID' => TOPIC_ID,
 
         );
     }
@@ -182,6 +238,12 @@ class TwigExtension extends Twig_Extension
             'bootstrap_breadcrumb' => new \Twig_Function_Method($this, 'BootstrapBreadcrumb'),
             'bootstrap_nav' => new \Twig_Function_Method($this, 'BootstrapNav'),
             'bootstrap_pager' => new \Twig_Function_Method($this, 'BootstrapPager'),
+            'browser_name' => new \Twig_Function_Method($this, 'BrowserName'),
+            'browser_version' => new \Twig_Function_Method($this, 'BrowserVersion'),
+            'browser_platform' => new \Twig_Function_Method($this, 'BrowserPlatform'),
+            'browser_is_mobile' => new \Twig_Function_Method($this, 'BrowserIsMobile'),
+            'browser_is_tablet' => new \Twig_Function_Method($this, 'BrowserIsTablet'),
+            'browser_is_desktop' => new \Twig_Function_Method($this, 'BrowserIsDesktop'),
             'classic_breadcrumb' => new \Twig_Function_Method($this, 'ClassicBreadcrumb'),
             'classic_pager' => new \Twig_Function_Method($this, 'ClassicPager'),
             'command' => new \Twig_Function_Method($this, 'kitCommand'),
@@ -601,7 +663,7 @@ class TwigExtension extends Twig_Extension
     /**
      * Get the first content image from any WYSIWYG, NEWS, TOPICS or flexContent article.
      * Try alternate to get a teaser image (TOPICS, flexContent)
-     * 
+     *
      * @param integer $page_id
      * @param array $options
      * @return string return the URL of the image or an empty string
@@ -610,5 +672,64 @@ class TwigExtension extends Twig_Extension
     {
         return $this->app['cms']->page_image($page_id, $options);
     }
-    
+
+    /**
+     * The name of the browser.  All return types are from the class contants
+     *
+     * @return string Name of the browser
+     */
+    public function BrowserName()
+    {
+        return $this->app['browser']->name(false);
+    }
+
+    /**
+     * The version of the browser.
+     *
+     * @return string Version of the browser (will only contain alpha-numeric characters and a period)
+     */
+    public function BrowserVersion()
+    {
+        return $this->app['browser']->version(false);
+    }
+
+    /**
+     * The name of the platform.  All return types are from the class contants
+     *
+     * @return string Name of the browser
+     */
+    public function BrowserPlatform()
+    {
+        return $this->app['browser']->platform(false);
+    }
+
+    /**
+     * Is the browser from a mobile device?
+     *
+     * @return boolean True if the browser is from a mobile device otherwise false
+     */
+    public function BrowserIsMobile()
+    {
+        return $this->app['browser']->is_mobile();
+    }
+
+    /**
+     * Is the browser from a tablet device?
+     *
+     * @return boolean True if the browser is from a tablet device otherwise false
+     */
+    public function BrowserIsTablet()
+    {
+        return $this->app['browser']->is_tablet();
+    }
+
+    /**
+     * Check if browser is not mobile and not tablet (simplified check!)
+     *
+     * @return boolean
+     */
+    public function BrowserIsDesktop()
+    {
+        return $this->app['browser']->is_desktop();
+    }
 }

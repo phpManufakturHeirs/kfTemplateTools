@@ -15,7 +15,6 @@ if (!defined('WB_PATH')) {
 
 require_once realpath(WB_PATH.'/kit2/framework/autoload.php');
 
-
 // set the error handling
 ini_set('display_errors', 1);
 error_reporting(-1);
@@ -184,10 +183,7 @@ if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title(' 
 if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(PAGE_ID, false));
 if (!defined('PAGE_LINK')) define('PAGE_LINK', $template['cms']->page_link(PAGE_ID));
 if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
-if (!defined('PAGE_ID_HOME')) {
-    $sequence = $template['cms']->page_sequence();
-    define('PAGE_ID_HOME', isset($sequence[0]) ? $sequence[0] : -1);
-}
+if (!defined('PAGE_ID_HOME')) define('PAGE_ID_HOME', $template['cms']->page_id_home());
 
 // normally set by CMS but not at SEARCH pages!
 if (!defined('PAGE_DESCRIPTION')) define('PAGE_DESCRIPTION', '');
@@ -210,8 +206,8 @@ else {
 }
 
 global $post_id;
-if (!defined('POST_ID')) define('POST_ID', isset($post_id) ? $post_id : -1);
-if (!defined('TOPIC_ID')) define('TOPIC_ID', -1);
+if (!defined('EXTRA_POST_ID')) define('EXTRA_POST_ID', isset($post_id) ? $post_id : -1);
+if (!defined('EXTRA_TOPIC_ID')) define('EXTRA_TOPIC_ID', defined('TOPIC_ID') ? TOPIC_ID : -1);
 
 if (!defined('TEMPLATE_DEFAULT_NAME')) define('TEMPLATE_DEFAULT_NAME', DEFAULT_TEMPLATE);
 if (!defined('TEMPLATE_PATH')) define('TEMPLATE_PATH', CMS_PATH.substr(TEMPLATE_DIR, strlen(CMS_URL)));
@@ -310,6 +306,67 @@ $template['bootstrap'] = $template->share(function($template) {
 $template['classic'] = $template->share(function($template) {
     return new phpManufaktur\TemplateTools\Control\Classic($template);
 });
+
+// Browser Detection
+$template['browser'] = $template->share(function($template) {
+   return new phpManufaktur\TemplateTools\Control\BrowserDetect($template);
+});
+
+if (!defined('BROWSER_AMAYA')) define('BROWSER_AMAYA', 'Amaya');
+if (!defined('BROWSER_ANDROID')) define('BROWSER_ANDROID', 'Android');
+if (!defined('BROWSER_BINGBOT')) define('BROWSER_BINGBOT', 'Bing Bot');
+if (!defined('BROWSER_BLACKBERRY')) define('BROWSER_BLACKBERRY', 'BlackBerry');
+if (!defined('BROWSER_CHROME')) define('BROWSER_CHROME', 'Chrome');
+if (!defined('BROWSER_FIREBIRD')) define('BROWSER_FIREBIRD', 'Firebird');
+if (!defined('BROWSER_FIREFOX')) define('BROWSER_FIREFOX', 'Firefox');
+if (!defined('BROWSER_GALEON')) define('BROWSER_GALEON', 'Galeon');
+if (!defined('BROWSER_GOOGLEBOT')) define('BROWSER_GOOGLEBOT', 'GoogleBot');
+if (!defined('BROWSER_ICAB')) define('BROWSER_ICAB', 'iCab');
+if (!defined('BROWSER_ICECAT')) define('BROWSER_ICECAT', 'IceCat');
+if (!defined('BROWSER_ICEWEASEL')) define('BROWSER_ICEWEASEL', 'Iceweasel');
+if (!defined('BROWSER_IE')) define('BROWSER_IE', 'Internet Explorer');
+if (!defined('BROWSER_IPAD')) define('BROWSER_IPAD', 'iPad');
+if (!defined('BROWSER_IPHONE')) define('BROWSER_IPHONE', 'iPhone');
+if (!defined('BROWSER_IPOD')) define('BROWSER_IPOD', 'iPod');
+if (!defined('BROWSER_KONQUEROR')) define('BROWSER_KONQUEROR', 'Konqueror');
+if (!defined('BROWSER_LYNX')) define('BROWSER_LYNX', 'Lynx');
+if (!defined('BROWSER_MOZILLA')) define('BROWSER_MOZILLA', 'Mozilla');
+if (!defined('BROWSER_MSN')) define('BROWSER_MSN', 'MSN Browser');
+if (!defined('BROWSER_MSNBOT')) define('BROWSER_MSNBOT', 'MSN Bot');
+if (!defined('BROWSER_NETPOSITIVE')) define('BROWSER_NETPOSITIVE', 'NetPositive');
+if (!defined('BROWSER_NETSCAPE_NAVIGATOR')) define('BROWSER_NETSCAPE_NAVIGATOR', 'Netscape Navigator');
+if (!defined('BROWSER_NOKIA')) define('BROWSER_NOKIA', 'Nokia Browser');
+if (!defined('BROWSER_NOKIA_S60')) define('BROWSER_NOKIA_S60', 'Nokia S60 OSS Browser');
+if (!defined('BROWSER_OMNIWEB')) define('BROWSER_OMNIWEB', 'OmniWeb');
+if (!defined('BROWSER_OPERA')) define('BROWSER_OPERA', 'Opera');
+if (!defined('BROWSER_OPERA_MINI')) define('BROWSER_OPERA_MINI', 'Opera Mini');
+if (!defined('BROWSER_PHOENIX')) define('BROWSER_PHOENIX', 'Phoenix');
+if (!defined('BROWSER_POCKET_IE')) define('BROWSER_POCKET_IE', 'Pocket Internet Explorer');
+if (!defined('BROWSER_SAFARI')) define('BROWSER_SAFARI', 'Safari');
+if (!defined('BROWSER_SHIRETOKO')) define('BROWSER_SHIRETOKO', 'Shiretoko');
+if (!defined('BROWSER_SLURP')) define('BROWSER_SLURP', 'Yahoo! Slurp');
+if (!defined('BROWSER_UNKNOWN')) define('BROWSER_UNKNOWN', 'unknown');
+if (!defined('BROWSER_W3CVALIDATOR')) define('BROWSER_W3CVALIDATOR', 'W3C Validator');
+if (!defined('BROWSER_WEBTV')) define('BROWSER_WEBTV', 'WebTV');
+
+if (!defined('PLATFORM_ANDROID')) define('PLATFORM_ANDROID', 'Android');
+if (!defined('PLATFORM_APPLE')) define('PLATFORM_APPLE', 'Apple');
+if (!defined('PLATFORM_BEOS')) define('PLATFORM_BEOS', 'BeOS');
+if (!defined('PLATFORM_BLACKBERRY')) define('PLATFORM_BLACKBERRY', 'BlackBerry');
+if (!defined('PLATFORM_FREEBSD')) define('PLATFORM_FREEBSD', 'FreeBSD');
+if (!defined('PLATFORM_IPAD')) define('PLATFORM_IPAD', 'iPad');
+if (!defined('PLATFORM_IPHONE')) define('PLATFORM_IPHONE', 'iPhone');
+if (!defined('PLATFORM_IPOD')) define('PLATFORM_IPOD', 'iPod');
+if (!defined('PLATFORM_LINUX')) define('PLATFORM_LINUX', 'Linux');
+if (!defined('PLATFORM_NETBSD')) define('PLATFORM_NETBSD', 'NetBSD');
+if (!defined('PLATFORM_NOKIA')) define('PLATFORM_NOKIA', 'Nokia');
+if (!defined('PLATFORM_OS2')) define('PLATFORM_OS2', 'OS/2');
+if (!defined('PLATFORM_OPENBSD')) define('PLATFORM_OPENBSD', 'OpenBSD');
+if (!defined('PLATFORM_OPENSOLARIS')) define('PLATFORM_OPENSOLARIS', 'OpenSolaris');
+if (!defined('PLATFORM_SUNOS')) define('PLATFORM_SUNOS', 'SunOS');
+if (!defined('PLATFORM_UNKNOWN')) define('PLATFORM_UNKNOWN', 'unknown');
+if (!defined('PLATFORM_WINDOWS')) define('PLATFORM_WINDOWS', 'Windows');
+if (!defined('PLATFORM_WINDOWS_CE')) define('PLATFORM_WINDOWS_CE', 'Windows CE');
 
 if (FRAMEWORK_CACHE) {
     // register the HTTP Cache Service
