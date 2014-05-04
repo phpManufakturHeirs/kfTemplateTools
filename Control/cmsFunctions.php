@@ -48,6 +48,9 @@ class cmsFunctions
                 self::$page_menu = $menu;
             }
         }
+
+        // create the default page sequence
+        $this->page_sequence();
     }
 
     /**
@@ -59,22 +62,22 @@ class cmsFunctions
      */
     public function page_description($prompt=true)
     {
-        if (defined('TOPIC_ID') && (TOPIC_ID > 0)) {
+        if (defined('EXTRA_TOPIC_ID') && (EXTRA_TOPIC_ID > 0)) {
             if (!file_exists(CMS_ADDONS_PATH . '/topics/module_settings.php')) {
-                throw new \Exception('A TOPIC_ID was submitted, but TOPICS is not installed!');
+                throw new \Exception('A EXTRA_TOPIC_ID was submitted, but TOPICS is not installed!');
             }
             // get the title
-            $SQL = "SELECT `description` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".TOPIC_ID;
-            $description = $this->app['db']->fetchColumn($SQL);
+            $SQL = "SELECT `description` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".EXTRA_TOPIC_ID;
+            $description = $this->app['tools']->unsanitizeText($this->app['db']->fetchColumn($SQL));
             if ($prompt) {
                 echo $description;
             }
             return $description;
         }
-        elseif (defined('POST_ID') && (POST_ID > 0)) {
+        elseif (defined('EXTRA_POST_ID') && (EXTRA_POST_ID > 0)) {
             // indicate a NEWS page
             if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
-                throw new \Exception('A POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
+                throw new \Exception('A EXTRA_POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
             }
             // there is no description available, so we return the CMS_DESCRIPTION
             if ($prompt) {
@@ -93,7 +96,7 @@ class cmsFunctions
                 }
                 return $content['description'];
             }
-            return null;            
+            return null;
         }
         elseif (function_exists('page_description')) {
             if ($prompt) {
@@ -109,10 +112,10 @@ class cmsFunctions
             return null;
         }
     }
-    
+
     /**
      * Create a page title for the given Template
-     * 
+     *
      * @param string $title
      * @return string
      */
@@ -120,7 +123,7 @@ class cmsFunctions
     {
         $placeholders = array('[WEBSITE_TITLE]', '[PAGE_TITLE]', '[MENU_TITLE]', '[SPACER]');
         $values = array(WEBSITE_TITLE, $title, MENU_TITLE, $spacer);
-        
+
         return str_replace($placeholders, $values, $template);
     }
 
@@ -135,27 +138,27 @@ class cmsFunctions
      */
     public function page_title($spacer= ' - ', $template='[PAGE_TITLE]', $prompt=true)
     {
-        if (defined('TOPIC_ID') && (TOPIC_ID  > 0)) {
+        if (defined('EXTRA_TOPIC_ID') && (EXTRA_TOPIC_ID  > 0)) {
             // this is a TOPIC article
             if (!file_exists(CMS_ADDONS_PATH . '/topics/module_settings.php')) {
-                throw new \Exception('A TOPIC_ID was submitted, but TOPICS is not installed!');
+                throw new \Exception('A EXTRA_TOPIC_ID was submitted, but TOPICS is not installed!');
             }
             // get the title
-            $SQL = "SELECT `title` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".TOPIC_ID;
+            $SQL = "SELECT `title` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".EXTRA_TOPIC_ID;
             $title = $this->app['db']->fetchColumn($SQL);
 
-            $title = $this->replaceTitlePlaceholders($title, $spacer, $template);            
+            $title = $this->replaceTitlePlaceholders($title, $spacer, $template);
             if ($prompt) {
                 echo $title;
             }
             return $title;
         }
-        elseif (defined(POST_ID) && (POST_ID > 0)) {
+        elseif (defined(EXTRA_POST_ID) && (EXTRA_POST_ID > 0)) {
             // this is a NEWS article
             if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
-                throw new \Exception('A POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
+                throw new \Exception('A EXTRA_POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
             }
-            $SQL = "SELECT `title` FROM `".CMS_TABLE_PREFIX."mod_news_posts` WHERE `post_id`=".POST_ID;
+            $SQL = "SELECT `title` FROM `".CMS_TABLE_PREFIX."mod_news_posts` WHERE `post_id`=".EXTRA_POST_ID;
             $title = $this->app['db']->fetchColumn($SQL);
 
             $title = $this->replaceTitlePlaceholders($title, $spacer, $template);
@@ -202,22 +205,22 @@ class cmsFunctions
      */
     public function page_keywords($prompt=true)
     {
-        if (defined('TOPIC_ID') && (TOPIC_ID > 0)) {
+        if (defined('EXTRA_TOPIC_ID') && (EXTRA_TOPIC_ID > 0)) {
             if (!file_exists(CMS_ADDONS_PATH . '/topics/module_settings.php')) {
-                throw new \Exception('A TOPIC_ID was submitted, but TOPICS is not installed!');
+                throw new \Exception('A EXTRA_TOPIC_ID was submitted, but TOPICS is not installed!');
             }
             // get the title
-            $SQL = "SELECT `keywords` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".TOPIC_ID;
+            $SQL = "SELECT `keywords` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".EXTRA_TOPIC_ID;
             $keywords = $this->app['db']->fetchColumn($SQL);
             if ($prompt) {
                 echo $keywords;
             }
             return $keywords;
         }
-        elseif (defined('POST_ID') && (POST_ID > 0)) {
+        elseif (defined('EXTRA_POST_ID') && (EXTRA_POST_ID > 0)) {
             // indicate a NEWS page
             if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
-                throw new \Exception('A POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
+                throw new \Exception('A EXTRA_POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
             }
             // there are no keywords available, so we return the CMS_KEYWORDS
             if ($prompt) {
@@ -236,7 +239,7 @@ class cmsFunctions
                 }
                 return $content['keywords'];
             }
-            return null;            
+            return null;
         }
         elseif (function_exists('page_keywords')) {
             if ($prompt) {
@@ -285,6 +288,7 @@ class cmsFunctions
             }
         }
         else {
+
             return null;
         }
     }
@@ -350,7 +354,7 @@ class cmsFunctions
 
     /**
      * Get the page link for the given page ID
-     * 
+     *
      * @param string $page_id
      * @return string|NULL
      */
@@ -358,11 +362,11 @@ class cmsFunctions
     {
         if (!is_numeric($page_id) || ($page_id < 1)) {
             return null;
-        } 
+        }
         $SQL = "SELECT `link` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
         return $this->app['db']->fetchColumn($SQL);
     }
-    
+
     /**
      * Get the URL of the given page ID. If arguments 'topic_id' or 'post_id'
      * the function will return the URL for the given TOPICS or NEWS article
@@ -385,20 +389,20 @@ class cmsFunctions
                 $url = $base_url.'/'.$content['permalink'];
             }
             else {
-                $url = CMS_URL. CMS_PAGES_DIRECTORY. $this->page_link($page_id). CMS_PAGES_EXTENSION;    
-            }             
-        }        
+                $url = CMS_URL. CMS_PAGES_DIRECTORY. $this->page_link($page_id). CMS_PAGES_EXTENSION;
+            }
+        }
         elseif (is_numeric($page_id) && ($page_id > 0)) {
             // this is a regular CMS page
             $url = $this->PageData->getURL($page_id, array(
-                'topic_id' => (defined('TOPIC_ID') && (TOPIC_ID > 0)) ? TOPIC_ID : null,
-                'post_id' => (defined('POST_ID') && (POST_ID > 0)) ? POST_ID : null
-            )); 
+                'topic_id' => (defined('EXTRA_TOPIC_ID') && (EXTRA_TOPIC_ID > 0)) ? EXTRA_TOPIC_ID : null,
+                'post_id' => (defined('EXTRA_POST_ID') && (EXTRA_POST_ID > 0)) ? EXTRA_POST_ID : null
+            ));
         }
         else {
             $url = $_SERVER['REQUEST_URI'];
         }
-                    
+
         if ($prompt) {
             echo $url;
         }
@@ -545,6 +549,10 @@ class cmsFunctions
     {
         if (!is_array($page_visibility) || empty($page_visibility)) {
             $page_visibility = array('public');
+        }
+
+        if ($page_id == PAGE_ID_HOME) {
+            return -1;
         }
 
         $SQL = "SELECT `menu` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
@@ -739,18 +747,52 @@ class cmsFunctions
         }
         return $result;
     }
-    
+
     /**
      * Get the first content image from any WYSIWYG, NEWS, TOPICS or flexContent article.
      * Try alternate to get a teaser image (TOPICS, flexContent)
-     * 
+     *
      * @param integer $page_id
      * @param array $options
      * @return string return the URL of the image or an empty string
      */
     public function page_image($page_id=PAGE_ID, $options=array())
     {
-        $PageImage = new PageImage($this->app); 
+        $PageImage = new PageImage($this->app);
         return $PageImage->page_image($page_id, $options);
+    }
+
+    /**
+     * Get the PAGE_ID for the first, the HOME page. Check also for for
+     * menu_links and return the corrected PAGE_ID.
+     * Return -1 if the HOME ID can not evaluated
+     *
+     * @return integer
+     */
+    public function page_id_home()
+    {
+        if (($id = isset(self::$page_sequence[0]) ? self::$page_sequence[0] : -1) == -1) {
+            // no page sequence available
+            return $id;
+        }
+
+        $SQL = "SELECT `module` FROM `".CMS_TABLE_PREFIX."sections` WHERE `page_id`=$id AND `position`=1";
+        $module = $this->app['db']->fetchColumn($SQL);
+
+        if ($module == 'menu_link') {
+            // this is a menulink, so get the target instead
+            $SQL = "SELECT `target_page_id` FROM `".CMS_TABLE_PREFIX."mod_menu_link` WHERE `page_id`=$id";
+            $target_id = $this->app['db']->fetchColumn($SQL);
+            if (is_numeric($target_id) && ($target_id > 0)) {
+                // use the target PAGE_ID
+                return $target_id;
+            }
+            else {
+                // this is an external link, we can't follow it
+                return -1;
+            }
+        }
+
+        return $id;
     }
 }
