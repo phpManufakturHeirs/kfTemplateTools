@@ -20,6 +20,9 @@ return array(
     'Authenticated'
         => 'Angemeldet',
 
+    '%direction% Page, Accesskey: [ALT]+%key%'
+        => '%direction% Seite, Tastenkürzel: [ALT]+%key%',
+
     'Enter password'
         => 'Passwort',
     'Enter username'
@@ -35,10 +38,10 @@ return array(
         => 'Anmelden',
     'Logout'
         => 'Abmelden',
-    
+
     'Missing the message to alert!'
         => 'Es wurde keine Mitteilung übergeben, die gemeldet werden kann!',
-    
+
     'Next'
         => 'Nächste',
 
@@ -46,9 +49,6 @@ return array(
         => 'Passwort',
     'Previous'
         => 'Vorherige',
-
-    '<em>Ridiculously Responsive Social Sharing Buttons</em>, using about <strong>%percent%%</strong> width of the <em>Panel Vontainer</em>.'
-        => '<em>Ridiculously Responsive Social Sharing Buttons</em>, verwenden etwa <strong>%percent%%</strong> der zur Verfügung stehenden Breite des <em>Panel Container</em>.',
 
     'Search'
         => 'Suche',
@@ -65,7 +65,5 @@ return array(
 
     'Welcome back, %name%'
         => 'Herzlich willkommen, %name%!',
-    'Welcome to the start page of %CMS_TITLE%!'
-        => 'Herzlich willkommen auf der Startseite von %CMS_TITLE%!',
-    
+
 );
