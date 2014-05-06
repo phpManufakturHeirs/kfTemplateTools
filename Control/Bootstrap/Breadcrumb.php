@@ -18,6 +18,7 @@ class Breadcrumb
     protected $app = null;
     protected static $options = array(
         'link_home' => true,
+        'menu_level' => 0,
         'template_directory' => '@pattern/bootstrap/function/breadcrumb/'
     );
 
@@ -40,6 +41,9 @@ class Breadcrumb
     {
         if (isset($options['link_home']) && is_bool($options['link_home'])) {
             self::$options['link_home'] = $options['link_home'];
+        }
+        if (isset($options['menu_level']) && is_numeric($options['menu_level']) && ($options['menu_level'] > 0)) {
+            self::$options['menu_level'] = $options['menu_level'];
         }
         if (isset($options['template_directory']) && !empty($options['template_directory'])) {
             self::$options['template_directory'] = rtrim($options['template_directory'], '/').'/';
@@ -89,8 +93,14 @@ class Breadcrumb
             else {
                 $trails = array(intval($page_trails));
             }
+            $level = -1;
             foreach ($trails as $trail) {
                 // walk through the trails of the current page
+                $level++;
+                if ($level < self::$options['menu_level']) {
+                    // skip until reach the wanted level
+                    continue;
+                }
                 $page = $this->getPageInformation($trail);
                 $breadcrumbs .= $this->app['twig']->render(
                     self::$options['template_directory'].'li.twig',
