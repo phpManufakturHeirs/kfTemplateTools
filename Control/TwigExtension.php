@@ -688,9 +688,9 @@ class TwigExtension extends Twig_Extension
      *
      * @return string Version of the browser (will only contain alpha-numeric characters and a period)
      */
-    public function BrowserVersion()
+    public function BrowserVersion($main_version_only=false)
     {
-        return $this->app['browser']->version(false);
+        return $this->app['browser']->version($main_version_only, false);
     }
 
     /**

@@ -142,3 +142,19 @@
   width: 300px;
   float: right;
 }
+
+/**
+  Needed for browser.check.twig
+**/
+.browser-update {
+  width: 100%;
+  background-color: #ffffcc;
+  background-image: url('../image/warning.gif');
+  background-position: top left;
+  background-repeat: no-repeat;
+  color: #2f2f2f;
+  padding: 3px 10px 2px 30px;
+  font-family: Tahoma, Arial, Verdana;
+  font-size: 12px;
+  border: 1px solid #ccc;
+}
