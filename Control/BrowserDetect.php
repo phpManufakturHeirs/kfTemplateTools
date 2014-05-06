@@ -50,9 +50,15 @@ class BrowserDetect
      *
      * @return string Version of the browser (will only contain alpha-numeric characters and a period)
      */
-    public function version($prompt=true)
+    public function version($main_version_only=false, $prompt=true)
     {
         $version = $this->Browser->getVersion();
+        if ($main_version_only && strpos($version, '.')) {
+            $version_array = explode('.', $version);
+            if (isset($version_array[0])) {
+                $version = $version_array[0];
+            }
+        }
         if ($prompt) {
             echo $version;
         }
