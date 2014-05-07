@@ -6,6 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.16** - 2014-05-07
+
+* added option to change the menu_level used by the Breadcrumb function
+* added switch to return only the main version number and not the full string (for simplified checks) to function `$template['browser']->version()`
+* added Pattern browser.check.twig (like [Browser-Update.org](http://www.browser-update.org/))
+* sample templates does no longer show the full path to the script (shortened)
+
 **0.15** - 2014-05-04
 
 * add `normalize.css` to the classic `head.simple.twig` and `html.simple.twig`
