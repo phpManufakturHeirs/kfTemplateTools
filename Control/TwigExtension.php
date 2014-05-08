@@ -241,6 +241,7 @@ class TwigExtension extends Twig_Extension
             'browser_name' => new \Twig_Function_Method($this, 'BrowserName'),
             'browser_version' => new \Twig_Function_Method($this, 'BrowserVersion'),
             'browser_platform' => new \Twig_Function_Method($this, 'BrowserPlatform'),
+            'browser_ip' => new \Twig_Function_Method($this, 'BrowserIP'),
             'browser_is_mobile' => new \Twig_Function_Method($this, 'BrowserIsMobile'),
             'browser_is_tablet' => new \Twig_Function_Method($this, 'BrowserIsTablet'),
             'browser_is_desktop' => new \Twig_Function_Method($this, 'BrowserIsDesktop'),
@@ -731,5 +732,10 @@ class TwigExtension extends Twig_Extension
     public function BrowserIsDesktop()
     {
         return $this->app['browser']->is_desktop();
+    }
+
+    public function BrowserIP()
+    {
+        return $this->app['browser']->ip(false);
     }
 }

@@ -108,4 +108,19 @@ class BrowserDetect
     {
         return (!$this->Browser->isMobile() && !$this->Browser->isTablet());
     }
+
+    /**
+     * Return the IP address from which the Browser is executed
+     *
+     * @param boolean $prompt
+     * @return string
+     */
+    public function ip($prompt=true)
+    {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        if ($prompt) {
+            echo $ip;
+        }
+        return $ip;
+    }
 }
