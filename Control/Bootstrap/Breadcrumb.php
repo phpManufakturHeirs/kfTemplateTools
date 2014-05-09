@@ -19,6 +19,8 @@ class Breadcrumb
     protected static $options = array(
         'link_home' => true,
         'menu_level' => 0,
+        'li_before' => null,
+        'li_after' => null,
         'template_directory' => '@pattern/bootstrap/function/breadcrumb/'
     );
 
@@ -47,6 +49,12 @@ class Breadcrumb
         }
         if (isset($options['template_directory']) && !empty($options['template_directory'])) {
             self::$options['template_directory'] = rtrim($options['template_directory'], '/').'/';
+        }
+        if (isset($options['li_before']) && !empty($options['li_before'])) {
+            self::$options['li_before'] = $options['li_before'];
+        }
+        if (isset($options['li_after']) && !empty($options['li_after'])) {
+            self::$options['li_after'] = $options['li_after'];
         }
     }
 
@@ -118,7 +126,9 @@ class Breadcrumb
                 array(
                     'link_home' => self::$options['link_home'],
                     'breadcrumbs' => $breadcrumbs,
-                    'active' => false
+                    'active' => false,
+                    'li_before' => self::$options['li_before'],
+                    'li_after' => self::$options['li_after']
                 )
             );
         }
@@ -128,7 +138,9 @@ class Breadcrumb
                 array(
                     'link_home' => self::$options['link_home'],
                     'breadcrumbs' => $breadcrumbs,
-                    'active' => true
+                    'active' => true,
+                    'li_before' => self::$options['li_before'],
+                    'li_after' => self::$options['li_after']
                 )
             );
         }

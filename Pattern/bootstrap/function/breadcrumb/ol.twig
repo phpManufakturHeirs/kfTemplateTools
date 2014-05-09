@@ -8,5 +8,11 @@
       {% endif %}
     </li>
   {% endif %}
+  {% if li_before|length > 0 %}
+    {{ li_before }}
+  {% endif %}  
   {{ breadcrumbs }}
+  {% if li_after|length > 0 %}
+    {{ li_after }}
+  {% endif %}    
 </ol>
