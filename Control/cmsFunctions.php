@@ -265,6 +265,7 @@ class cmsFunctions
      */
     public function page_content($block=1, $prompt=true)
     {
+
         if (!is_numeric($block) && is_string($block) && is_array(self::$page_block)) {
             // try to get the Block ID by the Block Name
             $search = $block;
@@ -274,6 +275,10 @@ class cmsFunctions
                     $block = $id;
                     break;
                 }
+            }
+            if (is_null($block)) {
+                // return null if block does not exists
+                return null;
             }
         }
 
