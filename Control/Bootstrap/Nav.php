@@ -20,6 +20,7 @@ class Nav
         'menu_id' => 0,
         'menu_level' => 0,
         'menu_level_max' => -1,
+        'indicate_parent' => true,
         'dropdown_link' => array(
             'add' => true,
             'divider' => true
@@ -67,6 +68,9 @@ class Nav
         }
         if (isset($options['menu_level_max']) && is_numeric($options['menu_level_max']) && ($options['menu_level_max'] > -1)) {
             self::$options['menu_level_max'] = intval($options['menu_level_max']);
+        }
+        if (isset($options['indicate_parent']) && is_bool($options['indicate_parent'])) {
+            self::$options['indicate_parent'] = $options['indicate_parent'];
         }
     }
 
@@ -119,11 +123,33 @@ class Nav
     protected function getMenuInformation($page_id)
     {
         $SQL = "SELECT `page_id`, `parent`, `root_parent`, `position`, `level`, `menu_title`, ".
-            "`page_title`, `link` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
+            "`page_title`, `link`, `page_trail` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
         $result = $this->app['db']->fetchAssoc($SQL);
 
         if (isset($result['parent'])) {
-            $result['active'] = (PAGE_ID == $page_id);
+            $active = (PAGE_ID == $page_id);
+
+            if (self::$options['indicate_parent'] && (self::$options['menu_level_max'] > 0)) {
+                // check if the current PAGE_ID is a child of the NAV
+                $SQL = "SELECT `page_trail` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=".PAGE_ID;
+                $page_trail = $this->app['db']->fetchColumn($SQL);
+
+                if (strpos($page_trail, ',')) {
+                    $trail = explode(',', $page_trail);
+                }
+                else {
+                    $trail = array(intval($page_trail));
+                }
+
+                for ($i=0; $i < count($trail); $i++) {
+                    if (($i >= self::$options['menu_level_max']) && ($trail[$i] == $page_id)) {
+                        $active = true;
+                        break;
+                    }
+                }
+            }
+
+            $result['active'] = $active;
             $result['url'] = CMS_URL . CMS_PAGES_DIRECTORY . $result['link'] . PAGE_EXTENSION;
             $result['icons'] = self::$options['icons'];
             return $result;

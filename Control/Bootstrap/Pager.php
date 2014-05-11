@@ -68,7 +68,7 @@ class Pager
             CMS_TABLE_PREFIX."pages` WHERE `page_id`=".$page_id;
         $page = $this->app['db']->fetchAssoc($SQL);
         if (isset($page['page_id'])) {
-            $page['page_url'] = $this->app['cms']->page_url($page_id, null, false);
+            $page['page_url'] = $this->app['cms']->page_url($page_id, false, false);
         }
         return $page;
     }
