@@ -16,6 +16,8 @@ use phpManufaktur\Basic\Data\CMS\Page;
 use phpManufaktur\flexContent\Data\Content\Content as flexContentData;
 use phpManufaktur\flexContent\Control\Command\Tools as flexContentTools;
 use phpManufaktur\TemplateTools\Control\cmsFunctions\PageImage;
+use phpManufaktur\imageTweak\Control;
+use phpManufaktur\imageTweak\Control\imageTweak;
 
 class cmsFunctions
 {
@@ -257,7 +259,7 @@ class cmsFunctions
      * @param boolean $prompt
      * @return string
      */
-    public function page_content($block=1, $prompt=true)
+    public function page_content($block=1, $use_image_tweak=true, $prompt=true)
     {
 
         if (!is_numeric($block) && is_string($block) && is_array(self::$page_block)) {
@@ -277,17 +279,27 @@ class cmsFunctions
         }
 
         if (function_exists('page_content')) {
+            // get the content for the given block
+            ob_start();
+            \page_content($block);
+            $content = ob_get_clean();
+
+            if (!empty($content) && $use_image_tweak &&
+                class_exists('phpManufaktur\imageTweak\Control\imageTweak')) {
+                // process imageTweak
+                $imageTweak = new imageTweak();
+                if (method_exists($imageTweak, 'controllerTemplateTools')) {
+                    $content = $imageTweak->controllerTemplateTools($this->app, $content);
+                }
+            }
+
             if ($prompt) {
-                \page_content($block);
+                echo $content;
             }
-            else {
-                ob_start();
-                \page_content($block);
-                return ob_get_clean();
-            }
+            return $content;
         }
         else {
-
+            // can nothing do ...
             return null;
         }
     }
