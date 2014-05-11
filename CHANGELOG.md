@@ -6,6 +6,15 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.17** - 2014-05-11
+
+* added function `$template['browser']->ip()`
+* extend the breadcrumb() function with the $options parameter `li_before` and `li_after`
+* `page_content()` now return null if an alphanumeric block does not exists
+* added constant `EXTRA_FLEXCONTENT_ID`
+* `breadcrumb()` can now return a flexContent article as position
+* added option `indicate_parent` to enable a `nav()` navigation to set attribute `active` if a child is selected (needed if the `menu_level_max` is used)
+
 **0.16** - 2014-05-07
 
 * added option to change the menu_level used by the Breadcrumb function
