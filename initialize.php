@@ -180,7 +180,7 @@ if (!defined('PAGE_PARENT_ID')) {
 }
 if (!defined('PAGE_HAS_CHILD')) define('PAGE_HAS_CHILD', $template['cms']->page_has_child());
 if (!defined('PAGE_TITLE')) define('PAGE_TITLE', $template['cms']->page_title(' - ', '[PAGE_TITLE]', false));
-if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(PAGE_ID, false));
+if (!defined('PAGE_URL')) define('PAGE_URL', $template['cms']->page_url(PAGE_ID, false, false));
 if (!defined('PAGE_LINK')) define('PAGE_LINK', $template['cms']->page_link(PAGE_ID));
 if (!defined('PAGE_VISIBILITY')) define('PAGE_VISIBILITY', VISIBILITY);
 if (!defined('PAGE_ID_HOME')) define('PAGE_ID_HOME', $template['cms']->page_id_home());
@@ -208,6 +208,16 @@ else {
 global $post_id;
 if (!defined('EXTRA_POST_ID')) define('EXTRA_POST_ID', isset($post_id) ? $post_id : -1);
 if (!defined('EXTRA_TOPIC_ID')) define('EXTRA_TOPIC_ID', defined('TOPIC_ID') ? TOPIC_ID : -1);
+if (!defined('EXTRA_FLEXCONTENT_ID')) {
+    if (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
+        isset($_GET['action']) && ($_GET['action'] == 'view') &&
+        isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
+        define('EXTRA_FLEXCONTENT_ID', $_GET['content_id']);
+    }
+    else {
+        define('EXTRA_FLEXCONTENT_ID', -1);
+    }
+}
 
 if (!defined('TEMPLATE_DEFAULT_NAME')) define('TEMPLATE_DEFAULT_NAME', DEFAULT_TEMPLATE);
 if (!defined('TEMPLATE_PATH')) define('TEMPLATE_PATH', CMS_PATH.substr(TEMPLATE_DIR, strlen(CMS_URL)));

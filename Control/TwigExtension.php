@@ -120,6 +120,7 @@ class TwigExtension extends Twig_Extension
             'EXTENSION_PATH' => EXTENSION_PATH,
             'EXTENSION_URL' => EXTENSION_URL,
 
+            'EXTRA_FLEXCONTENT_ID' => EXTRA_FLEXCONTENT_ID,
             'EXTRA_POST_ID' => EXTRA_POST_ID,
             'EXTRA_TOPIC_ID' => EXTRA_TOPIC_ID,
 
@@ -568,14 +569,14 @@ class TwigExtension extends Twig_Extension
      * Get the URL of the given page ID. If arguments 'topic_id' or 'post_id'
      * the function will return the URL for the given TOPICS or NEWS article
      *
-     * @param null|array $arguments
-     * @param boolean $prompt
+     * @param integer $page_id
+     * @param boolean $ignore_extra_ids
      * @throws \Exception
      * @return string URL of the page
      */
-    public function PageURL($page_id=PAGE_ID)
+    public function PageURL($page_id=PAGE_ID, $ignore_extra_ids=false)
     {
-        return $this->app['cms']->page_url($page_id, false);
+        return $this->app['cms']->page_url($page_id, $ignore_extra_ids, false);
     }
 
     /**
