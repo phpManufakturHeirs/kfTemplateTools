@@ -12,6 +12,8 @@
 namespace phpManufaktur\TemplateTools\Control\Bootstrap;
 
 use Silex\Application;
+use phpManufaktur\flexContent\Data\Content\Content as flexContentData;
+use phpManufaktur\flexContent\Control\Command\Tools as flexContentTools;
 
 class Breadcrumb
 {
@@ -110,17 +112,42 @@ class Breadcrumb
                     continue;
                 }
                 $page = $this->getPageInformation($trail);
+                $active = ($trail == PAGE_ID);
+                if ($active && (defined('EXTRA_FLEXCONTENT_ID') && (EXTRA_FLEXCONTENT_ID > 0))) {
+                    $active = false;
+                }
                 $breadcrumbs .= $this->app['twig']->render(
                     self::$options['template_directory'].'li.twig',
                     array(
-                        'active' => ($trail == PAGE_ID),
+                        'active' => $active,
                         'menu_title' => $page['menu_title'],
-                        'page_url' => $this->app['cms']->page_url($trail, null, false),
+                        'page_url' => $this->app['cms']->page_url($trail, true, false),
                         'page_title' => $page['page_title'],
                         'page_description' => $page['description']
                     )
                 );
             }
+
+            // check for EXTRA_FLEXCONTENT_ID
+            if (defined('EXTRA_FLEXCONTENT_ID') && (EXTRA_FLEXCONTENT_ID > 0)) {
+                $flexContentData = new flexContentData($this->app);
+                if (false !== ($content = $flexContentData->select(EXTRA_FLEXCONTENT_ID))) {
+                    $flexContentTools = new flexContentTools($this->app);
+                    $base_url = $flexContentTools->getPermalinkBaseURL($content['language']);
+                    $url = $base_url.'/'.$content['permalink'];
+                    $breadcrumbs .= $this->app['twig']->render(
+                        self::$options['template_directory'].'li.twig',
+                        array(
+                            'active' => true,
+                            'menu_title' => $content['title'],
+                            'page_url' => $url,
+                            'page_title' => $content['title'],
+                            'page_description' => $content['description']
+                        )
+                    );
+                }
+            }
+
             $result = $this->app['twig']->render(
                 self::$options['template_directory'].'ol.twig',
                 array(

@@ -85,12 +85,10 @@ class cmsFunctions
             }
             return CMS_DESCRIPTION;
         }
-        elseif (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
-            isset($_GET['action']) && ($_GET['action'] == 'view') &&
-            isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
+        elseif (defined('EXTRA_FLEXCONTENT_ID') && (EXTRA_FLEXCONTENT_ID > 0)) {
             // this is a flexContent article
             $flexContentData = new flexContentData($this->app);
-            if (false !== ($content = $flexContentData->select($_GET['content_id']))) {
+            if (false !== ($content = $flexContentData->select(EXTRA_FLEXCONTENT_ID))) {
                 if ($prompt) {
                     echo $content['description'];
                 }
@@ -153,7 +151,7 @@ class cmsFunctions
             }
             return $title;
         }
-        elseif (defined(EXTRA_POST_ID) && (EXTRA_POST_ID > 0)) {
+        elseif (defined('EXTRA_POST_ID') && (EXTRA_POST_ID > 0)) {
             // this is a NEWS article
             if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
                 throw new \Exception('A EXTRA_POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
@@ -167,12 +165,10 @@ class cmsFunctions
             }
             return $title;
         }
-        elseif (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
-            isset($_GET['action']) && ($_GET['action'] == 'view') &&
-            isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
+        elseif (defined('EXTRA_FLEXCONTENT_ID') && (EXTRA_FLEXCONTENT_ID > 0)) {
             // this is a flexContent article
             $flexContentData = new flexContentData($this->app);
-            if (false !== ($content = $flexContentData->select($_GET['content_id']))) {
+            if (false !== ($content = $flexContentData->select(EXTRA_FLEXCONTENT_ID))) {
                 $title = $this->replaceTitlePlaceholders($content['title'], $spacer, $template);
                 if ($prompt) {
                     echo $title;
@@ -228,12 +224,10 @@ class cmsFunctions
             }
             return CMS_KEYWORDS;
         }
-        elseif (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
-            isset($_GET['action']) && ($_GET['action'] == 'view') &&
-            isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
+        elseif (defined('EXTRA_FLEXCONTENT_ID') && (EXTRA_FLEXCONTENT_ID > 1)) {
             // this is a flexContent article
             $flexContentData = new flexContentData($this->app);
-            if (false !== ($content = $flexContentData->select($_GET['content_id']))) {
+            if (false !== ($content = $flexContentData->select(EXTRA_FLEXCONTENT_ID))) {
                 if ($prompt) {
                     echo $content['keywords'];
                 }
@@ -381,31 +375,41 @@ class cmsFunctions
      * @throws \Exception
      * @return string URL of the page
      */
-    public function page_url($page_id=PAGE_ID, $prompt=true)
+    public function page_url($page_id=PAGE_ID, $ignore_extra_ids=false, $prompt=true)
     {
-        if (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
-            isset($_GET['action']) && ($_GET['action'] == 'view') &&
-            isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
-            // this is a flexContent Article...
-            $flexContentData = new flexContentData($this->app);
-            if (false !== ($content = $flexContentData->selectPermaLinkByContentID($_GET['content_id']))) {
-                $flexContentTools = new flexContentTools($this->app);
-                $base_url = $flexContentTools->getPermalinkBaseURL($content['language']);
-                $url = $base_url.'/'.$content['permalink'];
-            }
-            else {
+        if ($ignore_extra_ids) {
+            // dont process any EXTRA_ ids!
+            if ($page_id > 0) {
                 $url = CMS_URL. CMS_PAGES_DIRECTORY. $this->page_link($page_id). CMS_PAGES_EXTENSION;
             }
-        }
-        elseif (is_numeric($page_id) && ($page_id > 0)) {
-            // this is a regular CMS page
-            $url = $this->PageData->getURL($page_id, array(
-                'topic_id' => (defined('EXTRA_TOPIC_ID') && (EXTRA_TOPIC_ID > 0)) ? EXTRA_TOPIC_ID : null,
-                'post_id' => (defined('EXTRA_POST_ID') && (EXTRA_POST_ID > 0)) ? EXTRA_POST_ID : null
-            ));
+            else {
+                $url = $_SERVER['REQUEST_URI'];
+            }
         }
         else {
-            $url = $_SERVER['REQUEST_URI'];
+            // get the URL and look also for the EXTRA_ ids
+            if (defined('EXTRA_FLEXCONTENT_ID') && (EXTRA_FLEXCONTENT_ID > 1)) {
+                // this is a flexContent Article...
+                $flexContentData = new flexContentData($this->app);
+                if (false !== ($content = $flexContentData->selectPermaLinkByContentID(EXTRA_FLEXCONTENT_ID))) {
+                    $flexContentTools = new flexContentTools($this->app);
+                    $base_url = $flexContentTools->getPermalinkBaseURL($content['language']);
+                    $url = $base_url.'/'.$content['permalink'];
+                }
+                else {
+                    $url = CMS_URL. CMS_PAGES_DIRECTORY. $this->page_link($page_id). CMS_PAGES_EXTENSION;
+                }
+            }
+            elseif (is_numeric($page_id) && ($page_id > 0)) {
+                // this is a regular CMS page
+                $url = $this->PageData->getURL($page_id, array(
+                    'topic_id' => (defined('EXTRA_TOPIC_ID') && (EXTRA_TOPIC_ID > 0)) ? EXTRA_TOPIC_ID : null,
+                    'post_id' => (defined('EXTRA_POST_ID') && (EXTRA_POST_ID > 0)) ? EXTRA_POST_ID : null
+                ));
+            }
+            else {
+                $url = $_SERVER['REQUEST_URI'];
+            }
         }
 
         if ($prompt) {
