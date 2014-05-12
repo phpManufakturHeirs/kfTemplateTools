@@ -16,7 +16,6 @@ use phpManufaktur\Basic\Data\CMS\Page;
 use phpManufaktur\flexContent\Data\Content\Content as flexContentData;
 use phpManufaktur\flexContent\Control\Command\Tools as flexContentTools;
 use phpManufaktur\TemplateTools\Control\cmsFunctions\PageImage;
-use phpManufaktur\imageTweak\Control;
 use phpManufaktur\imageTweak\Control\imageTweak;
 
 class cmsFunctions
@@ -26,6 +25,7 @@ class cmsFunctions
     private static $page_sequence = null;
     private static $page_block = null;
     private static $page_menu = null;
+    private static $page_option = null;
 
     /**
      * Constructor
@@ -195,6 +195,82 @@ class cmsFunctions
     }
 
     /**
+     * Extract the page options from the page keywords and cleanup the keywords
+     * string. This function will set the self::$page_option array
+     *
+     * @param string $keywords
+     * @return string
+     */
+    protected function extractOptionsFromKeywords($keywords)
+    {
+        $keywords = trim($keywords);
+        self::$page_option = null;
+
+        if (empty($keywords)) {
+            return $keywords;
+        }
+
+        if (strpos($keywords, ',')) {
+            $keyword_array = explode(',', $keywords);
+        }
+        else {
+            $keyword_array = array($keywords);
+        }
+
+        if (isset($keyword_array[0]) && (false !== strpos($keyword_array[0], '[')) && (false !== strpos($keyword_array[0], ']'))) {
+            // remove the square brackets from the options string
+            $options_string = trim(substr($keyword_array[0], strpos($keyword_array[0], '[')+1, strpos($keyword_array[0], ']')-1));
+
+            // explode to $options
+            $options = (strpos($options_string, '|')) ? explode('|', $options_string) : array($options_string);
+            self::$page_option = array();
+
+            // walk through the options
+            foreach ($options as $option) {
+                if (strpos($option, ':')) {
+                    list($key, $value) = explode(':', $option);
+                    // decode enties &#58; &#124; and &#44;
+                    $value = html_entity_decode($value);
+                    self::$page_option[strtolower(trim($key))] = trim($value);
+                }
+            }
+
+            // build the new keyword string
+            $new_keywords = array();
+            unset($keyword_array[0]);
+            foreach ($keyword_array as $keyword) {
+                $new_keywords[] = trim($keyword);
+            }
+            $keywords = implode(', ', $new_keywords);
+        }
+
+        return $keywords;
+    }
+
+    /**
+     * Get the value for the given page option
+     *
+     * @param string $option
+     * @param string $prompt
+     * @return Ambigous <NULL, multitype:, string>
+     */
+    public function page_option($option, $prompt=true)
+    {
+        if (is_null(self::$page_option)) {
+            // possibly self::$page_option are never set, so we call page_keywords() to initialize
+            $this->page_keywords(false);
+        }
+
+        $option = strtolower(trim($option));
+        $page_option = (isset(self::$page_option[$option])) ? self::$page_option[$option] : null;
+
+        if ($prompt) {
+            echo $page_option;
+        }
+        return $page_option;
+    }
+
+    /**
      * Return the page keywords for the actual PAGE_ID
      * The function detect TOPICS, NEWS and flexContent articles and return specific keywords
      *
@@ -203,17 +279,15 @@ class cmsFunctions
      */
     public function page_keywords($prompt=true)
     {
+        $keywords = null;
+
         if (defined('EXTRA_TOPIC_ID') && (EXTRA_TOPIC_ID > 0)) {
             if (!file_exists(CMS_ADDONS_PATH . '/topics/module_settings.php')) {
                 throw new \Exception('A EXTRA_TOPIC_ID was submitted, but TOPICS is not installed!');
             }
-            // get the title
+            // get the keywords
             $SQL = "SELECT `keywords` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".EXTRA_TOPIC_ID;
             $keywords = $this->app['db']->fetchColumn($SQL);
-            if ($prompt) {
-                echo $keywords;
-            }
-            return $keywords;
         }
         elseif (defined('EXTRA_POST_ID') && (EXTRA_POST_ID > 0)) {
             // indicate a NEWS page
@@ -221,35 +295,27 @@ class cmsFunctions
                 throw new \Exception('A EXTRA_POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
             }
             // there are no keywords available, so we return the CMS_KEYWORDS
-            if ($prompt) {
-                echo CMS_KEYWORDS;
-            }
-            return CMS_KEYWORDS;
+            $keywords = CMS_KEYWORDS;
         }
         elseif (defined('EXTRA_FLEXCONTENT_ID') && (EXTRA_FLEXCONTENT_ID > 1)) {
             // this is a flexContent article
             $flexContentData = new flexContentData($this->app);
             if (false !== ($content = $flexContentData->select(EXTRA_FLEXCONTENT_ID))) {
-                if ($prompt) {
-                    echo $content['keywords'];
-                }
-                return $content['keywords'];
+                $keywords = $content['keywords'];
             }
-            return null;
         }
         elseif (function_exists('page_keywords')) {
-            if ($prompt) {
-                \page_keywords();
-            }
-            else {
-                ob_start();
-                \page_keywords();
-                return ob_get_clean();
-            }
+            ob_start();
+            \page_keywords();
+            $keywords = ob_get_clean();
         }
-        else {
-            return null;
+
+        $keywords = $this->extractOptionsFromKeywords($keywords);
+
+        if ($prompt) {
+            echo $keywords;
         }
+        return $keywords;
     }
 
     /**

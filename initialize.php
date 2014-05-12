@@ -255,6 +255,7 @@ $template['markdown'] = $template->share(function($template) {
     return new phpManufaktur\Basic\Control\MarkdownFunctions($template);
 });
 
+
 // register Twig
 $template->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => array(

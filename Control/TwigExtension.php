@@ -261,6 +261,7 @@ class TwigExtension extends Twig_Extension
             'page_image' => new \Twig_Function_Method($this, 'PageImage'),
             'page_keywords' => new \Twig_Function_Method($this, 'PageKeywords'),
             'page_next_id' => new \Twig_Function_Method($this, 'PageNextID'),
+            'page_option' => new \Twig_Function_Method($this, 'PageOption'),
             'page_previous_id' => new \Twig_Function_Method($this, 'PagePreviousID'),
             'page_title' => new \Twig_Function_Method($this, 'PageTitle'),
             'page_url' => new \Twig_Function_Method($this, 'PageURL'),
@@ -736,8 +737,23 @@ class TwigExtension extends Twig_Extension
         return $this->app['browser']->is_desktop();
     }
 
+    /**
+     * Return the current IP
+     *
+     * @return string
+     */
     public function BrowserIP()
     {
         return $this->app['browser']->ip(false);
+    }
+
+    /**
+     * Return the value for the given page option
+     *
+     * @param string $option
+     */
+    public function PageOption($option)
+    {
+        return $this->app['cms']->page_option($option, false);
     }
 }
