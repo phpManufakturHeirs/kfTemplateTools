@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.18** - 2014-05-12
+
+* added support for [imageTweak](https://kit2.phpmanufaktur.de/de/erweiterungen/imagetweak.php) to `page_content()`
+
 **0.17** - 2014-05-11
 
 * added function `$template['browser']->ip()`
