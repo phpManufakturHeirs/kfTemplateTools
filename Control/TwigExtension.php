@@ -391,11 +391,11 @@ class TwigExtension extends Twig_Extension
      * Return the page content for the given block
      *
      * @param number $block
-     * @param boolean $use_image_tweak
+     * @param array $options
      */
-    public function PageContent($block=1, $use_image_tweak=true)
+    public function PageContent($block=1, $options=array())
     {
-        return $this->app['cms']->page_content($block, $use_image_tweak, false);
+        return $this->app['cms']->page_content($block, false, $options);
     }
 
     /**

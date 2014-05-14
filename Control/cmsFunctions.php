@@ -323,9 +323,10 @@ class cmsFunctions
      *
      * @param number|string $block
      * @param boolean $prompt
+     * @param array $options
      * @return string
      */
-    public function page_content($block=1, $use_image_tweak=true, $prompt=true)
+    public function page_content($block=1, $prompt=true, $options=array())
     {
 
         if (!is_numeric($block) && is_string($block) && is_array(self::$page_block)) {
@@ -349,6 +350,8 @@ class cmsFunctions
             ob_start();
             \page_content($block);
             $content = ob_get_clean();
+
+            $use_image_tweak = (isset($options['image_tweak']) && is_bool($options['image_tweak'])) ? $options['image_tweak'] : true;
 
             if (!empty($content) && $use_image_tweak &&
                 class_exists('phpManufaktur\imageTweak\Control\imageTweak')) {
