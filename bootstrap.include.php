@@ -16,3 +16,6 @@ $admin->get('/templatetools/update',
     'phpManufaktur\TemplateTools\Data\Setup\Update::exec');
 $admin->get('/templatetools/uninstall',
     'phpManufaktur\TemplateTools\Data\Setup\Uninstall::exec');
+
+$command->post('/wysiwyg_content',
+    'phpManufaktur\TemplateTools\Control\kitCommands\wysiwygContent::Controller');
