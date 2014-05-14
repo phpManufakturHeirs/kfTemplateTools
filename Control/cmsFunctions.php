@@ -831,6 +831,7 @@ class cmsFunctions
         }
         $SQL = "SELECT `content` FROM `".CMS_TABLE_PREFIX."mod_wysiwyg` WHERE `section_id`=$section_id";
         $content = $this->app['db']->fetchColumn($SQL);
+        $content = str_replace('{SYSVAR:MEDIA_REL}', CMS_MEDIA_URL, $content );
         $result = (!empty($content)) ? $this->app['tools']->unsanitizeText($content) : '';
         if ($prompt) {
             echo $result;
