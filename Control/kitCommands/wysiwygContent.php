@@ -12,9 +12,9 @@
 namespace phpManufaktur\TemplateTools\Control\kitCommands;
 
 use Silex\Application;
-use phpManufaktur\Basic\Control\kitCommand\Basic;
+use phpManufaktur\TemplateTools\Control\cmsFunctions;
 
-class wysiwygContent extends Basic
+class wysiwygContent
 {
 
     /**
@@ -27,20 +27,11 @@ class wysiwygContent extends Basic
      */
     public function Controller(Application $app)
     {
-        // initialize the Basic class
-        $this->initParameters($app);
-        // get the command parameters
-        $parameter = $this->getCommandParameters();
+        $parameter = $app['request']->request->get('parameter');
 
         if (isset($parameter['section_id'])) {
-            if (false === ($section_id = filter_var($parameter['section_id'], FILTER_VALIDATE_INT))) {
-                throw new \InvalidArgumentException('The $section_id must be of type integer!');
-            }
-            $SQL = "SELECT `content` FROM `".CMS_TABLE_PREFIX."mod_wysiwyg` WHERE `section_id`=$section_id";
-            $content = $this->app['db']->fetchColumn($SQL);
-            $content = str_replace('{SYSVAR:MEDIA_REL}', CMS_MEDIA_URL, $content);
-            $result = (!empty($content)) ? $this->app['utils']->unsanitizeText($content) : '';
-            return $result;
+            $cmsFunctions = new cmsFunctions($app);
+            return $cmsFunctions->wysiwyg_content($parameter['section_id'], false);
         }
         // nothing to do ...
         return '';

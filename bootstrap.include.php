@@ -18,4 +18,5 @@ $admin->get('/templatetools/uninstall',
     'phpManufaktur\TemplateTools\Data\Setup\Uninstall::exec');
 
 $command->post('/wysiwyg_content',
-    'phpManufaktur\TemplateTools\Control\kitCommands\wysiwygContent::Controller');
+    'phpManufaktur\TemplateTools\Control\kitCommands\wysiwygContent::Controller')
+    ->setOption('info', MANUFAKTUR_PATH.'/TemplateTools/command.wysiwyg_content.json');
