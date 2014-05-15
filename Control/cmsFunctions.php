@@ -32,13 +32,17 @@ class cmsFunctions
      *
      * @param Application $app
      */
-    public function __construct(Application $app)
+    public function __construct(Application $app, $initialize=true)
     {
         $this->app = $app;
         $this->PageData = new Page($app);
 
-        // use the origin constants, our own maybe not defined yet ...
-        $info_path = WB_PATH.substr(TEMPLATE_DIR, strlen(WB_URL)).'/info.php';
+        // be aware - some constants may undefined!
+        $cms_path = defined('CMS_PATH') ? CMS_PATH : WB_PATH;
+        $cms_url = defined('CMS_URL') ? CMS_URL : WB_URL;
+        $template_dir = defined('TEMPLATE_DIR') ? TEMPLATE_DIR : $cms_url.'/templates';
+
+        $info_path = $cms_path.substr($template_dir, strlen($cms_url)).'/info.php';
         if ($app['filesystem']->exists($info_path)) {
             global $block;
             global $menu;
@@ -50,9 +54,6 @@ class cmsFunctions
                 self::$page_menu = $menu;
             }
         }
-
-        // create the default page sequence
-        $this->page_sequence();
     }
 
     /**
@@ -70,7 +71,7 @@ class cmsFunctions
             }
             // get the title
             $SQL = "SELECT `description` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`=".EXTRA_TOPIC_ID;
-            $description = $this->app['tools']->unsanitizeText($this->app['db']->fetchColumn($SQL));
+            $description = $this->app['utils']->unsanitizeText($this->app['db']->fetchColumn($SQL));
             if ($prompt) {
                 echo $description;
             }
@@ -832,7 +833,7 @@ class cmsFunctions
         $SQL = "SELECT `content` FROM `".CMS_TABLE_PREFIX."mod_wysiwyg` WHERE `section_id`=$section_id";
         $content = $this->app['db']->fetchColumn($SQL);
         $content = str_replace('{SYSVAR:MEDIA_REL}', CMS_MEDIA_URL, $content );
-        $result = (!empty($content)) ? $this->app['tools']->unsanitizeText($content) : '';
+        $result = (!empty($content)) ? $this->app['utils']->unsanitizeText($content) : '';
         if ($prompt) {
             echo $result;
         }

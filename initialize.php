@@ -152,6 +152,9 @@ $template->register(new Silex\Provider\DoctrineServiceProvider(), array(
     )
 ));
 
+// create the page sequence
+$template['cms']->page_sequence();
+
 if (!defined('PAGE_FOOTER')) define('PAGE_FOOTER', $template['cms']->page_footer('Y', false));
 if (!defined('PAGE_HEADER')) define('PAGE_HEADER', $template['cms']->page_header(false));
 if (!defined('PAGE_KEYWORDS')) define('PAGE_KEYWORDS', $template['cms']->page_keywords(false));
