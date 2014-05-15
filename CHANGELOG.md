@@ -6,6 +6,17 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.19** - 2014-05-15
+
+* introduce `page_option()`
+* changed `page_content()` parameters to a more flexible usage
+* add kitCommand `~~ wysiwyg_content ~~`
+* added missing parsing for `{SYSVAR:MEDIA_REL}` before delivering the content
+* move initialize `page_sequence()` out of the CMS constructor
+* added kitCommands `page_modified_by`, `page_modified_when`, `cms_modified_by` and `cms_modified_when`
+* added missing unsanitize and translation of values in `initialize.php`
+* added kitCommand description files
+
 **0.18** - 2014-05-12
 
 * added support for [imageTweak](https://kit2.phpmanufaktur.de/de/erweiterungen/imagetweak.php) to `page_content()`
