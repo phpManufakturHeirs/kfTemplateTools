@@ -200,12 +200,12 @@ if (PAGE_ID > 0) {
         throw new \Exception("Can't read the page information for ID ".PAGE_ID." from the database!");
     }
     if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s', $result['modified_when']));
-    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $result['display_name']);
+    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $template['tools']->unsanitizeText($result['display_name']));
 }
 else {
     // no valid PAGE_ID, i.e. at search pages
     if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s'));
-    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', '- unknown -');
+    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $template['tools']->trans('- unknown -'));
 }
 
 global $post_id;
