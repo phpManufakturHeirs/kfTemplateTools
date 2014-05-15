@@ -1,23 +1,23 @@
 {
-  "command":"wysiwyg_content",
+  "command":"cms_modified_by",
   "vendor": {
     "name":"phpManufaktur",
     "url":"https://phpmanufaktur.de"
     },
   "name": {
-    "en":"wysiwyg_content",
-    "de":"wysiwyg_content"
+    "en":"cms_modified_by",
+    "de":"cms_modified_by"
   },
   "description": {
-    "en":"Return the content of a WYSIWYG page section",
-    "de":"Liefert den Inhalt eines WYSIWYG Seiten Abschnitt"
+    "en":"Display name of user who has last modified a page of the Content Management System (CMS)",
+    "de":"Anzeigename des Benutzers, der zuletzt eine Seite des Content Management System (CMS) geändert hat"
   },
   "help": {
     "en": {
-      "link":"https://gist.github.com/hertsch/7425fc0b88809993c502",
-      "gist_id":"7425fc0b88809993c502",
+      "link":"https://gist.github.com/c105afa9e16796c8900e.git",
+      "gist_id":"c105afa9e16796c8900e",
       "file": {
-        "help":"kitcommand_wysiwyg_content_en.md"
+        "help":"kitcommand_cms_modified_by_en.md"
       }
     }
   },

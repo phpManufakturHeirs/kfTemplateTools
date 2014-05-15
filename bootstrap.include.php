@@ -22,13 +22,17 @@ $command->post('/wysiwyg_content',
     ->setOption('info', MANUFAKTUR_PATH.'/TemplateTools/command.wysiwyg_content.json');
 
 $command->post('/page_modified_when',
-    'phpManufaktur\TemplateTools\Control\kitCommands\PageModifiedWhen::Controller');
+    'phpManufaktur\TemplateTools\Control\kitCommands\PageModifiedWhen::Controller')
+    ->setOption('info', MANUFAKTUR_PATH.'/TemplateTools/command.page_modified_when.json');
 
 $command->post('/page_modified_by',
-    'phpManufaktur\TemplateTools\Control\kitCommands\PageModifiedBy::Controller');
+    'phpManufaktur\TemplateTools\Control\kitCommands\PageModifiedBy::Controller')
+    ->setOption('info', MANUFAKTUR_PATH.'/TemplateTools/command.page_modified_by.json');
 
 $command->post('/cms_modified_when',
-    'phpManufaktur\TemplateTools\Control\kitCommands\cmsModifiedWhen::Controller');
+    'phpManufaktur\TemplateTools\Control\kitCommands\cmsModifiedWhen::Controller')
+    ->setOption('info', MANUFAKTUR_PATH.'/TemplateTools/command.cms_modified_when.json');
 
 $command->post('/cms_modified_by',
-    'phpManufaktur\TemplateTools\Control\kitCommands\cmsModifiedBy::Controller');
+    'phpManufaktur\TemplateTools\Control\kitCommands\cmsModifiedBy::Controller')
+    ->setOption('info', MANUFAKTUR_PATH.'/TemplateTools/command.cms_modified_by.json');

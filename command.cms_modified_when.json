@@ -1,23 +1,23 @@
 {
-  "command":"wysiwyg_content",
+  "command":"cms_modified_when",
   "vendor": {
     "name":"phpManufaktur",
     "url":"https://phpmanufaktur.de"
     },
   "name": {
-    "en":"wysiwyg_content",
-    "de":"wysiwyg_content"
+    "en":"cms_modified_when",
+    "de":"cms_modified_when"
   },
   "description": {
-    "en":"Return the content of a WYSIWYG page section",
-    "de":"Liefert den Inhalt eines WYSIWYG Seiten Abschnitt"
+    "en":"Date/time last modification of a page in the Content Management System (CMS)",
+    "de":"Datum und Zeit der letzten Änderung einer Seite im Content Manangement System (CMS)"
   },
   "help": {
     "en": {
-      "link":"https://gist.github.com/hertsch/7425fc0b88809993c502",
-      "gist_id":"7425fc0b88809993c502",
+      "link":"https://gist.github.com/21b3e4898bd9a13018a1.git",
+      "gist_id":"21b3e4898bd9a13018a1",
       "file": {
-        "help":"kitcommand_wysiwyg_content_en.md"
+        "help":"kitcommand_cms_modified_when_en.md"
       }
     }
   },
