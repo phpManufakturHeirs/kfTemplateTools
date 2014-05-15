@@ -884,7 +884,123 @@ class cmsFunctions
                 return -1;
             }
         }
-
         return $id;
+    }
+
+    /**
+     * Date/Time of the last modification for the given page
+     *
+     * @param integer $page_id
+     * @param string $format
+     * @param string $locale
+     * @param boolean $prompt
+     * @return string
+     */
+    public function page_modified_when($page_id=PAGE_ID, $format='DATETIME_FORMAT', $locale=null, $prompt=true)
+    {
+        if (is_null($locale)) {
+            $locale = defined('CMS_LOCALE') ? CMS_LOCALE : 'en';
+        }
+
+        $SQL = "SELECT `modified_when` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
+        $result = $this->app['db']->fetchAssoc($SQL);
+
+        if (!isset($result['modified_when'])) {
+            // no valid page, return the current date/time in given format
+            $datetime = date($this->app['translator']->trans($format, array(), 'messages', $locale));
+        }
+        else {
+            $datetime = date($this->app['translator']->trans($format, array(), 'messages', $locale), $result['modified_when']);
+        }
+
+        if ($prompt) {
+            echo $datetime;
+        }
+        return $datetime;
+    }
+
+    /**
+     * Display name of the user who has at last modified the given page
+     *
+     * @param integer $page_id
+     * @param string $locale
+     * @param boolean $prompt
+     * @return string
+     */
+    public function page_modified_by($page_id=PAGE_ID, $locale=null, $prompt=true)
+    {
+        $SQL = "SELECT `display_name` FROM `".CMS_TABLE_PREFIX."pages`, `".CMS_TABLE_PREFIX."users` ".
+        "WHERE `user_id`=`modified_by` AND `page_id`=$page_id";
+
+        $result = $this->app['db']->fetchAssoc($SQL);
+
+        if (is_null($locale)) {
+            $locale = defined('CMS_LOCALE') ? CMS_LOCALE : 'en';
+        }
+
+        $name = isset($result['display_name']) ? $this->app['utils']->unsanitizeText($result['display_name']) :
+            $this->app['translator']->trans('- unknown -', array(), 'messages', $locale);
+
+        if ($prompt) {
+            echo $name;
+        }
+        return $name;
+    }
+
+    /**
+     * Date/Time of the last modification of the CMS
+     *
+     * @param string $format
+     * @param string $locale
+     * @param boolean $prompt
+     * @return string
+     */
+    public function cms_modified_when($format='DATETIME_FORMAT', $locale=null, $prompt=true)
+    {
+        if (is_null($locale)) {
+            $locale = defined('CMS_LOCALE') ? CMS_LOCALE : 'en';
+        }
+
+        $SQL = "SELECT MAX(`modified_when`) AS `cms_modified` FROM `".CMS_TABLE_PREFIX."pages`";
+        $result = $this->app['db']->fetchAssoc($SQL);
+
+        if (!isset($result['cms_modified'])) {
+            // no valid page, return the current date/time in given format
+            $datetime = date($this->app['translator']->trans($format, array(), 'messages', $locale));
+        }
+        else {
+            $datetime = date($this->app['translator']->trans($format, array(), 'messages', $locale), $result['cms_modified']);
+        }
+
+        if ($prompt) {
+            echo $datetime;
+        }
+        return $datetime;
+    }
+
+    /**
+     * Displayname of the user who has last changed a page of the CMS
+     *
+     * @param string $locale
+     * @param boolean $prompt
+     * @return string
+     */
+    public function cms_modified_by($locale=null, $prompt=true)
+    {
+        $SQL = "SELECT `display_name` FROM `".CMS_TABLE_PREFIX."pages`, `".CMS_TABLE_PREFIX."users` ".
+            "WHERE `modified_when`=(SELECT MAX(`modified_when`) FROM `".CMS_TABLE_PREFIX."pages`) AND `user_id`=`modified_by`";
+        $result = $this->app['db']->fetchAssoc($SQL);
+
+        if (is_null($locale)) {
+            $locale = defined('CMS_LOCALE') ? CMS_LOCALE : 'en';
+        }
+
+        $name = isset($result['display_name']) ? $this->app['utils']->unsanitizeText($result['display_name']) :
+            $this->app['translator']->trans('- unknown -', array(), 'messages', $locale);
+
+        if ($prompt) {
+            echo $name;
+        }
+        return $name;
     }
 }

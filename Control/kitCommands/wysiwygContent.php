@@ -13,6 +13,7 @@ namespace phpManufaktur\TemplateTools\Control\kitCommands;
 
 use Silex\Application;
 use phpManufaktur\TemplateTools\Control\cmsFunctions;
+use phpManufaktur\Basic\Control\kitCommand\Help;
 
 class wysiwygContent
 {
@@ -33,7 +34,9 @@ class wysiwygContent
             $cmsFunctions = new cmsFunctions($app);
             return $cmsFunctions->wysiwyg_content($parameter['section_id'], false);
         }
-        // nothing to do ...
-        return '';
+
+        // missing the parameter - show the helpfile
+        $Help = new Help($app);
+        return $Help->getContent(MANUFAKTUR_PATH.'/TemplateTools/command.wysiwyg_content.json');
     }
 }

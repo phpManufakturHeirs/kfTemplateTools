@@ -20,3 +20,15 @@ $admin->get('/templatetools/uninstall',
 $command->post('/wysiwyg_content',
     'phpManufaktur\TemplateTools\Control\kitCommands\wysiwygContent::Controller')
     ->setOption('info', MANUFAKTUR_PATH.'/TemplateTools/command.wysiwyg_content.json');
+
+$command->post('/page_modified_when',
+    'phpManufaktur\TemplateTools\Control\kitCommands\PageModifiedWhen::Controller');
+
+$command->post('/page_modified_by',
+    'phpManufaktur\TemplateTools\Control\kitCommands\PageModifiedBy::Controller');
+
+$command->post('/cms_modified_when',
+    'phpManufaktur\TemplateTools\Control\kitCommands\cmsModifiedWhen::Controller');
+
+$command->post('/cms_modified_by',
+    'phpManufaktur\TemplateTools\Control\kitCommands\cmsModifiedBy::Controller');

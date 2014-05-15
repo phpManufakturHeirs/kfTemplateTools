@@ -15,6 +15,9 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    '- unknown -'
+        => '- unbekannt -',
+
     'A error occured while executing the Droplet, please check the PHP code.'
         => 'Bei der Ausführung des Droplet trat ein Fehler auf, bitte prüfen Sie den PHP Code.',
     'Authenticated'
@@ -67,6 +70,6 @@ return array(
         => 'Herzlich willkommen, %name%!',
 
     'Your browser (%name% %version%) is <strong>out of date</strong>. It has known <strong>security flaws</strong> and may <strong>not display all features</strong> of this and other websites. <strong><a href="%update%">Please update your browser</a></strong>.'
-      => 'Sie verwenden einen <strong>veralteten Browser</strong> (%name% %version%) mit <strong>Sicherheitsschwachstellen</strong> und <strong>können nicht alle Funktionen dieser Webseite nutzen</strong>. <strong><a href="%update%">Bitte aktualisieren Sie Ihren Browser</a></strong>.'    
-    
+      => 'Sie verwenden einen <strong>veralteten Browser</strong> (%name% %version%) mit <strong>Sicherheitsschwachstellen</strong> und <strong>können nicht alle Funktionen dieser Webseite nutzen</strong>. <strong><a href="%update%">Bitte aktualisieren Sie Ihren Browser</a></strong>.'
+
 );

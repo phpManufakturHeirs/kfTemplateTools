@@ -248,6 +248,8 @@ class TwigExtension extends Twig_Extension
             'browser_is_desktop' => new \Twig_Function_Method($this, 'BrowserIsDesktop'),
             'classic_breadcrumb' => new \Twig_Function_Method($this, 'ClassicBreadcrumb'),
             'classic_pager' => new \Twig_Function_Method($this, 'ClassicPager'),
+            'cms_modified_by' => new \Twig_Function_Method($this, 'cmsModifiedBy'),
+            'cms_modified_when' => new \Twig_Function_Method($this, 'cmsModifiedWhen'),
             'command' => new \Twig_Function_Method($this, 'kitCommand'),
             'droplet' => new \Twig_Function_Method($this, 'Droplet'),
             'ellipsis' => new \Twig_Function_Method($this, 'Ellipsis'),
@@ -260,6 +262,8 @@ class TwigExtension extends Twig_Extension
             'page_description' => new \Twig_Function_Method($this, 'PageDescription'),
             'page_image' => new \Twig_Function_Method($this, 'PageImage'),
             'page_keywords' => new \Twig_Function_Method($this, 'PageKeywords'),
+            'page_modified_by' => new \Twig_Function_Method($this, 'PageModifiedBy'),
+            'page_modified_when' => new \Twig_Function_Method($this, 'PageModifiedWhen'),
             'page_next_id' => new \Twig_Function_Method($this, 'PageNextID'),
             'page_option' => new \Twig_Function_Method($this, 'PageOption'),
             'page_previous_id' => new \Twig_Function_Method($this, 'PagePreviousID'),
@@ -755,5 +759,53 @@ class TwigExtension extends Twig_Extension
     public function PageOption($option)
     {
         return $this->app['cms']->page_option($option, false);
+    }
+
+    /**
+     * Date/Time of the last modification for the given page
+     *
+     * @param integer $page_id
+     * @param string $format
+     * @param string $locale
+     * @return string
+     */
+    public function PageModifiedWhen($page_id=PAGE_ID, $format='DATETIME_FORMAT', $locale=CMS_LOCALE)
+    {
+        return $this->app['cms']->page_modified_when($page_id, $format, $locale, false);
+    }
+
+    /**
+     * Display name of the user who has at last modified the given page
+     *
+     * @param integer $page_id
+     * @param string $locale
+     * @return string
+     */
+    public function PageModifiedBy($page_id=PAGE_ID, $locale=CMS_LOCALE)
+    {
+        return $this->app['cms']->page_modified_by($page_id, $locale, false);
+    }
+
+    /**
+     * Date/Time of the last modification of the CMS
+     *
+     * @param string $format
+     * @param string $locale
+     * @return string
+     */
+    public function cmsModifiedWhen($format='DATETIME_FORMAT', $locale=CMS_LOCALE)
+    {
+        return $this->app['cms']->cms_modified_when($format, $locale, false);
+    }
+
+    /**
+     * Displayname of the user who has last changed a page of the CMS
+     *
+     * @param string $locale
+     * @return string
+     */
+    public function cmsModifiedBy($locale=CMS_LOCALE)
+    {
+        return $this->app['cms']->cms_modified_by($locale, false);
     }
 }
