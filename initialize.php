@@ -45,7 +45,7 @@ if (!defined('CMS_PATH')) define('CMS_PATH', $template['tools']->sanitizePath(WB
 if (!defined('CMS_URL')) define('CMS_URL', WB_URL);
 if (!defined('CMS_MEDIA_PATH')) define('CMS_MEDIA_PATH', CMS_PATH.MEDIA_DIRECTORY);
 if (!defined('CMS_MEDIA_URL')) define('CMS_MEDIA_URL', CMS_URL.MEDIA_DIRECTORY);
-if (!defined('CMS_LOCALE')) define('CMS_LOCALE', strtolower(LANGUAGE));
+if (!defined('CMS_LOCALE')) define('CMS_LOCALE', strtolower(DEFAULT_LANGUAGE));
 if (!defined('CMS_TEMPLATES_PATH')) define('CMS_TEMPLATES_PATH', CMS_PATH.'/templates');
 if (!defined('CMS_TEMPLATES_URL')) define('CMS_TEMPLATES_URL', CMS_URL.'/templates');
 if (!defined('CMS_ADDONS_PATH')) define('CMS_ADDONS_PATH', CMS_PATH.'/modules');
@@ -155,6 +155,7 @@ $template->register(new Silex\Provider\DoctrineServiceProvider(), array(
 // create the page sequence
 $template['cms']->page_sequence();
 
+if (!defined('PAGE_LOCALE')) define('PAGE_LOCALE', LANGUAGE);
 if (!defined('PAGE_FOOTER')) define('PAGE_FOOTER', $template['cms']->page_footer('Y', false));
 if (!defined('PAGE_HEADER')) define('PAGE_HEADER', $template['cms']->page_header(false));
 if (!defined('PAGE_KEYWORDS')) define('PAGE_KEYWORDS', $template['cms']->page_keywords(false));
@@ -252,6 +253,11 @@ if ($template['filesystem']->exists(TEMPLATE_PATH.'/locale')) {
     // if the template has a /locale directory load these language files also
     $template['tools']->addLanguageFiles(TEMPLATE_PATH.'/locale');
 }
+
+// add missing constants which need a full configured access to $template['cms']
+if (!defined('CMS_MODIFIED_BY')) define('CMS_LAST_MODIFIED_BY', $template['cms']->cms_modified_by(null, false));
+if (!defined('CMS_MODIFIED_WHEN')) define('CMS_LAST_MODIFIED_WHEN', $template['cms']->cms_modified_when('Y-m-d H:i:s', null, false));
+
 
 // Markdown Parser
 $template['markdown'] = $template->share(function($template) {

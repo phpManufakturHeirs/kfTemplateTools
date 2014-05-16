@@ -899,7 +899,7 @@ class cmsFunctions
     public function page_modified_when($page_id=PAGE_ID, $format='DATETIME_FORMAT', $locale=null, $prompt=true)
     {
         if (is_null($locale)) {
-            $locale = defined('CMS_LOCALE') ? CMS_LOCALE : 'en';
+            $locale = defined('PAGE_LOCALE') ? PAGE_LOCALE : 'en';
         }
 
         $SQL = "SELECT `modified_when` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
@@ -935,7 +935,7 @@ class cmsFunctions
         $result = $this->app['db']->fetchAssoc($SQL);
 
         if (is_null($locale)) {
-            $locale = defined('CMS_LOCALE') ? CMS_LOCALE : 'en';
+            $locale = defined('PAGE_LOCALE') ? PAGE_LOCALE : 'en';
         }
 
         $name = isset($result['display_name']) ? $this->app['utils']->unsanitizeText($result['display_name']) :
@@ -958,7 +958,7 @@ class cmsFunctions
     public function cms_modified_when($format='DATETIME_FORMAT', $locale=null, $prompt=true)
     {
         if (is_null($locale)) {
-            $locale = defined('CMS_LOCALE') ? CMS_LOCALE : 'en';
+            $locale = defined('PAGE_LOCALE') ? PAGE_LOCALE : 'en';
         }
 
         $SQL = "SELECT MAX(`modified_when`) AS `cms_modified` FROM `".CMS_TABLE_PREFIX."pages`";
@@ -992,7 +992,7 @@ class cmsFunctions
         $result = $this->app['db']->fetchAssoc($SQL);
 
         if (is_null($locale)) {
-            $locale = defined('CMS_LOCALE') ? CMS_LOCALE : 'en';
+            $locale = defined('PAGE_LOCALE') ? PAGE_LOCALE : 'en';
         }
 
         $name = isset($result['display_name']) ? $this->app['utils']->unsanitizeText($result['display_name']) :
