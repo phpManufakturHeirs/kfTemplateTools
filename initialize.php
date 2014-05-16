@@ -239,8 +239,8 @@ $template['translator'] = $template->share($template->extend('translator', funct
     return $translator;
 }));
 
-// set the locale from the CMS
-$template['translator']->setLocale(CMS_LOCALE);
+// set the locale from the current page
+$template['translator']->setLocale(PAGE_LOCALE);
 
 // load the metric language file from BASIC
 $template['tools']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
@@ -255,8 +255,8 @@ if ($template['filesystem']->exists(TEMPLATE_PATH.'/locale')) {
 }
 
 // add missing constants which need a full configured access to $template['cms']
-if (!defined('CMS_MODIFIED_BY')) define('CMS_LAST_MODIFIED_BY', $template['cms']->cms_modified_by(null, false));
-if (!defined('CMS_MODIFIED_WHEN')) define('CMS_LAST_MODIFIED_WHEN', $template['cms']->cms_modified_when('Y-m-d H:i:s', null, false));
+if (!defined('CMS_MODIFIED_BY')) define('CMS_MODIFIED_BY', $template['cms']->cms_modified_by(null, false));
+if (!defined('CMS_MODIFIED_WHEN')) define('CMS_MODIFIED_WHEN', $template['cms']->cms_modified_when('Y-m-d H:i:s', null, false));
 
 
 // Markdown Parser
