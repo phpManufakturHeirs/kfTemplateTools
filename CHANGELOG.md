@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.20** - 2014-05-16
+
+* added constants `PAGE_LOCALE`, `CMS_MODIFIED_BY` and `CMS_MODIFIED_WHEN` and corrected the usage of `CMS_LOCALE` for global usage
+* added kitCommand `~~ google_map ~~`
+
 **0.19** - 2014-05-15
 
 * introduce `page_option()`
