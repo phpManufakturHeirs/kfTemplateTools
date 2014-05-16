@@ -772,7 +772,7 @@ class TwigExtension extends Twig_Extension
      * @param string $locale
      * @return string
      */
-    public function PageModifiedWhen($page_id=PAGE_ID, $format='DATETIME_FORMAT', $locale=CMS_LOCALE)
+    public function PageModifiedWhen($page_id=PAGE_ID, $format='DATETIME_FORMAT', $locale=PAGE_LOCALE)
     {
         return $this->app['cms']->page_modified_when($page_id, $format, $locale, false);
     }
@@ -784,7 +784,7 @@ class TwigExtension extends Twig_Extension
      * @param string $locale
      * @return string
      */
-    public function PageModifiedBy($page_id=PAGE_ID, $locale=CMS_LOCALE)
+    public function PageModifiedBy($page_id=PAGE_ID, $locale=PAGE_LOCALE)
     {
         return $this->app['cms']->page_modified_by($page_id, $locale, false);
     }
@@ -796,7 +796,7 @@ class TwigExtension extends Twig_Extension
      * @param string $locale
      * @return string
      */
-    public function cmsModifiedWhen($format='DATETIME_FORMAT', $locale=CMS_LOCALE)
+    public function cmsModifiedWhen($format='DATETIME_FORMAT', $locale=PAGE_LOCALE)
     {
         return $this->app['cms']->cms_modified_when($format, $locale, false);
     }
@@ -807,7 +807,7 @@ class TwigExtension extends Twig_Extension
      * @param string $locale
      * @return string
      */
-    public function cmsModifiedBy($locale=CMS_LOCALE)
+    public function cmsModifiedBy($locale=PAGE_LOCALE)
     {
         return $this->app['cms']->cms_modified_by($locale, false);
     }

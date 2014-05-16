@@ -39,7 +39,7 @@ class kitCommandFunctions
     {
         $params = array(
             'cms' => array(
-                'locale' => CMS_LOCALE,
+                'locale' => PAGE_LOCALE,
                 'page_id' => PAGE_ID,
                 'page_url' => PAGE_URL,
                 'user' => array(
