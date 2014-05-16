@@ -36,3 +36,7 @@ $command->post('/cms_modified_when',
 $command->post('/cms_modified_by',
     'phpManufaktur\TemplateTools\Control\kitCommands\cmsModifiedBy::Controller')
     ->setOption('info', MANUFAKTUR_PATH.'/TemplateTools/command.cms_modified_by.json');
+
+$command->post('/google_map',
+    'phpManufaktur\TemplateTools\Control\kitCommands\GoogleMap::Controller')
+    ->setOption('info', MANUFAKTUR_PATH.'/TemplateTools/command.google_map.json');
