@@ -41,4 +41,4 @@
   {% set location = 'phpManufaktur, Berlin' %}
 {% endif %}
 
-<iframe width="{{ parameter.width|default('100%') }}" height="{{ parameter.height|default('300px') }}" src="https://maps.google.de/maps?hl={{ parameter.locale|default('en') }}&q={{ location }}&ie=UTF8&t=&z=14&iwloc=B&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" ></iframe>
+<iframe width="{{ parameter.width|default('100%') }}" height="{{ parameter.height|default('300px') }}" src="https://maps.google.de/maps?hl={{ parameter.locale|default('en') }}&q={{ location }}&ie=UTF8&t=&z={{ parameter.zoom|default(14) }}&iwloc=B&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" ></iframe>
