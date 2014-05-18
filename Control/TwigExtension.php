@@ -257,6 +257,7 @@ class TwigExtension extends Twig_Extension
             'droplet' => new \Twig_Function_Method($this, 'Droplet'),
             'ellipsis' => new \Twig_Function_Method($this, 'Ellipsis'),
             'file_exists' => new \Twig_Function_Method($this, 'FileExists'),
+            'get_first_header' => new \Twig_Function_Method($this, 'getFirstHeader'),
             'humanize' => new \Twig_Function_Method($this, 'Humanize'),
             'image' => new \Twig_Function_Method($this, 'Image'),
             'markdown' => new \Twig_Function_Method($this, 'MarkdownHTML'),
@@ -274,8 +275,10 @@ class TwigExtension extends Twig_Extension
             'page_url' => new \Twig_Function_Method($this, 'PageURL'),
             'register_frontend_modfiles' => new \Twig_Function_Method($this, 'RegisterFrontendModfiles'),
             'register_frontend_modfiles_body' => new \Twig_Function_Method($this, 'RegisterFrontendModfilesBody'),
+            'remove_first_header' => new \Twig_Function_Method($this, 'removeFirstHeader'),
             'show_menu2' => new \Twig_Function_Method($this, 'ShowMenu2'),
             'wysiwyg_content' => new \Twig_Function_Method($this, 'WYSIWYGcontent'),
+            'wysiwyg_section_ids' => new \Twig_Function_Method($this, 'WYSIWYGsectionIDs'),
         );
     }
 
@@ -810,5 +813,43 @@ class TwigExtension extends Twig_Extension
     public function cmsModifiedBy($locale=PAGE_LOCALE)
     {
         return $this->app['cms']->cms_modified_by($locale, false);
+    }
+
+    /**
+     * Get the SECTION_ID's for the given PAGE_ID and $block identifier (ID or name).
+     * Order the result 'ASC', 'DESC' or as RANDOM
+     *
+     * @param integer $page_id
+     * @param integer|string $block
+     * @param string $order
+     * @return NULL|array
+     */
+    public function WYSIWYGsectionIDs($page_id=PAGE_ID, $block=1, $order='ASC')
+    {
+        return $this->app['cms']->wysiwyg_section_ids($page_id, $block, $order);
+    }
+
+    /**
+     * Get the first headline <h1>, <h2> or <h3> from the html content and
+     * return the content without the tags
+     *
+     * @param string $content html text
+     * @return NULL|string headline content
+     */
+    public function getFirstHeader($content)
+    {
+        return $this->app['tools']->get_first_header($content);
+    }
+
+    /**
+     * Remove the first headline <h1>, <h2> or <h3> from the html content and
+     * return the modified html
+     *
+     * @param string $content
+     * @return NULL|string
+     */
+    public function removeFirstHeader($content)
+    {
+        return $this->app['tools']->remove_first_header($content);
     }
 }

@@ -96,7 +96,7 @@ class Tools
                 return $translator;
             }));
             $this->app['monolog']->addDebug('Added language file: '.$locale->getRealpath());
-        }        
+        }
     }
 
     /**
@@ -167,5 +167,61 @@ class Tools
     public function readJSON($file)
     {
         return $this->utils->readConfiguration($file);
+    }
+
+    /**
+     * Get the first headline <h1>, <h2> or <h3> from the html content and
+     * return the content without the tags
+     *
+     * @param string $content html text
+     * @return NULL|string headline content
+     */
+    public function get_first_header($content)
+    {
+        $DOM = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        if (!$DOM->loadHTML($content)) {
+            return null;
+        }
+        libxml_clear_errors();
+
+        if (null != ($node = $DOM->getElementsByTagName('h1')->item(0))) {
+            return $node->nodeValue;
+        }
+        elseif (null != ($node = $DOM->getElementsByTagName('h2')->item(0))) {
+            return $node->nodeValue;
+        }
+        elseif (null != ($node = $DOM->getElementsByTagName('h3')->item(0))) {
+            return $node->nodeValue;
+        }
+        return null;
+    }
+
+    /**
+     * Remove the first headline <h1>, <h2> or <h3> from the html content and
+     * return the modified html
+     *
+     * @param string $content
+     * @return NULL|string
+     */
+    public function remove_first_header($content)
+    {
+        $DOM = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        if (!$DOM->loadHTML($content)) {
+            return null;
+        }
+        libxml_clear_errors();
+
+        if (null != ($node = $DOM->getElementsByTagName('h1')->item(0))) {
+            $node->parentNode->removeChild($node);
+        }
+        elseif (null != ($node = $DOM->getElementsByTagName('h2')->item(0))) {
+            $node->parentNode->removeChild($node);
+        }
+        elseif (null != ($node = $DOM->getElementsByTagName('h3')->item(0))) {
+            $node->parentNode->removeChild($node);
+        }
+        return $DOM->saveHTML();
     }
 }
