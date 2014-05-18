@@ -232,6 +232,12 @@ class cmsFunctions
                     list($key, $value) = explode(':', $option);
                     // decode enties &#58; &#124; and &#44;
                     $value = html_entity_decode($value);
+                    if (strtolower(trim($value)) == 'true') {
+                        $value = true;
+                    }
+                    elseif (strtolower(trim($value)) == 'false') {
+                        $value = false;
+                    }
                     self::$page_option[strtolower(trim($key))] = trim($value);
                 }
             }
@@ -320,6 +326,38 @@ class cmsFunctions
     }
 
     /**
+     * Check the given $block. If the $block is a string return the ID of the
+     * block if exists, otherwise NULL
+     *
+     * @param mixed $block
+     * @return integer|NULL
+     */
+    protected function check_block($block)
+    {
+        if (!is_numeric($block) && is_string($block) && is_array(self::$page_block)) {
+            // try to get the Block ID by the Block Name
+            $search = $block;
+            $block = null;
+            foreach (self::$page_block as $id => $name) {
+                if (strtolower($search) == strtolower($name)) {
+                    // hit - return the ID
+                    return $id;
+                }
+            }
+            if (is_null($block)) {
+                // return null if block does not exists
+                return null;
+            }
+        }
+        elseif (is_numeric($block) && ($block > 0)) {
+            return $block;
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
      * Return the page content by the given block for the actual PAGE_ID
      *
      * @param number|string $block
@@ -329,21 +367,8 @@ class cmsFunctions
      */
     public function page_content($block=1, $prompt=true, $options=array())
     {
-
-        if (!is_numeric($block) && is_string($block) && is_array(self::$page_block)) {
-            // try to get the Block ID by the Block Name
-            $search = $block;
-            $block = null;
-            foreach (self::$page_block as $id => $name) {
-                if (strtolower($search) == strtolower($name)) {
-                    $block = $id;
-                    break;
-                }
-            }
-            if (is_null($block)) {
-                // return null if block does not exists
-                return null;
-            }
+        if (null == ($block = $this->check_block($block))) {
+            return null;
         }
 
         if (function_exists('page_content')) {
@@ -1002,5 +1027,43 @@ class cmsFunctions
             echo $name;
         }
         return $name;
+    }
+
+    /**
+     * Get the SECTION_ID's for the given PAGE_ID and $block identifier (ID or name).
+     * Order the result 'ASC', 'DESC' or as RANDOM
+     *
+     * @param integer $page_id
+     * @param integer|string $block
+     * @param string $order
+     * @return NULL|array
+     */
+    public function wysiwyg_section_ids($page_id=PAGE_ID, $block=1, $order='ASC')
+    {
+        $order = strtoupper(trim($order));
+        if (!in_array($order, array('ASC', 'DESC', 'RANDOM'))) {
+            $order = 'ASC';
+        }
+
+        if (null == ($block = $this->check_block($block))) {
+            return null;
+        }
+
+        if (!is_numeric($page_id) || ($page_id < 1)) {
+            return null;
+        }
+
+        $SQL = "SELECT `section_id` FROM `".CMS_TABLE_PREFIX."sections` WHERE `page_id`=$page_id AND ".
+            "`block`=$block AND `module`='wysiwyg' ORDER BY ";
+        $SQL .= ($order == 'RANDOM') ? "RAND()" : "`position` $order";
+
+        $results = $this->app['db']->fetchAll($SQL);
+        $section_ids = array();
+        if (is_array($results)) {
+            foreach ($results as $result) {
+                $section_ids[] = $result['section_id'];
+            }
+        }
+        return $section_ids;
     }
 }
