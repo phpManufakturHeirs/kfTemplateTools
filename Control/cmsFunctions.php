@@ -57,6 +57,16 @@ class cmsFunctions
     }
 
     /**
+     * Return self::$page_menu for internal use in other classes
+     *
+     * @return null|array
+     */
+    public function internal_page_menu()
+    {
+        return self::$page_menu;
+    }
+
+    /**
      * Return the page description for the actual PAGE_ID.
      * The function detect TOPICS, NEWS and flexContent article and return specific descriptions
      *

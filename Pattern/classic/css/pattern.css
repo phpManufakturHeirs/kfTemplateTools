@@ -158,3 +158,32 @@
   font-size: 12px;
   border: 1px solid #ccc;
 }
+
+/**
+  Sitelinks
+**/
+
+.sitelinks table {
+  width: 100%;
+  table-layout: fixed;
+}
+.sitelinks table tbody tr td {
+  font-size: 11px;
+  vertical-align: top;
+}
+.sitelinks table tbody tr td ul {
+  margin-left: 0;
+  padding-left: 0;
+}
+.sitelinks table tbody tr td ul li {
+  padding-left: 0;
+  margin-left: 0;
+  list-style: none;
+ }
+ 
+.sitelinks table a:visited.active,
+.sitelinks table a:link.active {
+  color: #da251d;
+  font-weight: bold;
+}
+

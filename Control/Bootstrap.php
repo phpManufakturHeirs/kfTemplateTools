@@ -21,7 +21,7 @@ use phpManufaktur\TemplateTools\Control\Classic\SocialSharingButtons;
 class Bootstrap
 {
     protected $app = null;
-    
+
     /**
      * Constructor
      *
@@ -71,10 +71,10 @@ class Bootstrap
         $Pager = new Pager($this->app);
         return $Pager->pager($options, $prompt);
     }
-    
+
     /**
      * Use the Bootstrap Alert Component to alert a message
-     * 
+     *
      * @param string $message
      * @param array $options
      * @param boolean $prompt
@@ -85,7 +85,7 @@ class Bootstrap
         $Alert = new Alert($this->app);
         return $Alert->alert($message, $options, $prompt);
     }
-    
+
     /**
      * Create responsive social sharing buttons
      *
@@ -98,5 +98,22 @@ class Bootstrap
     {
         $SocialSharingButtons = new SocialSharingButtons($this->app);
         return $SocialSharingButtons->social_sharing_buttons($buttons, $options, $prompt);
+    }
+
+    /**
+     * Return Sitemap Links in Columns for the given $menu
+     *
+     * @param integer|string $menu
+     * @param array $options
+     * @return NULL
+     */
+    public function sitelinks_navigation($menu, $options=array())
+    {
+        // we are using the Classic sitelinks_navigation() function!
+        if (!isset($options['template_directory'])) {
+            // the only difference are the used templates ...
+            $options['template_directory'] = '@pattern/bootstrap/function/sitelinks/';
+        }
+        return $this->app['classic']->sitelinks_navigation($menu, $options);
     }
 }

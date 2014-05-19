@@ -91,3 +91,37 @@
   font-size: 12px;
   border: 1px solid #ccc;
 }
+
+.sitelinks {
+  margin: 20px 0 20px 0;
+  padding: 0 20px 0 20px;
+}
+.sitelink-container {
+  font-size: 11px;
+}
+.sitelink-container a:link,
+.sitelink-container a:visited {
+  color: #999 !important;
+  text-decoration: none;
+}
+.sitelink-container a:link.active,
+.sitelink-container a:visited.active,
+.sitelink-container a:hover,
+.sitelink-container a:focus {
+  color: #da251d !important;
+  text-decoration: none;
+}
+.sitelink-container .header {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.sitelink-container nav > ul {
+  margin-left: 0;
+  padding-left: 0;
+}
+.sitelink-container nav > ul > li {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}

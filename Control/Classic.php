@@ -15,6 +15,7 @@ use Silex\Application;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Breadcrumb;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Pager;
 use phpManufaktur\TemplateTools\Control\Classic\SocialSharingButtons;
+use phpManufaktur\TemplateTools\Control\Classic\SitelinksNavigation;
 
 class Classic
 {
@@ -80,5 +81,18 @@ class Classic
     {
         $SocialSharingButtons = new SocialSharingButtons($this->app);
         return $SocialSharingButtons->social_sharing_buttons($buttons, $options, $prompt);
+    }
+
+    /**
+     * Return Sitemap Links in Columns for the given $menu
+     *
+     * @param integer|string $menu
+     * @param array $options
+     * @return NULL
+     */
+    public function sitelinks_navigation($menu, $options=array())
+    {
+        $SitelinksNavigation = new SitelinksNavigation($this->app);
+        return $SitelinksNavigation->sitelinks_navigation($menu, $options);
     }
 }

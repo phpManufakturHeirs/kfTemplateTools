@@ -242,6 +242,7 @@ class TwigExtension extends Twig_Extension
             'bootstrap_breadcrumb' => new \Twig_Function_Method($this, 'BootstrapBreadcrumb'),
             'bootstrap_nav' => new \Twig_Function_Method($this, 'BootstrapNav'),
             'bootstrap_pager' => new \Twig_Function_Method($this, 'BootstrapPager'),
+            'bootstrap_sitelinks_navigation' => new \Twig_Function_Method($this, 'BootstrapSitelinksNavigation'),
             'browser_name' => new \Twig_Function_Method($this, 'BrowserName'),
             'browser_version' => new \Twig_Function_Method($this, 'BrowserVersion'),
             'browser_platform' => new \Twig_Function_Method($this, 'BrowserPlatform'),
@@ -251,6 +252,7 @@ class TwigExtension extends Twig_Extension
             'browser_is_desktop' => new \Twig_Function_Method($this, 'BrowserIsDesktop'),
             'classic_breadcrumb' => new \Twig_Function_Method($this, 'ClassicBreadcrumb'),
             'classic_pager' => new \Twig_Function_Method($this, 'ClassicPager'),
+            'classic_sitelinks_navigation' => new \Twig_Function_Method($this, 'ClassicSitelinksNavigation'),
             'cms_modified_by' => new \Twig_Function_Method($this, 'cmsModifiedBy'),
             'cms_modified_when' => new \Twig_Function_Method($this, 'cmsModifiedWhen'),
             'command' => new \Twig_Function_Method($this, 'kitCommand'),
@@ -851,5 +853,29 @@ class TwigExtension extends Twig_Extension
     public function removeFirstHeader($content)
     {
         return $this->app['tools']->remove_first_header($content);
+    }
+
+    /**
+     * Return Sitemap Links in Columns for the given $menu
+     *
+     * @param integer|string $menu
+     * @param array $options
+     * @return NULL
+     */
+    public function ClassicSitelinksNavigation($menu, $options=array())
+    {
+        return $this->app['classic']->sitelinks_navigation($menu, $options);
+    }
+
+    /**
+     * Return Sitemap Links in Columns for the given $menu
+     *
+     * @param integer|string $menu
+     * @param array $options
+     * @return NULL
+     */
+    public function BootstrapSitelinksNavigation($menu, $options=array())
+    {
+        return $this->app['bootstrap']->sitelinks_navigation($menu, $options);
     }
 }
