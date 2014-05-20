@@ -864,7 +864,7 @@ class TwigExtension extends Twig_Extension
      */
     public function ClassicSitelinksNavigation($menu, $options=array())
     {
-        return $this->app['classic']->sitelinks_navigation($menu, $options);
+        return $this->app['classic']->sitelinks_navigation($menu, $options, false);
     }
 
     /**
@@ -876,6 +876,6 @@ class TwigExtension extends Twig_Extension
      */
     public function BootstrapSitelinksNavigation($menu, $options=array())
     {
-        return $this->app['bootstrap']->sitelinks_navigation($menu, $options);
+        return $this->app['bootstrap']->sitelinks_navigation($menu, $options, false);
     }
 }

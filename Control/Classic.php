@@ -90,9 +90,13 @@ class Classic
      * @param array $options
      * @return NULL
      */
-    public function sitelinks_navigation($menu, $options=array())
+    public function sitelinks_navigation($menu, $options=array(), $prompt=true)
     {
         $SitelinksNavigation = new SitelinksNavigation($this->app);
-        return $SitelinksNavigation->sitelinks_navigation($menu, $options);
+        $result = $SitelinksNavigation->sitelinks_navigation($menu, $options);
+        if ($prompt) {
+            echo $result;
+        }
+        return $result;
     }
 }

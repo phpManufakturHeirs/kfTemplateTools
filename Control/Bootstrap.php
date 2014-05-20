@@ -107,7 +107,7 @@ class Bootstrap
      * @param array $options
      * @return NULL
      */
-    public function sitelinks_navigation($menu, $options=array())
+    public function sitelinks_navigation($menu, $options=array(), $prompt=true)
     {
         // we are using the Classic sitelinks_navigation() function!
         if (!isset($options['template_directory'])) {
