@@ -114,6 +114,6 @@ class Bootstrap
             // the only difference are the used templates ...
             $options['template_directory'] = '@pattern/bootstrap/function/sitelinks/';
         }
-        return $this->app['classic']->sitelinks_navigation($menu, $options);
+        return $this->app['classic']->sitelinks_navigation($menu, $options, $prompt);
     }
 }
