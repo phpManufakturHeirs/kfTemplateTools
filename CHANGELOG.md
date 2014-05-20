@@ -6,6 +6,14 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.21** - 2014-05-20
+
+* added parameter `zoom[]` to kitCommand `~~ google_map ~~`
+* added function `wysiwyg_section_ids()`
+* added functions `get_first_header()` and `remove_first_header()`
+* added function `sitelinks_navigation()`
+* `bootstrap_nav()` can now also process Menu names and not only ID's
+
 **0.20** - 2014-05-16
 
 * added constants `PAGE_LOCALE`, `CMS_MODIFIED_BY` and `CMS_MODIFIED_WHEN` and corrected the usage of `CMS_LOCALE` for global usage

@@ -19,8 +19,8 @@
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/TemplateTools",
   "namespace":"phpManufaktur\\TemplateTools",
   "release":{
-    "number":"0.20",
-    "date":"2014-05-16",
+    "number":"0.21",
+    "date":"2014-05-20",
     "status":"beta"
   },
   "description": {
