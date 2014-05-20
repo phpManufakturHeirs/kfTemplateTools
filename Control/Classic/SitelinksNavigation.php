@@ -18,7 +18,7 @@ class SitelinksNavigation
     protected $app = null;
     protected static $options = array(
         'level' => 0,
-        'strict' => false,
+        'strict' => true,
         'visibility' => array(
             'public'
         ),
