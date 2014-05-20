@@ -18,7 +18,7 @@
       {% endif %}
       {% set count = 1 %}
       {% for column in sitelinks.columns %}
-        {% if count < 7 %}
+        {% if count < 7 and column.items is defined and (column.items|length > 0) %}
           <div class="{{ col_classes }}">
             <div class="sitelink-container">
               <div class="header">
