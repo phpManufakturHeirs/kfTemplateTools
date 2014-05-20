@@ -52,17 +52,43 @@ class Nav
      */
     protected function checkOptions($options)
     {
-        if (isset($options['menu_id'])) self::$options['menu_id'] = $options['menu_id'];
-        if (isset($options['menu_level'])) self::$options['menu_level'] = $options['menu_level'];
-        if (isset($options['dropdown_link']['add'])) self::$options['dropdown_link']['add'] = $options['dropdown_link']['add'];
-        if (isset($options['dropdown_link']['divider'])) self::$options['dropdown_link']['divider'] = $options['dropdown_link']['divider'];
+        if (isset($options['menu_id'])) {
+            if (is_numeric($options['menu_id']) && ($options['menu_id'] > 0)) {
+                self::$options['menu_id'] = $options['menu_id'];
+            }
+            else {
+                // set the menu ID to default
+                self::$options['menu_id'] = 0;
+                // get the page menu from info.php
+                $page_menu = $this->app['cms']->internal_page_menu();
+                if (is_array($page_menu)) {
+                    foreach ($page_menu as $id => $name) {
+                        if (strtolower(trim($options['menu_id'])) == strtolower($name)) {
+                            self::$options['menu_id'] = $id;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (isset($options['menu_level'])) {
+            self::$options['menu_level'] = $options['menu_level'];
+        }
+        if (isset($options['dropdown_link']['add'])) {
+            self::$options['dropdown_link']['add'] = $options['dropdown_link']['add'];
+        }
+        if (isset($options['dropdown_link']['divider'])) {
+            self::$options['dropdown_link']['divider'] = $options['dropdown_link']['divider'];
+        }
         if (isset($options['icons']['page_id']) && is_array($options['icons']['page_id'])) {
             self::$options['icons']['page_id'] = $options['icons']['page_id'];
         }
         if (isset($options['icons']['height']) && is_numeric($options['icons']['height'])) {
             self::$options['icons']['height'] = intval($options['icons']['height']);
         }
-        if (isset($options['visibility']) && is_array($options['visibility'])) self::$options['visibility'] = $options['visibility'];
+        if (isset($options['visibility']) && is_array($options['visibility'])) {
+            self::$options['visibility'] = $options['visibility'];
+        }
         if (isset($options['template_directory']) && !empty($options['template_directory'])) {
             self::$options['template_directory'] = rtrim($options['template_directory'], '/').'/';
         }
@@ -247,8 +273,6 @@ class Nav
         if ($prompt) {
             echo $nav;
         }
-        else {
-            return $nav;
-        }
+        return $nav;
     }
 }
