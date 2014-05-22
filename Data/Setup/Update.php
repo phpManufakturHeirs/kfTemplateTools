@@ -32,6 +32,9 @@ class Update
         // proceed CMS bugfixes
         $Setup->cms_bugfix();
 
+        // Create the Locale Table
+        $Setup->createLocaleTable();
+
         // install the templates
         $Setup->install_templates();
 

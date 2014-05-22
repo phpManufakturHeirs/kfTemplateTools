@@ -125,3 +125,20 @@
   margin-left: 0;
   padding-left: 0;
 }
+
+/**
+  Locale Navigation
+**/
+
+.locale-navigation .nav>li>a {
+  padding: 0 5px;
+}
+.locale-navigation img {
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+}
+.locale-navigation img.active,
+.locale-navigation img:hover {
+  opacity: 1.0;
+  filter: alpha(opacity=100);
+}

@@ -116,4 +116,22 @@ class Bootstrap
         }
         return $this->app['classic']->sitelinks_navigation($menu, $options, $prompt);
     }
+
+    /**
+     * Return a locale navigation for the current page tree
+     *
+     * @param array $options
+     * @param boolean $prompt
+     * @throws \InvalidArgumentException
+     * @return string
+     */
+    public function locale_navigation($options=array(), $prompt=true)
+    {
+        // we are using the Classic language_navigation() function!
+        if (!isset($options['template_directory'])) {
+            // the only difference are the used templates ...
+            $options['template_directory'] = '@pattern/bootstrap/function/locale/';
+        }
+        return $this->app['classic']->locale_navigation($options, $prompt);
+    }
 }

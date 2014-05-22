@@ -13,6 +13,7 @@ namespace phpManufaktur\TemplateTools\Data\Setup;
 
 use Silex\Application;
 use Symfony\Component\Finder\Finder;
+use phpManufaktur\TemplateTools\Data\Locale\Data\Locale;
 
 class Setup
 {
@@ -159,6 +160,17 @@ class Setup
     }
 
     /**
+     * Create the Locale Table
+     *
+     */
+    public function createLocaleTable()
+    {
+        $Locale = new Locale($this->app);
+        $Locale->createTable();
+        $Locale->initLocaleList();
+    }
+
+    /**
      * Execute the setup routine for the TemplateTools
      *
      * @param Application $app
@@ -169,6 +181,9 @@ class Setup
 
         // CMS Bugfixes
         $this->cms_bugfix();
+
+        // create the Country Table
+        $this->createLocaleTable();
 
         // install the templates
         $this->install_templates();

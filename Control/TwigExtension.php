@@ -240,6 +240,7 @@ class TwigExtension extends Twig_Extension
         return array(
             'bootstrap_alert' => new \Twig_Function_Method($this, 'BootstrapAlert'),
             'bootstrap_breadcrumb' => new \Twig_Function_Method($this, 'BootstrapBreadcrumb'),
+            'bootstrap_locale_navigation' => new \Twig_Function_Method($this, 'BootstrapLocaleNavigation'),
             'bootstrap_nav' => new \Twig_Function_Method($this, 'BootstrapNav'),
             'bootstrap_pager' => new \Twig_Function_Method($this, 'BootstrapPager'),
             'bootstrap_sitelinks_navigation' => new \Twig_Function_Method($this, 'BootstrapSitelinksNavigation'),
@@ -251,6 +252,7 @@ class TwigExtension extends Twig_Extension
             'browser_is_tablet' => new \Twig_Function_Method($this, 'BrowserIsTablet'),
             'browser_is_desktop' => new \Twig_Function_Method($this, 'BrowserIsDesktop'),
             'classic_breadcrumb' => new \Twig_Function_Method($this, 'ClassicBreadcrumb'),
+            'classic_locale_navigation' => new \Twig_Function_Method($this, 'ClassicLocaleNavigation'),
             'classic_pager' => new \Twig_Function_Method($this, 'ClassicPager'),
             'classic_sitelinks_navigation' => new \Twig_Function_Method($this, 'ClassicSitelinksNavigation'),
             'cms_modified_by' => new \Twig_Function_Method($this, 'cmsModifiedBy'),
@@ -877,5 +879,31 @@ class TwigExtension extends Twig_Extension
     public function BootstrapSitelinksNavigation($menu, $options=array())
     {
         return $this->app['bootstrap']->sitelinks_navigation($menu, $options, false);
+    }
+
+    /**
+     * Return a locale navigation for the current page tree
+     *
+     * @param array $options
+     * @param boolean $prompt
+     * @throws \InvalidArgumentException
+     * @return string
+     */
+    public function ClassicLocaleNavigation($options=array())
+    {
+        return $this->app['classic']->locale_navigation($options, false);
+    }
+
+    /**
+     * Return a locale navigation for the current page tree
+     *
+     * @param array $options
+     * @param boolean $prompt
+     * @throws \InvalidArgumentException
+     * @return string
+     */
+    public function BootstrapLocaleNavigation($options=array())
+    {
+        return $this->app['bootstrap']->locale_navigation($options, false);
     }
 }

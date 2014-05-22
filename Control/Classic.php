@@ -16,6 +16,7 @@ use phpManufaktur\TemplateTools\Control\Bootstrap\Breadcrumb;
 use phpManufaktur\TemplateTools\Control\Bootstrap\Pager;
 use phpManufaktur\TemplateTools\Control\Classic\SocialSharingButtons;
 use phpManufaktur\TemplateTools\Control\Classic\SitelinksNavigation;
+use phpManufaktur\TemplateTools\Control\Classic\LocaleNavigation;
 
 class Classic
 {
@@ -99,4 +100,19 @@ class Classic
         }
         return $result;
     }
+
+    /**
+     * Return a locale navigation for the current page tree
+     *
+     * @param array $options
+     * @param boolean $prompt
+     * @throws \InvalidArgumentException
+     * @return string
+     */
+    public function locale_navigation($options=array(), $prompt=true)
+    {
+        $LocaleNavigation = new LocaleNavigation($this->app);
+        return $LocaleNavigation->locale_navigation($options, $prompt);
+    }
+
 }
