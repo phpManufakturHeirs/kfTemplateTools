@@ -155,7 +155,7 @@ $template->register(new Silex\Provider\DoctrineServiceProvider(), array(
 // create the page sequence
 $template['cms']->page_sequence();
 
-if (!defined('PAGE_LOCALE')) define('PAGE_LOCALE', LANGUAGE);
+if (!defined('PAGE_LOCALE')) define('PAGE_LOCALE', strtolower(LANGUAGE));
 if (!defined('PAGE_FOOTER')) define('PAGE_FOOTER', $template['cms']->page_footer('Y', false));
 if (!defined('PAGE_HEADER')) define('PAGE_HEADER', $template['cms']->page_header(false));
 if (!defined('PAGE_KEYWORDS')) define('PAGE_KEYWORDS', $template['cms']->page_keywords(false));
@@ -192,37 +192,6 @@ if (!defined('PAGE_ID_HOME')) define('PAGE_ID_HOME', $template['cms']->page_id_h
 // normally set by CMS but not at SEARCH pages!
 if (!defined('PAGE_DESCRIPTION')) define('PAGE_DESCRIPTION', '');
 
-// get PAGE_MODIFIED_WHEN and PAGE_MODIFIED_BY
-if (PAGE_ID > 0) {
-    $SQL = "SELECT `modified_when`, `display_name` FROM `".CMS_TABLE_PREFIX."pages`, `".CMS_TABLE_PREFIX."users` ".
-        "WHERE `user_id`=`modified_by` AND `page_id`=".PAGE_ID;
-    $result = $template['db']->fetchAssoc($SQL);
-    if (!isset($result['modified_when'])) {
-        throw new \Exception("Can't read the page information for ID ".PAGE_ID." from the database!");
-    }
-    if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s', $result['modified_when']));
-    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $template['tools']->unsanitizeText($result['display_name']));
-}
-else {
-    // no valid PAGE_ID, i.e. at search pages
-    if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s'));
-    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $template['tools']->trans('- unknown -'));
-}
-
-global $post_id;
-if (!defined('EXTRA_POST_ID')) define('EXTRA_POST_ID', isset($post_id) ? $post_id : -1);
-if (!defined('EXTRA_TOPIC_ID')) define('EXTRA_TOPIC_ID', defined('TOPIC_ID') ? TOPIC_ID : -1);
-if (!defined('EXTRA_FLEXCONTENT_ID')) {
-    if (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
-        isset($_GET['action']) && ($_GET['action'] == 'view') &&
-        isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
-        define('EXTRA_FLEXCONTENT_ID', $_GET['content_id']);
-    }
-    else {
-        define('EXTRA_FLEXCONTENT_ID', -1);
-    }
-}
-
 if (!defined('TEMPLATE_DEFAULT_NAME')) define('TEMPLATE_DEFAULT_NAME', DEFAULT_TEMPLATE);
 if (!defined('TEMPLATE_PATH')) define('TEMPLATE_PATH', CMS_PATH.substr(TEMPLATE_DIR, strlen(CMS_URL)));
 if (!defined('TEMPLATE_URL')) define('TEMPLATE_URL', TEMPLATE_DIR);
@@ -252,6 +221,37 @@ $template['tools']->addLanguageFiles(MANUFAKTUR_PATH.'/TemplateTools/Data/Locale
 if ($template['filesystem']->exists(TEMPLATE_PATH.'/locale')) {
     // if the template has a /locale directory load these language files also
     $template['tools']->addLanguageFiles(TEMPLATE_PATH.'/locale');
+}
+
+// get PAGE_MODIFIED_WHEN and PAGE_MODIFIED_BY
+if (PAGE_ID > 0) {
+    $SQL = "SELECT `modified_when`, `display_name` FROM `".CMS_TABLE_PREFIX."pages`, `".CMS_TABLE_PREFIX."users` ".
+        "WHERE `user_id`=`modified_by` AND `page_id`=".PAGE_ID;
+    $result = $template['db']->fetchAssoc($SQL);
+    if (!isset($result['modified_when'])) {
+        throw new \Exception("Can't read the page information for ID ".PAGE_ID." from the database!");
+    }
+    if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s', $result['modified_when']));
+    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $template['tools']->unsanitizeText($result['display_name']));
+}
+else {
+    // no valid PAGE_ID, i.e. at search pages
+    if (!defined('PAGE_MODIFIED_WHEN')) define('PAGE_MODIFIED_WHEN', date('Y-m-d H:i:s'));
+    if (!defined('PAGE_MODIFIED_BY')) define('PAGE_MODIFIED_BY', $template['translator']->trans('- unknown -'));
+}
+
+global $post_id;
+if (!defined('EXTRA_POST_ID')) define('EXTRA_POST_ID', isset($post_id) ? $post_id : -1);
+if (!defined('EXTRA_TOPIC_ID')) define('EXTRA_TOPIC_ID', defined('TOPIC_ID') ? TOPIC_ID : -1);
+if (!defined('EXTRA_FLEXCONTENT_ID')) {
+    if (isset($_GET['command']) && ($_GET['command'] == 'flexcontent') &&
+        isset($_GET['action']) && ($_GET['action'] == 'view') &&
+        isset($_GET['content_id']) && is_numeric($_GET['content_id'])) {
+        define('EXTRA_FLEXCONTENT_ID', $_GET['content_id']);
+    }
+    else {
+        define('EXTRA_FLEXCONTENT_ID', -1);
+    }
 }
 
 // add missing constants which need a full configured access to $template['cms']
