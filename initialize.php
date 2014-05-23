@@ -261,7 +261,7 @@ if (!defined('EXTRA_FLEXCONTENT_ID')) {
 if (!defined('CMS_MODIFIED_BY')) define('CMS_MODIFIED_BY', $template['cms']->cms_modified_by(null, false));
 if (!defined('CMS_MODIFIED_WHEN')) define('CMS_MODIFIED_WHEN', $template['cms']->cms_modified_when('Y-m-d H:i:s', null, false));
 
-if (!defined('CMS_MAINTENANCE')) define('CMS_MAINTENANCE', $template['cms']->maintenance());
+if (!defined('CMS_MAINTENANCE')) define('CMS_MAINTENANCE', defined('MAINTENANCE_MODE') ? MAINTENANCE_MODE : $template['cms']->maintenance());
 
 // Markdown Parser
 $template['markdown'] = $template->share(function($template) {
