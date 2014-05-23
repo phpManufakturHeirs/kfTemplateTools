@@ -25,10 +25,8 @@
     {# get the page keywords from CMS #}
     <meta name="keywords" content="{{ page_keywords() }}" />
 
-    {# robots: don't use the Open Directory entry #}
-    <meta name="robots" content="noodp" />
     {# robots: index this page and follow all links #}
-    <meta name="robots" content="index,follow" />
+    <meta name="robots" content="{% block robots %}index,follow,noodp{% endblock %}" />
 
     {# Facebook Open Graph Meta Tags #}
     {% include '@pattern/bootstrap/head.open.graph.twig' %}
