@@ -6,6 +6,14 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.22** - 2014-05-23
+
+* changed `sitelinks_navigation()` to strict mode by default
+* added Country Flags for the `locale_navigation()`
+* changed order of initializing components for the TemplateTools
+* introduce pattern `locale_navigation()`
+* added constants `CMS_MAINTENANCE`, `CMS_USER_GROUP_IDS`, `CMS_USER_GROUP_NAMES`, `CMS_USER_IS_ADMIN`
+
 **0.21** - 2014-05-20
 
 * added parameter `zoom[]` to kitCommand `~~ google_map ~~`
