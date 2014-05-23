@@ -1077,5 +1077,46 @@ class cmsFunctions
         return $section_ids;
     }
 
+    /**
+     * Check if the Maintenance Mode is switched on
+     *
+     * @return boolean
+     */
+    public function maintenance()
+    {
+        $id = defined('PAGE_ID_HOME') ? PAGE_ID_HOME : $this->page_id_home();
+        $SQL = "SELECT `keywords` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$id";
+        $keywords = $this->app['db']->fetchColumn($SQL);
 
+        $keywords = trim($keywords);
+        $keyword_array = (strpos($keywords, ',')) ? explode(',', $keywords) : array($keywords);
+
+        if (isset($keyword_array[0]) && (false !== strpos($keyword_array[0], '[')) && (false !== strpos($keyword_array[0], ']'))) {
+            // remove the square brackets from the options string
+            $options_string = trim(substr($keyword_array[0], strpos($keyword_array[0], '[')+1, strpos($keyword_array[0], ']')-1));
+
+            // explode to $options
+            $options = (strpos($options_string, '|')) ? explode('|', $options_string) : array($options_string);
+
+            // walk through the options
+            foreach ($options as $option) {
+                if (strpos($option, ':')) {
+                    list($key, $value) = explode(':', $option);
+                    // decode enties &#58; &#124; and &#44;
+                    $value = html_entity_decode($value);
+                    if (strtolower(trim($value)) == 'true') {
+                        $value = true;
+                    }
+                    elseif (strtolower(trim($value)) == 'false') {
+                        $value = false;
+                    }
+                    if (strtolower(trim($key)) == 'maintenance') {
+                        return (is_bool($value)) ? $value : false;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 }

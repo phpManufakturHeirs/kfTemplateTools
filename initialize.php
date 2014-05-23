@@ -55,6 +55,9 @@ if (!defined('CMS_USER_USERNAME')) define('CMS_USER_USERNAME', isset($_SESSION['
 if (!defined('CMS_USER_DISPLAYNAME')) define('CMS_USER_DISPLAYNAME', isset($_SESSION['DISPLAY_NAME']) ? $_SESSION['DISPLAY_NAME'] : 'anonymous');
 if (!defined('CMS_USER_EMAIL')) define('CMS_USER_EMAIL', isset($_SESSION['EMAIL']) ? $_SESSION['EMAIL'] : '');
 if (!defined('CMS_USER_IS_AUTHENTICATED')) define('CMS_USER_IS_AUTHENTICATED', ((CMS_USER_ID > 0) && (CMS_USER_EMAIL != '')));
+if (!defined('CMS_USER_GROUP_NAMES')) define('CMS_USER_GROUP_NAMES', (isset($_SESSION['GROUP_NAME'])) ? implode(',', $_SESSION['GROUP_NAME']) : '');
+if (!defined('CMS_USER_GROUP_IDS')) define('CMS_USER_GROUP_IDS', (isset($_SESSION['GROUPS_ID'])) ? $_SESSION['GROUPS_ID'] : '');
+if (!defined('CMS_USER_IS_ADMIN')) define('CMS_USER_IS_ADMIN', (isset($_SESSION['GROUP_ID']) && ($_SESSION['GROUP_ID'] == 1)));
 if (!defined('CMS_USER_ACCOUNT_URL')) define('CMS_USER_ACCOUNT_URL', defined('PREFERENCES_URL') ? PREFERENCES_URL : CMS_URL);
 if (!defined('CMS_LOGIN_ENABLED')) define('CMS_LOGIN_ENABLED', FRONTEND_LOGIN);
 if (!defined('CMS_LOGIN_URL')) define('CMS_LOGIN_URL', defined('LOGIN_URL') ? LOGIN_URL : CMS_URL);
@@ -258,6 +261,7 @@ if (!defined('EXTRA_FLEXCONTENT_ID')) {
 if (!defined('CMS_MODIFIED_BY')) define('CMS_MODIFIED_BY', $template['cms']->cms_modified_by(null, false));
 if (!defined('CMS_MODIFIED_WHEN')) define('CMS_MODIFIED_WHEN', $template['cms']->cms_modified_when('Y-m-d H:i:s', null, false));
 
+if (!defined('CMS_MAINTENANCE')) define('CMS_MAINTENANCE', $template['cms']->maintenance());
 
 // Markdown Parser
 $template['markdown'] = $template->share(function($template) {

@@ -42,6 +42,8 @@ return array(
     'Logout'
         => 'Abmelden',
 
+    'Maintenance'
+        => 'Wartungsarbeiten',
     'Missing the message to alert!'
         => 'Es wurde keine Mitteilung übergeben, die gemeldet werden kann!',
 
@@ -55,6 +57,8 @@ return array(
 
     'Search'
         => 'Suche',
+    'Sorry, but this site is temporary offline due service operations.'
+        => 'Entschuldigung, diese Website ist wegen Wartungsarbeiten vorübergehend offline',
 
     'The Droplet %droplet% does not exists!'
         => 'Das Droplet <i>%droplet%</i> existiert nicht!',
@@ -66,6 +70,8 @@ return array(
     'Username'
         => 'Benutzername',
 
+    'We will be back soon ...'
+        => 'Wir sind in Kürze zurück ...',
     'Welcome back, %name%'
         => 'Herzlich willkommen, %name%!',
 
