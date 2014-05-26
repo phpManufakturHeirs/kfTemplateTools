@@ -97,7 +97,7 @@ class TwigExtension extends Twig_Extension
             'CMS_LOGIN_SIGNUP_URL' => CMS_LOGIN_SIGNUP_URL,
             'CMS_LOGIN_URL' => CMS_LOGIN_URL,
             'CMS_LOGOUT_URL' => CMS_LOGOUT_URL,
-            'CMS_MAINTENANCE' => CMS_MAINTENANCE,
+            'CMS_MAINTENANCE_MODE' => CMS_MAINTENANCE_MODE,
             'CMS_MEDIA_PATH' => CMS_MEDIA_PATH,
             'CMS_MEDIA_URL' => CMS_MEDIA_URL,
             'CMS_MODIFIED_BY' => CMS_MODIFIED_BY,
@@ -259,6 +259,7 @@ class TwigExtension extends Twig_Extension
             'classic_locale_navigation' => new \Twig_Function_Method($this, 'ClassicLocaleNavigation'),
             'classic_pager' => new \Twig_Function_Method($this, 'ClassicPager'),
             'classic_sitelinks_navigation' => new \Twig_Function_Method($this, 'ClassicSitelinksNavigation'),
+            'cms_maintenance_active' => new \Twig_Function_Method($this, 'cmsMaintenanceActive'),
             'cms_modified_by' => new \Twig_Function_Method($this, 'cmsModifiedBy'),
             'cms_modified_when' => new \Twig_Function_Method($this, 'cmsModifiedWhen'),
             'command' => new \Twig_Function_Method($this, 'kitCommand'),
@@ -910,4 +911,19 @@ class TwigExtension extends Twig_Extension
     {
         return $this->app['bootstrap']->locale_navigation($options, false);
     }
+
+    /**
+     * Check if the CMS_MAINTENANCE_MODE is enabled and active.
+     * Possible values for $let_pass are 'ADMIN' (default), 'USER' or 'NONE'
+     *
+     * @param string $let_pass - allow access for authenticated users
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @return string|boolean
+     */
+    public function cmsMaintenanceActive($let_pass='ADMIN')
+    {
+        return $this->app['cms']->cms_maintenance_active($let_pass);
+    }
+
 }

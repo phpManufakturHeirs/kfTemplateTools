@@ -64,6 +64,8 @@ return array(
         => 'Das Droplet <i>%droplet%</i> existiert nicht!',
     'The <em>%pattern_type% Pager</em> enable you to step forward and backward through the whole Website.'
         => 'Der <em>%pattern_type% Pager</em> ermöglicht es Ihnen sich vorwärts und rückwärts durch die gesamte Website zu bewegen.',
+    'The maintenance mode is active - non authenticated visitors can not see this content!'
+        => 'Der Wartungsmodus ist aktiviert - nicht angemeldete Besucher können die Inhalte dieser Seite nicht sehen!',
 
     'User account'
         => 'Benutzerkonto',

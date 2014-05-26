@@ -84,7 +84,17 @@ if (!defined('FRAMEWORK_DEBUG')) define('FRAMEWORK_DEBUG', (isset($framework_con
 $template['debug'] = FRAMEWORK_DEBUG;
 
 if (!defined('FRAMEWORK_CACHE')) define('FRAMEWORK_CACHE', (isset($framework_config['CACHE'])) ? $framework_config['CACHE'] : true);
-
+if (!defined('FRAMEWORK_UID')) define('FRAMEWORK_UID', isset($framework_config['FRAMEWORK_UID']) ? $framework_config['FRAMEWORK_UID'] : $template['utils']->createGUID());
+if (!defined('FRAMEWORK_UID_AUTHENTICATED')) {
+    // check if a kitFramework extension is accessing the website
+    if ((isset($_GET['fuid']) && ($_GET['fuid'] == FRAMEWORK_UID)) ||
+        (isset($_POST['fuid']) && ($_POST['fuid'] == FRAMEWORK_UID))) {
+        define('FRAMEWORK_UID_AUTHENTICATED', true);
+    }
+    else {
+        define('FRAMEWORK_UID_AUTHENTICATED', false);
+    }
+}
 if (!defined('FRAMEWORK_PATH')) define('FRAMEWORK_PATH', CMS_PATH.'/kit2');
 if (!defined('FRAMEWORK_URL')) define('FRAMEWORK_URL', CMS_URL.'/kit2');
 if (!defined('FRAMEWORK_MEDIA_PATH')) define('FRAMEWORK_MEDIA_PATH', FRAMEWORK_PATH.'/media/public');
@@ -261,7 +271,7 @@ if (!defined('EXTRA_FLEXCONTENT_ID')) {
 if (!defined('CMS_MODIFIED_BY')) define('CMS_MODIFIED_BY', $template['cms']->cms_modified_by(null, false));
 if (!defined('CMS_MODIFIED_WHEN')) define('CMS_MODIFIED_WHEN', $template['cms']->cms_modified_when('Y-m-d H:i:s', null, false));
 
-if (!defined('CMS_MAINTENANCE')) define('CMS_MAINTENANCE', defined('MAINTENANCE_MODE') ? MAINTENANCE_MODE : $template['cms']->maintenance());
+if (!defined('CMS_MAINTENANCE_MODE')) define('CMS_MAINTENANCE_MODE', defined('MAINTENANCE_MODE') ? MAINTENANCE_MODE : $template['cms']->internal_maintenance());
 
 // Markdown Parser
 $template['markdown'] = $template->share(function($template) {

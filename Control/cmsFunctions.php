@@ -1078,11 +1078,11 @@ class cmsFunctions
     }
 
     /**
-     * Check if the Maintenance Mode is switched on
+     * Check if the Maintenance Mode is switched on, used to set CMS_MAINTENANCE
      *
      * @return boolean
      */
-    public function maintenance()
+    public function internal_maintenance()
     {
         $id = defined('PAGE_ID_HOME') ? PAGE_ID_HOME : $this->page_id_home();
         $SQL = "SELECT `keywords` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$id";
@@ -1117,6 +1117,72 @@ class cmsFunctions
             }
         }
 
+        return false;
+    }
+
+    /**
+     * Check if the CMS_MAINTENANCE_MODE is enabled and active.
+     * Possible values for $let_pass are 'ADMIN' (default), 'USER' or 'NONE'
+     *
+     * @param string $let_pass - allow access for authenticated users
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @return string|boolean
+     */
+    public function cms_maintenance_active($let_pass='ADMIN')
+    {
+        $let_pass = strtoupper(trim($let_pass));
+
+        if (!defined('CMS_MAINTENANCE_MODE')) {
+            throw new \Exception('Missing the constant CMS_MAINTENANCE_MODE!');
+        }
+
+        switch ($let_pass) {
+            case 'NONE':
+                // let pass no one - return the CMS_MAINTENANCE_MODE
+                return CMS_MAINTENANCE_MODE;
+            case 'ADMIN':
+            case 'USER':
+                if (!CMS_MAINTENANCE_MODE) {
+                    return false;
+                }
+                $authenticated = ($let_pass == 'USER') ? CMS_USER_IS_AUTHENTICATED : CMS_USER_IS_ADMIN;
+                if ($authenticated || (isset($_GET['fuid']) && ($_GET['fuid'] == FRAMEWORK_UID))) {
+                    // the user is authenticated or the template is called by an authenticated kitFramework extension
+                    $_POST['fuid'] = FRAMEWORK_UID;
+                    return false;
+                }
+                else {
+                    // Maintenance mode is active!
+                    return true;
+                }
+            default:
+                // invalid parameter
+                throw new \InvalidArgumentException("Invalid parameter for cms_maintenance_active(), allowed values are 'NONE', 'ADMIN' or 'USER'");
+        }
+    }
+
+    /**
+     * Check if the browser (robot) comes from Google, MSN or Yahoo and return
+     * a HTTP Status Code 503 in this case
+     *
+     * @param integer $retry_after seconds
+     * @param boolean $prompt
+     * @return boolean
+     */
+    public function cms_maintenance_header_searchbot($retry_after=86400, $prompt=true)
+    {
+        if (($this->app['browser']->name(false) == BROWSER_GOOGLEBOT) ||
+            ($this->app['browser']->name(false) == BROWSER_MSNBOT) ||
+            ($this->app['browser']->name(false) == BROWSER_SLURP)) {
+            if ($prompt) {
+                // send a 503 header to Google, MSN and Yahoo robots
+                header('HTTP/1.1 503 Service Temporarily Unavailable');
+                header('Status: 503 Service Temporarily Unavailable');
+                header("Retry-After: $retry_after"); // seconds
+            }
+            return true;
+        }
         return false;
     }
 }

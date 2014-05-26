@@ -209,15 +209,27 @@
   Maintenance
 **/
 .maintenance {
-    border: solid 3px #da251d;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    background-color: white;
-    z-index: 100;
-    padding: 20px;
-    height: 300px;
-    margin-top: -150px;
-    width: 800px;
-    margin-left: -400px;
+  border: solid 3px #da251d;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  background-color: white;
+  z-index: 100;
+  padding: 20px;
+  height: 300px;
+  margin-top: -150px;
+  width: 800px;
+  margin-left: -400px;
+}
+.maintenance-hint {
+  width: 100%;
+  background-color: #ffcc66;
+  background-image: url('../image/warning.gif');
+  background-position: top left;
+  background-repeat: no-repeat;
+  color: #2f2f2f;
+  padding: 3px 10px 2px 30px;
+  font-family: Tahoma, Arial, Verdana;
+  font-size: 12px;
+  border: 1px solid #ff9966; 
 }
