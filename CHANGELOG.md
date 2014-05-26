@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.23** - 2014-05-26
+
+* introduce the maintenance mode and handling for it
+
 **0.22** - 2014-05-23
 
 * changed `sitelinks_navigation()` to strict mode by default
