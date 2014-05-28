@@ -867,6 +867,8 @@ class cmsFunctions
         }
         $SQL = "SELECT `content` FROM `".CMS_TABLE_PREFIX."mod_wysiwyg` WHERE `section_id`=$section_id";
         $content = $this->app['db']->fetchColumn($SQL);
+        // force UTF-8 encoding!
+        $content = mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
         $content = str_replace('{SYSVAR:MEDIA_REL}', CMS_MEDIA_URL, $content );
         $result = (!empty($content)) ? $this->app['utils']->unsanitizeText($content) : '';
         if ($prompt) {
