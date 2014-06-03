@@ -7,6 +7,7 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% if sitelinks is defined and sitelinks|length > 0 %}
+  <!-- {{ _self.getTemplateName() }} -->
   <div class="sitelinks">
     <div class="row">
       {% if sitelinks.columns|length < 4 %}

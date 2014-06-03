@@ -8,6 +8,7 @@
 #}
 
 {% if CMS_MAINTENANCE_MODE %}
+  <!-- {{ _self.getTemplateName() }} -->
   <div class="maintenance-hint">
     {{ 'The maintenance mode is active - non authenticated visitors can not see this content!'|trans }}
   </div>

@@ -8,6 +8,7 @@
 #}
 {% if PAGE_ID > 0 %}
   {# show the search field only at regular pages not at the search results #}
+  <!-- {{ _self.getTemplateName() }} -->
   <div class="search-container">
     {# just include the ready to use search form #}
     {% include '@pattern/classic/search.form.twig' %}

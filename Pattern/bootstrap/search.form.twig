@@ -9,6 +9,7 @@
   This search form is ready to use, just place it in your template, the size
   will fit to the embedding parent.
 #}
+<!-- {{ _self.getTemplateName() }} -->
 <form action="{{ CMS_URL ~ '/search/index.php' }}" name="search" role="form" method="get">      
   <div class="input-group">
     <input name="string" type="text" class="form-control" placeholder="{{ 'Search'|trans }}..." />

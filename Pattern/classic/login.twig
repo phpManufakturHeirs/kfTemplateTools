@@ -7,6 +7,7 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% if CMS_LOGIN_ENABLED and PAGE_VISIBILITY != 'private' and not CMS_USER_IS_AUTHENTICATED %}
+  <!-- {{ _self.getTemplateName() }} -->
   <div id="classic-login">
     <form name="login" action="{{ CMS_LOGIN_URL }}" method="post">
       <input type="hidden" name="redirect" value="{{ CMS_LOGIN_REDIRECT_URL }}" />
@@ -30,6 +31,7 @@
     </form>
   </div>  
 {% elseif CMS_LOGIN_ENABLED and CMS_USER_IS_AUTHENTICATED %}
+  <!-- {{ _self.getTemplateName() }} -->
   <div id="classic-login">
     <form name="logout" action="{{ CMS_LOGOUT_URL }}" method="post">
       <fieldset>
