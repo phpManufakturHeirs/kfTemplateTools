@@ -222,6 +222,7 @@ class Tools
         elseif (null != ($node = $DOM->getElementsByTagName('h3')->item(0))) {
             $node->parentNode->removeChild($node);
         }
-        return $DOM->saveHTML();
+        $content = $DOM->saveHTML();
+        return str_replace(array('%5B','%5D'), array('[',']'), $content );
     }
 }
