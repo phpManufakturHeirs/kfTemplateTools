@@ -6,6 +6,14 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.24** - 2014-06-05
+
+* templates now prompt their path and name in HTML output
+* fixed: sometimes filter destroy the brackets of `[wblinkxxx]` tags
+* force UTF-8 encoding for `wyswiyg_content()`
+* added microdata information to the breadcrumbs
+* added missing LICENSE information
+
 **0.23** - 2014-05-26
 
 * introduce the maintenance mode and handling for it
