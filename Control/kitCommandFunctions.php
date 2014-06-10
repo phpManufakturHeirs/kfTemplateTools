@@ -39,9 +39,12 @@ class kitCommandFunctions
     {
         $params = array(
             'cms' => array(
+                'type' => CMS_TYPE,
+                'version' => CMS_VERSION,
                 'locale' => PAGE_LOCALE,
                 'page_id' => PAGE_ID,
                 'page_url' => PAGE_URL,
+                'page_visibility' => PAGE_VISIBILITY,
                 'user' => array(
                     'id' => CMS_USER_ID,
                     'name' => CMS_USER_USERNAME,
@@ -54,7 +57,7 @@ class kitCommandFunctions
         );
 
         $option = array(
-            CURLOPT_URL => FRAMEWORK_URL.'/kit_command/'.strtolower($command),
+            CURLOPT_URL => FRAMEWORK_URL.'/command/'.strtolower($command),
             CURLOPT_HEADER => false,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_RETURNTRANSFER => true,
