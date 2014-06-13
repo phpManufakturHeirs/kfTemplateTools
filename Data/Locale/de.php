@@ -57,6 +57,8 @@ return array(
 
     'Search'
         => 'Suche',
+    'Share this content at %platform%'
+        => 'Teilen Sie diesen Artikel auf %platform%',
     'Sorry, but this site is temporary offline due service operations.'
         => 'Entschuldigung, diese Website ist wegen Wartungsarbeiten vorübergehend offline',
 
