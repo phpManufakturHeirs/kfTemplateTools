@@ -36,4 +36,4 @@ and at a German (`de`) localized page something like:
     
 Have a [look to the different Services](https://github.com/phpManufaktur/kfTemplateTools/wiki/Services) provided by the TemplateTools and test the [Template Examples](https://github.com/phpManufaktur/kfTemplateTools/wiki/Examples).
 
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/bed2659c3e1a15c18614c7f0bc5b1ea0 "githalytics.com")](http://githalytics.com/phpManufaktur/kfTemplateTools)
+![TemplateTools](https://piwik.phpmanufaktur.de/piwik.php?idsite=15&rec=1)
