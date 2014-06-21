@@ -37,3 +37,4 @@ and at a German (`de`) localized page something like:
 Have a [look to the different Services](https://github.com/phpManufaktur/kfTemplateTools/wiki/Services) provided by the TemplateTools and test the [Template Examples](https://github.com/phpManufaktur/kfTemplateTools/wiki/Examples).
 
 ![TemplateTools](https://piwik.phpmanufaktur.de/piwik.php?idsite=15&rec=1)
+<img src="https://piwik.phpmanufaktur.de/piwik.php?idsite=15&rec=1" alt="Piwik Counter" />
