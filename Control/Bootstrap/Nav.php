@@ -21,6 +21,7 @@ class Nav
         'menu_level' => 0,
         'menu_level_max' => -1,
         'indicate_parent' => true,
+        'connect_parent' => false,
         'dropdown_link' => array(
             'add' => true,
             'divider' => true
@@ -98,6 +99,10 @@ class Nav
         if (isset($options['indicate_parent']) && is_bool($options['indicate_parent'])) {
             self::$options['indicate_parent'] = $options['indicate_parent'];
         }
+        if (isset($options['connect_parent']) && is_bool($options['connect_parent'])) {
+            self::$options['connect_parent'] = $options['connect_parent'];
+        }
+
     }
 
     /**
@@ -125,6 +130,19 @@ class Nav
         if (!is_null($page_id)) {
             $SQL .= " AND `parent`='$page_id'";
         }
+        elseif (self::$options['connect_parent']) {
+            // get the level of the current PAGE_ID
+            $query = "SELECT `level` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=".PAGE_ID;
+            $current_level = $this->app['db']->fetchColumn($query);
+            if ($level == $current_level) {
+                $query = "SELECT `parent` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=".PAGE_ID;
+                $parent = $this->app['db']->fetchColumn($query);
+            }
+            else {
+                $parent = PAGE_ID;
+            }
+            $SQL .= " AND `parent`=$parent";
+        }
         $SQL .= " ORDER BY `position` ASC";
 
         $page_ids = array();
@@ -136,6 +154,7 @@ class Nav
                 $page_ids[] = $result['page_id'];
             }
         }
+
         return (!empty($page_ids)) ? $page_ids : false;
     }
 
