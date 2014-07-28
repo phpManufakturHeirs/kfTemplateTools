@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.25** - 2014-07-28
+
+* changed route to access commands directly
+* changed title tag for the social sharing buttons
+* introduce `bootstrap_nav()` option 'connect_parent' to enable navigation level to connect with the current PAGE_ID - only fitting pages will be shown
+
 **0.24** - 2014-06-05
 
 * templates now prompt their path and name in HTML output
