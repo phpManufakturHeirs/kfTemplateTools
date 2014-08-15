@@ -13,7 +13,7 @@
  */
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ PAGE_LOCALE|lower }}">
   <?php
     // initialize the TemplateTools
     require_once WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/TemplateTools/initialize.php';  

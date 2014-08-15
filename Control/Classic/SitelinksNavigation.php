@@ -119,6 +119,12 @@ class SitelinksNavigation
                     'description' => $this->app['tools']->unsanitizeText($column['description']),
                     'active' => false,
                 );
+                if ((CMS_TYPE === 'LEPTON') && version_compare(CMS_VERSION, '1.3.1', '==')) {
+                    $sitelinks['columns'][$column['page_id']]['menu_title'] = 
+                        utf8_encode($sitelinks['columns'][$column['page_id']]['menu_title']);
+                    $sitelinks['columns'][$column['page_id']]['page_title'] = 
+                        utf8_encode($sitelinks['columns'][$column['page_id']]['page_title']);
+                }
                 // get the items of the column
                 $page_id = $column['page_id'];
                 $SQL = "SELECT `page_id`, `link`, `page_title`, `menu_title`, `description`, `keywords` FROM `".CMS_TABLE_PREFIX."pages` WHERE ".
@@ -143,6 +149,12 @@ class SitelinksNavigation
                             'description' => $this->app['tools']->unsanitizeText($item['description']),
                             'active' => $active
                         );
+                        if ((CMS_TYPE === 'LEPTON') && version_compare(CMS_VERSION, '1.3.1', '==')) {
+                            $sitelinks['columns'][$column['page_id']]['items'][$item['page_id']]['menu_title'] = 
+                                utf8_encode($sitelinks['columns'][$column['page_id']]['items'][$item['page_id']]['menu_title']);
+                            $sitelinks['columns'][$column['page_id']]['items'][$item['page_id']]['page_title'] = 
+                                utf8_encode($sitelinks['columns'][$column['page_id']]['items'][$item['page_id']]['page_title']);
+                        }
                     }
                 }
             }

@@ -69,7 +69,12 @@ class Breadcrumb
     {
         $SQL = "SELECT `page_id`, `link`, `menu_title`, `page_title`, `description` FROM `".
             CMS_TABLE_PREFIX."pages` WHERE `page_id`=".$page_id;
-        return $this->app['db']->fetchAssoc($SQL);
+        $result = $this->app['db']->fetchAssoc($SQL);
+        if ((CMS_TYPE === 'LEPTON') && version_compare(CMS_VERSION, '1.3.1', '==')) {
+            $result['menu_title'] = utf8_encode($result['menu_title']);
+            $result['page_title'] = utf8_encode($result['page_title']);
+        }
+        return $result;
     }
 
     /**

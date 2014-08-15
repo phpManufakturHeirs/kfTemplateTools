@@ -174,7 +174,7 @@ class Nav
         if (isset($result['parent'])) {
             $active = (PAGE_ID == $page_id);
 
-            if (self::$options['indicate_parent'] && (self::$options['menu_level_max'] > 0)) {
+            if (self::$options['indicate_parent']) { // && (self::$options['menu_level_max'] > 0)) {
                 // check if the current PAGE_ID is a child of the NAV
                 $SQL = "SELECT `page_trail` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=".PAGE_ID;
                 $page_trail = $this->app['db']->fetchColumn($SQL);
@@ -192,6 +192,11 @@ class Nav
                         break;
                     }
                 }
+            }
+
+            if ((CMS_TYPE === 'LEPTON') && version_compare(CMS_VERSION, '1.3.1', '==')) {
+                $result['menu_title'] = utf8_encode($result['menu_title']);
+                $result['page_title'] = utf8_encode($result['page_title']);
             }
 
             $result['active'] = $active;
