@@ -168,7 +168,7 @@ class Nav
     protected function getMenuInformation($page_id)
     {
         $SQL = "SELECT `page_id`, `parent`, `root_parent`, `position`, `level`, `menu_title`, ".
-            "`page_title`, `link`, `page_trail` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
+            "`page_title`, `link`, `page_trail`, `target` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
         $result = $this->app['db']->fetchAssoc($SQL);
 
         if (isset($result['parent'])) {
