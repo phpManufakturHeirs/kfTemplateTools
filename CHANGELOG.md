@@ -6,6 +6,15 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.26** - 2014-09-14
+
+* localization is just in progress ...
+* added missing language to the `html` tag
+* added missing `target` property to the nav links
+* updated `@link` references
+* updated info URL
+* added URL for the changelog in CMS Tool
+
 **0.25** - 2014-07-28
 
 * changed route to access commands directly
