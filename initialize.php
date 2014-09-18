@@ -139,8 +139,6 @@ $template['monolog']->addDebug('Monolog initialized.');
 // read the CMS configuration
 $cms_config = $template['tools']->readJSON(FRAMEWORK_PATH . '/config/cms.json');
 
-if (!defined('CMS_ADMIN_PATH')) define('CMS_ADMIN_PATH', $template['tools']->sanitizePath($cms_config['CMS_ADMIN_PATH']));
-if (!defined('CMS_ADMIN_URL')) define('CMS_ADMIN_URL', $cms_config['CMS_ADMIN_URL']);
 if (!defined('CMS_TYPE')) define('CMS_TYPE', $cms_config['CMS_TYPE']);
 if (!defined('CMS_VERSION')) define('CMS_VERSION', $cms_config['CMS_VERSION']);
 

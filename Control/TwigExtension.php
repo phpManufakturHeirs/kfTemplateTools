@@ -84,8 +84,6 @@ class TwigExtension extends Twig_Extension
 
             'CMS_ADDONS_PATH' => CMS_ADDONS_PATH,
             'CMS_ADDONS_URL' => CMS_ADDONS_URL,
-            'CMS_ADMIN_PATH' => CMS_ADMIN_PATH,
-            'CMS_ADMIN_URL' => CMS_ADMIN_URL,
             'CMS_ADDONS_PATH' => CMS_ADDONS_PATH,
             'CMS_DESCRIPTION' => CMS_DESCRIPTION,
             'CMS_KEYWORDS' => CMS_KEYWORDS,
