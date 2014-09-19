@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.27** - 2014-09-19
+
+* no longer use `CMS_ADMIN_PATH` and `CMS_ADMIN_URL`
+
 **0.26** - 2014-09-14
 
 * localization is just in progress ...

@@ -19,8 +19,8 @@
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/TemplateTools",
   "namespace":"phpManufaktur\\TemplateTools",
   "release":{
-    "number":"0.26",
-    "date":"2014-09-14",
+    "number":"0.27",
+    "date":"2014-09-19",
     "status":"beta",
     "changelog":"https:\/\/github.com\/phpManufaktur\/kfTemplateTools\/blob\/master\/CHANGELOG.md"
   },
@@ -43,7 +43,7 @@
       "release":"0.27"
     },
     "Basic": {
-        "release":"1.0.12"
+        "release":"1.0.14"
     },
     "Library":{
         "release":"0.38"
