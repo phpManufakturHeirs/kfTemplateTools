@@ -3,9 +3,9 @@
 /**
  * TemplateTools
  *
- * @author Team phpManufaktur <team@phpmanufaktur.de>
- * @link https://kit2.phpmanufaktur.de/TemplateTools
- * @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ * @author Team phpManufaktur <team@phpmanufaktur.info>
+ * @link https://kit2.phpmanufaktur.info/TemplateTools
+ * @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.info>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
@@ -203,8 +203,14 @@ if (!defined('PAGE_ID_HOME')) define('PAGE_ID_HOME', $template['cms']->page_id_h
 // normally set by CMS but not at SEARCH pages!
 if (!defined('PAGE_DESCRIPTION')) define('PAGE_DESCRIPTION', '');
 
+// for scheme relative URLs (used in BlackCat CMS)
+$rel_parsed = parse_url(TEMPLATE_DIR);
+$scheme     = NULL;
+if(!is_array($rel_parsed) || ( array_key_exists('scheme',$rel_parsed ) && $rel_parsed['scheme']=='' ) )
+    $scheme = (isset($_SERVER['HTTPS']) ? 'https:' : 'http:');
+
 if (!defined('TEMPLATE_DEFAULT_NAME')) define('TEMPLATE_DEFAULT_NAME', DEFAULT_TEMPLATE);
-if (!defined('TEMPLATE_PATH')) define('TEMPLATE_PATH', CMS_PATH.substr(TEMPLATE_DIR, strlen(CMS_URL)));
+if (!defined('TEMPLATE_PATH')) define('TEMPLATE_PATH', CMS_PATH.substr($scheme.TEMPLATE_DIR, strlen(CMS_URL)));
 if (!defined('TEMPLATE_URL')) define('TEMPLATE_URL', TEMPLATE_DIR);
 if (!defined('TEMPLATE_DIRECTORY')) define('TEMPLATE_DIRECTORY', substr(TEMPLATE_DIR, strlen(CMS_TEMPLATES_URL)+1));
 if (!defined('TEMPLATE_NAME')) define('TEMPLATE_NAME', TEMPLATE);

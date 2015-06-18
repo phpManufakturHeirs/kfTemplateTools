@@ -37,11 +37,16 @@ class cmsFunctions
         $this->app = $app;
         $this->PageData = new Page($app);
 
+        // for scheme relative URLs (used in BlackCat CMS)
+        $rel_parsed = parse_url(TEMPLATE_DIR);
+        $scheme     = NULL;
+        if(!is_array($rel_parsed) || ( array_key_exists('scheme',$rel_parsed ) && $rel_parsed['scheme']=='' ) )
+            $scheme = (isset($_SERVER['HTTPS']) ? 'https:' : 'http:');
+
         // be aware - some constants may undefined!
         $cms_path = defined('CMS_PATH') ? CMS_PATH : WB_PATH;
         $cms_url = defined('CMS_URL') ? CMS_URL : WB_URL;
-        $template_dir = defined('TEMPLATE_DIR') ? TEMPLATE_DIR : $cms_url.'/templates';
-
+        $template_dir = defined('TEMPLATE_DIR') ? $scheme.TEMPLATE_DIR : $cms_url.'/templates';
         $info_path = $cms_path.substr($template_dir, strlen($cms_url)).'/info.php';
         if ($app['filesystem']->exists($info_path)) {
             global $block;

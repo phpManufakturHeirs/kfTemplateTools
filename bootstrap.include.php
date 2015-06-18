@@ -3,9 +3,9 @@
 /**
  * TemplateTools
  *
- * @author Team phpManufaktur <team@phpmanufaktur.de>
- * @link https://kit2.phpmanufaktur.de/TemplateTools
- * @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ * @author Team phpManufaktur <team@phpmanufaktur.info>
+ * @link https://kit2.phpmanufaktur.info/TemplateTools
+ * @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.info>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 

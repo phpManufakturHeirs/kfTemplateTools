@@ -1,10 +1,15 @@
 ## kitFramework::TemplateTools ##
 
 &copy; 2014 phpManufaktur by Ralf Hertsch
+&copy; 2015 phpManufakturHeirs
 
 MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
-kitFramework - <https://kit2.phpmanufaktur.de>
+kitFramework - <https://kit2.phpmanufaktur.info>
+
+**0.28** - 2015-06-18
+
+* added check for scheme relative URLs (BlackCat CMS)
 
 **0.27** - 2014-09-19
 
@@ -71,7 +76,7 @@ kitFramework - <https://kit2.phpmanufaktur.de>
 
 **0.18** - 2014-05-12
 
-* added support for [imageTweak](https://kit2.phpmanufaktur.de/de/erweiterungen/imagetweak.php) to `page_content()`
+* added support for [imageTweak](https://kit2.phpmanufaktur.info/de/erweiterungen/imagetweak.php) to `page_content()`
 
 **0.17** - 2014-05-11
 

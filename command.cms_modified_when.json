@@ -2,7 +2,7 @@
   "command":"cms_modified_when",
   "vendor": {
     "name":"phpManufaktur",
-    "url":"https://phpmanufaktur.de"
+    "url":"https://phpmanufaktur.info"
     },
   "name": {
     "en":"cms_modified_when",
@@ -23,7 +23,7 @@
   },
   "info": {
     "en": {
-      "link":"https://kit2.phpmanufaktur.de"
+      "link":"https://kit2.phpmanufaktur.info"
     }
   },
   "issues": {
@@ -33,7 +33,7 @@
   },
   "support": {
     "en": {
-      "link":"https://support.phpmanufaktur.de"
+      "link":"https://support.phpmanufaktur.info"
     }
   }
 }
