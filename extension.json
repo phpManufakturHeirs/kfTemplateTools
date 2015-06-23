@@ -5,7 +5,7 @@
   "group":"phpManufaktur",
   "vendor":{
       "name":"phpManufaktur",
-      "url":"https:\/\/phpmanufaktur.info",
+      "url":"http:\/\/phpmanufaktur.info",
       "mail":"team@phpmanufaktur.info",
       "address":{
           "street":"Reginhardstraße 34",
@@ -19,10 +19,10 @@
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/TemplateTools",
   "namespace":"phpManufaktur\\TemplateTools",
   "release":{
-    "number":"0.27",
-    "date":"2014-09-19",
+    "number":"0.29",
+    "date":"2015-06-23",
     "status":"beta",
-    "changelog":"https:\/\/github.com\/phpManufaktur\/kfTemplateTools\/blob\/master\/CHANGELOG.md"
+    "changelog":"https:\/\/github.com\/phpManufakturHeirs\/kfTemplateTools\/blob\/master\/CHANGELOG.md"
   },
   "description": {
     "en":{
@@ -56,15 +56,15 @@
   },
   "license": {
     "name":"MIT License",
-    "url":"https:\/\/github.com\/phpManufaktur\/kfTemplateTools\/raw\/master\/LICENSE.md"
+    "url":"https:\/\/github.com\/phpManufakturHeirs\/kfTemplateTools\/raw\/master\/LICENSE.md"
   },
   "download": {
     "availability":"public",
     "agreement":"free",
     "github":{
-      "organization":"phpManufaktur",
+      "organization":"phpManufakturHeirs",
       "repository":"kfTemplateTools"
     },
-    "url":"https:\/\/github.com\/phpManufaktur\/kfTemplateTools"
+    "url":"https:\/\/github.com\/phpManufakturHeirs\/kfTemplateTools"
   }
 }

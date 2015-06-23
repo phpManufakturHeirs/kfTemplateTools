@@ -2,7 +2,7 @@
   "command":"cms_modified_when",
   "vendor": {
     "name":"phpManufaktur",
-    "url":"https://phpmanufaktur.info"
+    "url":"http://phpmanufaktur.info"
     },
   "name": {
     "en":"cms_modified_when",
@@ -23,17 +23,17 @@
   },
   "info": {
     "en": {
-      "link":"https://kit2.phpmanufaktur.info"
+      "link":"http://phpmanufaktur.info"
     }
   },
   "issues": {
     "en": {
-      "link":"https://github.com/phpManufaktur/kfTemplateTools/issues"
+      "link":"https://github.com/phpManufakturHeirs/kfTemplateTools/issues"
     }
   },
   "support": {
     "en": {
-      "link":"https://support.phpmanufaktur.info"
+      "link":"http://phpmanufaktur.info"
     }
   }
 }

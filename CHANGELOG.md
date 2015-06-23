@@ -7,6 +7,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.info>
 
+**0.29** - 2015-06-23
+
+* fix for scheme relative URLs
+* fixed version number
+
 **0.28** - 2015-06-18
 
 * added check for scheme relative URLs (BlackCat CMS)

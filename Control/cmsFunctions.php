@@ -40,7 +40,7 @@ class cmsFunctions
         // for scheme relative URLs (used in BlackCat CMS)
         $rel_parsed = parse_url(TEMPLATE_DIR);
         $scheme     = NULL;
-        if(!is_array($rel_parsed) || ( array_key_exists('scheme',$rel_parsed ) && $rel_parsed['scheme']=='' ) )
+        if(!is_array($rel_parsed) || !array_key_exists('scheme',$rel_parsed ) || $rel_parsed['scheme']=='' )
             $scheme = (isset($_SERVER['HTTPS']) ? 'https:' : 'http:');
 
         // be aware - some constants may undefined!
